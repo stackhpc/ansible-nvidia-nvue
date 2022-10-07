@@ -1,0 +1,1 @@
+cumulus ansible_host=172.17.0.3 ansible_user=cumulus ansible_password=cumulus
