@@ -56,7 +56,7 @@ options:
 EXAMPLES = r"""
 # Pass in a single command
 - name: Set system pre-login message
-  nvidia.nvue.command: 
+  nvidia.nvue.command:
     commands:
     - set system message pre-login "{{ MSG }}"
     atomic: true
@@ -66,7 +66,7 @@ EXAMPLES = r"""
 
 # Using command templating
 - name: Set prefix lists
-  nvidia.nvue.command: 
+  nvidia.nvue.command:
     template: |
       {% for rule in rules %}
       set router policy prefix-list PL rule {{ rule.id }} match {{ rule.match }}
