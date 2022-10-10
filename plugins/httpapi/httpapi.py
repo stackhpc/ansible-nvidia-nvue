@@ -1,6 +1,17 @@
+# Copyright: (c) 2022, NVIDIA <nvidia.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
 from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
+
+DOCUMENTATION = r"""
+author: Nvidia NBU Team (@nvidia-nbu)
+name: httpapi
+short_description: httpapi plugin for NVIDIA's NVUE API
+description:
+- This connection plugin provides a connection to devices with NVIDIA's NVUE API over HTTP(S)-based
+"""
 
 import urllib
 
@@ -9,15 +20,6 @@ import time
 
 from ansible.module_utils.six.moves.urllib.error import HTTPError
 from ansible_collections.ansible.netcommon.plugins.plugin_utils.httpapi_base import HttpApiBase
-
-DOCUMENTATION = r"""
-author: Nvidia NBU team
-connection: httpapi
-short_description: Use httpapi to run command on NVUE devices
-description:
-- This connection plugin provides a connection to NVUE over an HTTP(S)-based
-  api.
-"""
 
 
 class HttpApi(HttpApiBase):

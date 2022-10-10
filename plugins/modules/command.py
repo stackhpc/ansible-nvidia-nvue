@@ -12,21 +12,16 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
 ---
+author: Nvidia NBU Team (@nvidia-nbu)
 module: command
-
 short_description: Run NVUE commands on Nvidia Cumulus Linux
-
-# If this is part of a collection, you need to use semantic versioning,
-# i.e. the version is of the form "2.5.0" and not "2.4".
-version_added: "1.0.0"
-
 description: This is my longer description explaining my test module.
-
 options:
     commands:
         description: A list of strings containing the net commands to run.
         required: false
         type: list
+        elements: str
     template:
         description: A single, multi-line string with jinja2 formatting. This string will be broken and executed by lines.
         required: false
@@ -39,36 +34,54 @@ options:
     assume_yes:
         description: When true, adds a "-y" flag to the "nvue apply" command.
         required: false
+        default: false
         type: bool
     detach:
         description: When true, performs `nv config detach` before this block.
         required: false
+        default: false
         type: bool
     atomic:
         description: When true, equivalent to both `apply` and `detach` being true.
         required: false
+        default: false
         type: bool
-
-author:
-    - Nvidia NBU SA team
+    save:
+        description: Saves NVUE configuration to disk
+        required: false
+        default: false
+        type: bool
 """
 
 EXAMPLES = r"""
-# Pass in a message
-- name: Test with a message
-  my_namespace.my_collection.my_test:
-    name: hello world
+# Pass in a single command
+- name: Set system pre-login message
+  nvidia.nvue.command: 
+    commands:
+    - set system message pre-login "{{ MSG }}"
+    atomic: true
+    assume_yes: true
+  vars:
+    MSG: WARNING
 
-# pass in a message and have changed true
-- name: Test with a message and changed output
-  my_namespace.my_collection.my_test:
-    name: hello world
-    new: true
-
-# fail the module
-- name: Test failure of the module
-  my_namespace.my_collection.my_test:
-    name: fail me
+# Using command templating
+- name: Set prefix lists
+  nvidia.nvue.command: 
+    template: |
+      {% for rule in rules %}
+      set router policy prefix-list PL rule {{ rule.id }} match {{ rule.match }}
+      set router policy prefix-list PL rule {{ rule.id }} action {{ rule.action }}
+      {% endfor %}
+    apply: true
+    assume_yes: true
+  vars:
+    rules:
+    - id: 10
+      match: 1.1.1.1/32
+      action: permit
+    - id: 20
+      match: 8.8.8.8/32
+      action: deny
 """
 
 RETURN = r"""
@@ -143,7 +156,7 @@ def run_nvue(module):
 def run_module():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
-        commands=dict(type="list", required=False),
+        commands=dict(type="list", required=False, elements='str'),
         template=dict(type="str", required=False),
         apply=dict(type="bool", required=False, default=False),
         assume_yes=dict(type="bool", required=False, default=False),
@@ -167,8 +180,8 @@ def run_module():
         argument_spec=module_args,
         mutually_exclusive=[
             ("commands", "template"),
-            ("commit", "atomic"),
-            ("abort", "atomic"),
+            ("save", "atomic"),
+            ("detach", "atomic"),
         ],
         supports_check_mode=True,
     )

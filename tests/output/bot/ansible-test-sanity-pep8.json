@@ -3,7 +3,7 @@
     "results": [
         {
             "message": "The test `ansible-test sanity --test pep8` [[explain](https://docs.ansible.com/ansible-core/2.13/dev_guide/testing/sanity/pep8.html)] failed with 1 error:", 
-            "output": "plugins/httpapi/httpapi.py:17:1: E302: expected 2 blank lines, found 1"
+            "output": "plugins/modules/api.py:21:43: W291: trailing whitespace"
         }
     ], 
     "verified": false

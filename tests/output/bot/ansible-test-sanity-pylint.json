@@ -3,7 +3,7 @@
     "results": [
         {
             "message": "The test `ansible-test sanity --test pylint` [[explain](https://docs.ansible.com/ansible-core/2.13/dev_guide/testing/sanity/pylint.html)] failed with 1 error:", 
-            "output": "plugins/httpapi/httpapi.py:85:12: disallowed-name: Disallowed name \"_\""
+            "output": "plugins/httpapi/httpapi.py:12:0: misplaced-future: __future__ import is not the first non docstring statement"
         }
     ], 
     "verified": false
