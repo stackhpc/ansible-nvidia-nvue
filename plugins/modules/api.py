@@ -9,9 +9,44 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = """"""
-EXAMPLES = """"""
-RETURN = """"""
+DOCUMENTATION = r"""
+author: Nvidia NBU team
+short_description: Use httpapi to run command on NVUE devices
+description:
+- This connection plugin provides a connection to NVUE over an HTTP(S)-based
+  api.
+"""
+EXAMPLES = r"""
+# Pass in a message
+- name: Test with a message
+  my_namespace.my_collection.my_test:
+    name: hello world
+
+# pass in a message and have changed true
+- name: Test with a message and changed output
+  my_namespace.my_collection.my_test:
+    name: hello world
+    new: true
+
+# fail the module
+- name: Test failure of the module
+  my_namespace.my_collection.my_test:
+    name: fail me
+"""
+
+RETURN = r"""
+# These are examples of possible return values, and in general should use other names for return values.
+original_message:
+    description: The original name param that was passed in.
+    type: str
+    returned: always
+    sample: "hello world"
+message:
+    description: The output message that the test module generates.
+    type: str
+    returned: always
+    sample: "goodbye"
+"""
 
 import json
 from ansible.module_utils.basic import AnsibleModule
@@ -63,7 +98,7 @@ def main():
 
     connection = Connection(module._socket_path)
     response = connection.send_request(data, path, operation, force=force, wait=wait)
-    if operation=="set" and response:
+    if operation == "set" and response:
         result["changed"] = True
     result["message"] = response
 

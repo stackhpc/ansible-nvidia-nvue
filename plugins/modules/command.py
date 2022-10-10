@@ -24,7 +24,7 @@ description: This is my longer description explaining my test module.
 
 options:
     commands:
-        description: A list of strings containing the net commands to run. 
+        description: A list of strings containing the net commands to run.
         required: false
         type: list
     template:
@@ -32,12 +32,12 @@ options:
         required: false
         type: str
     apply:
-        description: When true, performs a ‘nvue apply’ at the end of the block.
+        description: When true, performs a "nvue apply" at the end of the block.
         required: false
         default: false
         type: bool
     assume_yes:
-        description: When true, adds a ‘-y’ flag to the ‘nvue apply’ command.
+        description: When true, adds a "-y" flag to the "nvue apply" command.
         required: false
         type: bool
     detach:
@@ -48,10 +48,6 @@ options:
         description: When true, equivalent to both `apply` and `detach` being true.
         required: false
         type: bool
-# Specify this value according to your collection
-# in format of namespace.collection.doc_fragment_name
-extends_documentation_fragment:
-    - my_namespace.my_collection.my_doc_fragment_name
 
 author:
     - Nvidia NBU SA team

@@ -10,6 +10,15 @@ import time
 from ansible.module_utils.six.moves.urllib.error import HTTPError
 from ansible_collections.ansible.netcommon.plugins.plugin_utils.httpapi_base import HttpApiBase
 
+DOCUMENTATION = r"""
+author: Nvidia NBU team
+connection: httpapi
+short_description: Use httpapi to run command on NVUE devices
+description:
+- This connection plugin provides a connection to NVUE over an HTTP(S)-based
+  api.
+"""
+
 
 class HttpApi(HttpApiBase):
     def __init__(self, connection):
@@ -25,7 +34,6 @@ class HttpApi(HttpApiBase):
             path = f"{self.prefix}/?{urllib.parse.urlencode(params)}"
             return self.get_operation(path)
 
-
     def get_operation(self, path):
         response, response_data = self.connection.send(
             path, "", headers=self.headers, method="GET"
@@ -37,7 +45,7 @@ class HttpApi(HttpApiBase):
         self.revisionID = self.create_revision()
 
         self.patch_revision(path, data)
-        
+
         return self.apply_config(**kwargs)
 
     def create_revision(self):
@@ -51,7 +59,7 @@ class HttpApi(HttpApiBase):
             return k
 
     def patch_revision(self, path, data):
-        
+
         params = {"rev": self.revisionID}
         path = f"{self.prefix}/?{urllib.parse.urlencode(params)}"
 
@@ -63,8 +71,8 @@ class HttpApi(HttpApiBase):
 
     def apply_config(self, **kwargs):
 
-        force=kwargs.get("force", False)
-        wait=kwargs.get("wait", 0)
+        force = kwargs.get("force", False)
+        wait = kwargs.get("wait", 0)
         path = "/".join([self.prefix, "revision", self.revisionID.replace("/", "%2F")])
 
         data = {"state": "apply"}
@@ -83,11 +91,12 @@ class HttpApi(HttpApiBase):
 
         result = handle_response(response, response_data)
 
-        for _ in range(wait):
+        while wait >= 0:
             result = self.get_operation(path)
             if result.get("state") == "applied":
                 break
             time.sleep(1)
+            wait -= 1
 
         return result
 
