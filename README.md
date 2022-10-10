@@ -1,3 +1,3 @@
-# Ansible Collection - nvidia.nvue
+# NVIDIA NVUE Collection
 
-Documentation for the collection.
+The NVIDIA NVUE Collection includes a modules to help you interact with NVIDIA devices managed by NVUE.

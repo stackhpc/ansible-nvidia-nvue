@@ -9,7 +9,8 @@ sanity:
     COLLECTIONS_PATHS: ./
   before_script:
     - python3 -m pip install ansible
-    - ln -s ../../ ansible_collections
+    - mkdir -p ansible_collections/nvidia
+    - ln -s $(pwd) ansible_collections/nvidia/nvue
   script:
     - ansible-test sanity
   artifacts:
