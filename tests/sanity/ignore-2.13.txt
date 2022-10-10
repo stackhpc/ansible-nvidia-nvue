@@ -1,2 +1,3 @@
+plugins/modules/api.py validate-modules:import-error
 plugins/modules/api.py import-3.9
 plugins/httpapi/httpapi.py import-3.9
