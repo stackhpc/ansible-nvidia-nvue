@@ -6,11 +6,10 @@ sanity:
   stage: test
   image: python:3.9
   variables:
-    COLLECTIONS_PATHS: ./
+    GIT_CLONE_PATH: ~/.ansible/collections/ansible_collections/nvidia/nvue
+  GIT_CLONE_PATH
   before_script:
     - python3 -m pip install ansible
-    - mkdir -p ansible_collections/nvidia
-    - ln -s $(pwd) ansible_collections/nvidia/nvue
   script:
     - ansible-test sanity
   artifacts:
