@@ -1,0 +1,13 @@
+---
+stages:
+  - test
+
+sanity:
+  stage: test
+  image: python:3.9
+  before_script:
+    - python3 -m pip install ansible
+  script:
+    - ansible-test sanity
+  artifacts:
+    expire_in: 1 week
