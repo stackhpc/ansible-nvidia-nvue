@@ -12,7 +12,7 @@
   tasks:
 
   - name: Create new revision
-    config:
+    nvidia.nvue.config:
       state: new
       provider: "{{ provider_spec }}"
     register: revision
@@ -22,7 +22,7 @@
       msg: '{{ revision.revid }}'
 
   - name: Set system settings
-    system:
+    nvidia.nvue.system:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -44,7 +44,7 @@
       provider: "{{ provider_spec }}"
 
   - name: Set interface
-    interface:
+    nvidia.nvue.interface:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -82,7 +82,7 @@
       provider: "{{ provider_spec }}"
 
   - name: Set bridge
-    bridge:
+    nvidia.nvue.bridge:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -101,7 +101,7 @@
       provider: "{{ provider_spec }}"
     
   - name: Set next set of interfaces
-    interface:
+    nvidia.nvue.interface:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -121,7 +121,7 @@
       provider: "{{ provider_spec }}"
 
   - name: Set evpn
-    evpn:
+    nvidia.nvue.evpn:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -129,7 +129,7 @@
       provider: "{{ provider_spec }}"
 
   - name: Set mlag
-    mlag:
+    nvidia.nvue.mlag:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -143,7 +143,7 @@
       provider: "{{ provider_spec }}"
     
   - name: Set vxlan
-    vxlan:
+    nvidia.nvue.vxlan:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -156,7 +156,7 @@
       provider: "{{ provider_spec }}"
 
   - name: Set router
-    router:
+    nvidia.nvue.router:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -169,7 +169,7 @@
       provider: "{{ provider_spec }}"
 
   - name: Set vrf
-    vrf:
+    nvidia.nvue.vrf:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -263,7 +263,7 @@
       provider: "{{ provider_spec }}"
 
   - name: Set VLAN interfaces
-    interface:
+    nvidia.nvue.interface:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -367,7 +367,7 @@
       provider: "{{ provider_spec }}"
 
   - name: Apply new revision
-    config:
+    nvidia.nvue.config:
       state: apply
       revid: '{{ revision.revid }}'
       provider: "{{ provider_spec }}"
