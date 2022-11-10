@@ -1,0 +1,36 @@
+---
+
+- name: Test playbook to display information using the various modules 
+  hosts: localhost
+  vars:
+    provider_spec:
+      cl_url: leaf01
+      cl_port: 8765
+      cl_username: cumulus
+      cl_password: CumulusLinux!
+
+  tasks:
+  - name: List all bridges
+    nvidia.nvue.bridge:
+      state: gathered
+      provider: "{{ provider_spec }}"
+
+  - name: List all interfaces
+    nvidia.nvue.interface:
+      state: gathered
+      provider: "{{ provider_spec }}"
+
+  - name: List system
+    nvidia.nvue.system:
+      state: gathered
+      provider: "{{ provider_spec }}"
+
+  - name: List service
+    nvidia.nvue.service:
+      state: gathered
+      provider: "{{ provider_spec }}"
+
+  - name: List router
+    nvidia.nvue.router:
+      state: gathered
+      provider: "{{ provider_spec }}"
