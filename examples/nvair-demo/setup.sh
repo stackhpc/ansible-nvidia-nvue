@@ -9,5 +9,3 @@ cd .ansible/collections/ansible_collections/nvidia
 git clone https://gitlab.com/nvidia-networking/systems-engineering/nvue.git
 cd nvue
 git checkout devel
-
-ansible-playbook enable-api.yml -i ../hosts
