@@ -29,7 +29,7 @@ Please note that this is for internal use only!
 	  > \# /home/ubuntu/.ansible/collections/ansible_collections <br>
 Collection  Version <br>
 \----------- ------- <br>
-**nvidia.nvue** 1.0.0 <br>
+**nvidia.nvue** 1.1.0 <br>
 \
 \# /home/ubuntu/.local/lib/python3.6/site-packages/ansible_collections <br>
 Collection                    Version <br>
