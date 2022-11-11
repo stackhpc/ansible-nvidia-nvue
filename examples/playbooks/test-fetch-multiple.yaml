@@ -2,6 +2,7 @@
 
 - name: Test playbook to display information using the various modules 
   hosts: localhost
+  collections: nvidia.nvue
   vars:
     provider_spec:
       cl_url: leaf01
@@ -11,26 +12,26 @@
 
   tasks:
   - name: List all bridges
-    nvidia.nvue.bridge:
+    bridge:
       state: gathered
       provider: "{{ provider_spec }}"
 
   - name: List all interfaces
-    nvidia.nvue.interface:
+    interface:
       state: gathered
       provider: "{{ provider_spec }}"
 
   - name: List system
-    nvidia.nvue.system:
+    system:
       state: gathered
       provider: "{{ provider_spec }}"
 
   - name: List service
-    nvidia.nvue.service:
+    service:
       state: gathered
       provider: "{{ provider_spec }}"
 
   - name: List router
-    nvidia.nvue.router:
+    router:
       state: gathered
       provider: "{{ provider_spec }}"

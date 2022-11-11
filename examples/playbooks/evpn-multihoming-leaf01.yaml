@@ -2,9 +2,10 @@
 
 - name: test CL system settings
   hosts: localhost
+  collections: nvidia.nvue
   vars:
     provider_spec:
-      cl_url: 192.168.200.6
+      cl_url: leaf01
       cl_port: 8765
       cl_username: cumulus
       cl_password: CumulusLinux!
@@ -12,7 +13,7 @@
   tasks:
 
   - name: Create new revision
-    nvidia.nvue.config:
+    config:
       state: new
       provider: "{{ provider_spec }}"
     register: revision
@@ -22,7 +23,7 @@
       msg: '{{ revision.revid }}'
 
   - name: Set system settings
-    nvidia.nvue.system:
+    system:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -44,14 +45,14 @@
       provider: "{{ provider_spec }}"
 
   - name: Set interface
-    nvidia.nvue.interface:
+    interface:
       state: merged
       revid: '{{ revision.revid }}'
       config:
         - id: 'eth0'
           ip:
             address:
-              - id: '192.168.200.6/24'
+              - id: '192.168.200.11/24'
             vrf: 'mgmt'
           type: 'eth'
         - id: 'lo'
@@ -72,7 +73,7 @@
       provider: "{{ provider_spec }}"
 
   - name: Set bridge
-    nvidia.nvue.bridge:
+    bridge:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -91,7 +92,7 @@
       provider: "{{ provider_spec }}"
 
   - name: Set evpn
-    nvidia.nvue.evpn:
+    evpn:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -101,7 +102,7 @@
       provider: "{{ provider_spec }}"
     
   - name: Set vxlan
-    nvidia.nvue.vxlan:
+    vxlan:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -112,7 +113,7 @@
       provider: "{{ provider_spec }}"
 
   - name: Set router
-    nvidia.nvue.router:
+    router:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -125,7 +126,7 @@
       provider: "{{ provider_spec }}"
 
   - name: Set vrf
-    nvidia.nvue.vrf:
+    vrf:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -210,7 +211,7 @@
       provider: "{{ provider_spec }}"
 
   - name: Set VLAN interfaces
-    nvidia.nvue.interface:
+    interface:
       state: merged
       revid: '{{ revision.revid }}'
       config:
@@ -331,7 +332,7 @@
       provider: "{{ provider_spec }}"
 
   - name: Apply new revision
-    nvidia.nvue.config:
+    config:
       state: apply
       revid: '{{ revision.revid }}'
       provider: "{{ provider_spec }}"
