@@ -26,11 +26,6 @@
       state: gathered
       provider: "{{ provider_spec }}"
 
-  - name: List service
-    service:
-      state: gathered
-      provider: "{{ provider_spec }}"
-
   - name: List router
     router:
       state: gathered
