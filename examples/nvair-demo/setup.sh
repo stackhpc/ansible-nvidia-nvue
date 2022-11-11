@@ -10,4 +10,4 @@ git clone https://gitlab.com/nvidia-networking/systems-engineering/nvue.git
 cd nvue
 git checkout devel
 
-cd nvue/examples/playbooks
+cd examples/playbooks
