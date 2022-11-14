@@ -10,5 +10,3 @@ cd ~/.ansible/collections/ansible_collections/nvidia
 git clone https://gitlab.com/nvidia-networking/systems-engineering/nvue.git
 cd nvue
 git checkout devel
-
-cd examples/playbooks
