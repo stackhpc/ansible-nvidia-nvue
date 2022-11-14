@@ -1,6 +1,7 @@
 sudo apt-get update -y
 python3 -m pip install ansible
 export PATH=/home/ubuntu/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+ansible --version
 
 mkdir ~/.ansible/collections
 mkdir ~/.ansible/collections/ansible_collections
