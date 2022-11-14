@@ -7,9 +7,40 @@ Please note that this is for internal use only!
 # Files
 
 - topology.dot : Use this to create Build Your Own Simulation on NVAir.
-	> Remember to enable ZTP and uncomment the SSH sections to get the setup ready
+	- Remember to enable ZTP and uncomment the SSH sections to get the setup ready. The final ZTP script will look as below:
+		> #!/bin/bash <br>
+		\# Created by Topology-Converter v4.7.1 <br>
+		\#    Template Revision: v4.7.1 <br>
+		function error() { <br>
+  		echo -e "e[0;33mERROR: The Zero Touch Provisioning script failed while running the command $BASH_COMMAND at line $BASH_LINENO.e[0m" >&2 <br>
+		} <br>
+		trap error ERR <br><br>
+		SSH_URL="http://192.168.200.1/authorized_keys" <br>
+		\# Uncomment to setup SSH key authentication for Ansible <br>
+		mkdir -p /home/cumulus/.ssh <br>
+		wget -O /home/cumulus/.ssh/authorized_keys $SSH_URL <br><br>
+		\# Uncomment to unexpire and change the default cumulus user password <br>
+		passwd -x 99999 cumulus <br>
+		echo 'cumulus:CumulusLinux!' | chpasswd <br><br>
+		\# Uncomment to make user cumulus passwordless sudo <br>
+		echo "cumulus ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/10_cumulus <br><br>
+		\# Uncomment to enable all debian sources & netq apps3 repo <br>
+		\# sed -i 's/#deb/deb/g' /etc/apt/sources.list <br>
+		\# wget -O pubkey https://apps3.cumulusnetworks.com/setup/cumulus-apps-deb.pubkey <br>
+		\# apt-key add pubkey <br>
+		\# rm pubkey <br><br>
+		\# Uncomment to allow NTP to make large steps at service restart<br>
+		echo "tinker panic 0" >> /etc/ntp.conf <br>
+		systemctl enable ntp@mgmt <br><br>
+		exit 0 <br>
+		\#CUMULUS-AUTOPROVISIONING
+
 - setup.sh: Use the script to prepare and setup your system with the new collections
-	> The script updates the Ansible version to 2.11, prepares the directory structure to install the new collection, and installs the new collection from the development branch of the gitlab code.
+	- The script updates the Ansible version to 2.11, prepares the directory structure to install the new collection, and installs the new collection from the development branch of the gitlab code.
+	- Run the following commands to download the script onto your oob-mgmt-server and run it
+		>`$ wget https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/raw/devel/examples/nvair-demo/setup.sh` <br>
+		`$ chmod +x setup.sh` <br>
+		`$ ./setup.sh`
 
 # Post installation steps
 
@@ -29,7 +60,7 @@ Please note that this is for internal use only!
 	  > \# /home/ubuntu/.ansible/collections/ansible_collections <br>
 Collection  Version <br>
 \----------- ------- <br>
-**nvidia.nvue** 1.1.0 <br>
+**nvidia.nvue 1.1.0** <br>
 \
 \# /home/ubuntu/.local/lib/python3.6/site-packages/ansible_collections <br>
 Collection                    Version <br>
@@ -45,6 +76,9 @@ azure.azcollection            1.10.0 <br>
 check_point.mgmt              2.2.0 <br>
 chocolatey.chocolatey         1.1.0 <br>
 ......
+
+ - Change into the playbooks directory:
+ `$ cd .ansible/collections/ansible_collections/nvidia/nvue/examples/playbooks/`
 
 ## Enable NVUE API on all of the switches
 
