@@ -10,6 +10,6 @@ sanity:
     - python3 -m pip install ansible
     - ansible-galaxy collection install ansible.netcommon
   script:
-    - make test
+    - make test-ci
   artifacts:
     expire_in: 1 week
