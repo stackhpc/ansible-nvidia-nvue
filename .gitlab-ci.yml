@@ -6,6 +6,7 @@ sanity:
   stage: test
   image: python:3.9
   before_script:
+    - apt update && apt install rsync -y
     - python3 -m pip install ansible
     - ansible-galaxy collection install ansible.netcommon
   script:
