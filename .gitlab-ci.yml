@@ -8,7 +8,8 @@ sanity:
   before_script:
     - apt update && apt install rsync -y
     - python3 -m pip install ansible
-    - ansible-galaxy collection install ansible.netcommon
+    - mkdir ansible_collections
+    - ansible-galaxy collection install ansible.netcommon -p ansible_collections/
   script:
     - make test-ci
   artifacts:
