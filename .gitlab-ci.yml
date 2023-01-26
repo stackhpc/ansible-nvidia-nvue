@@ -5,14 +5,10 @@ stages:
 sanity:
   stage: test
   image: python:3.9
-  variables:
-    COLLECTIONS_PATHS: ./
   before_script:
     - python3 -m pip install ansible
-    - mkdir -p ansible_collections/nvidia/nvue
-    - cp -r galaxy.yml plugins tests ./ansible_collections/nvidia/nvue
+    - ansible-galaxy collection install ansible.netcommon
   script:
-    - cd ./ansible_collections/nvidia/nvue/
-    - ansible-test sanity
+    - make test
   artifacts:
     expire_in: 1 week
