@@ -1,8 +1,2 @@
 ---
 requires_ansible: ">=2.9.10"
-plugin_routing:
-  modules:
-    api:
-      redirect: nvidia.nvue.api
-    command:
-      redirect: nvidia.nvue.command
