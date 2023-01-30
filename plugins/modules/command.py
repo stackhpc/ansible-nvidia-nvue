@@ -86,16 +86,16 @@ EXAMPLES = r"""
 
 RETURN = r"""
 # These are examples of possible return values, and in general should use other names for return values.
-original_message:
-    description: The original name param that was passed in.
-    type: str
-    returned: always
-    sample: 'hello world'
+changed:
+  description: whether a configuration was changed
+  returned: always
+  type: bool
+  sample: true
 message:
-    description: The output message that the test module generates.
+    description: a message returned from the supplied NVUE commands
     type: str
     returned: always
-    sample: 'goodbye'
+    sample: "Failed on line \"set system m123ssage pre-login \"WARNING\"\"\nInvalid Command: set system m123ssage pre-login WARNING\n"
 """
 
 from ansible.module_utils.basic import AnsibleModule

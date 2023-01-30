@@ -11,6 +11,6 @@ sanity:
     - mkdir ansible_collections
     - ansible-galaxy collection install ansible.netcommon -p ansible_collections/
   script:
-    - make test-ci
+    - make test
   artifacts:
     expire_in: 1 week
