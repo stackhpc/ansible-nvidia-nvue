@@ -3,7 +3,12 @@
 
 [![CI](https://gitlab.com/nvidia-networking/systems-engineering/nvue/badges/main/pipeline.svg)](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/pipelines?scope=branches)
 
-The NVIDIA NVUE Collection includes Ansible modules to help you interact with NVIDIA devices managed by NVUE.
+The NVIDIA NVUE Collection includes Ansible modules to help you interact with NVIDIA devices managed by NVUE. Currently, it includes the following modules:
+
+| Module | Description |
+| ------ | ----------  |
+| nvidia.nvue.command | A wrapper around `nv` command line tool with added templating and automated dialog prompting. | 
+| nvidia.nvue.api | Send and retrieve NVUE configuration via REST API. | 
 
 ## Ansible version compatibility
 
