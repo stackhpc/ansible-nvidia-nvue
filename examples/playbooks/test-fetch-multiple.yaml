@@ -1,0 +1,36 @@
+---
+
+- name: Test playbook to display information using the various modules 
+  hosts: localhost
+  vars:
+    provider_spec:
+      cl_url: leaf01
+      cl_port: 8765
+      cl_username: username
+      cl_password: password
+
+  tasks:
+  - name: List all bridges
+    bridge:
+      state: gathered
+      provider: "{{ provider_spec }}"
+
+  - name: List all interfaces
+    interface:
+      state: gathered
+      provider: "{{ provider_spec }}"
+
+  - name: List system
+    system:
+      state: gathered
+      provider: "{{ provider_spec }}"
+
+  - name: List service
+    service:
+      state: gathered
+      provider: "{{ provider_spec }}"
+
+  - name: List router
+    router:
+      state: gathered
+      provider: "{{ provider_spec }}"

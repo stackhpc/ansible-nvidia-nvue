@@ -1,0 +1,67 @@
+---
+
+- name: Test playbook to update bridge settings
+  hosts: localhost
+  vars:
+    provider_spec:
+      cl_url: leaf01
+      cl_port: 8765
+      cl_username: username
+      cl_password: password
+
+  tasks:
+
+  - name: Create new revision
+    config:
+      state: new
+      provider: "{{ provider_spec }}"
+    register: revision
+
+  - name: dump revision
+    debug:
+      msg: '{{ revision.revid }}'
+
+  - name: Set bridge
+    bridge:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        - id: 'br_default'
+          type: 'vlan-aware'
+          vlan:
+            - id: '10'
+              vni:
+                - id: '10'
+            - id: '20'
+              vni:
+                - id: '20'
+            - id: '30'
+              vni:
+                - id: '30'
+      provider: "{{ provider_spec }}"
+    register: bridge
+
+  - name: dump previous output
+    debug:
+      msg: '{{ bridge }}'
+
+  - name: Apply new revision
+    config:
+      state: apply
+      revid: '{{ revision.revid }}'
+      provider: "{{ provider_spec }}"
+    register: revision
+  
+  - name: dump previous output
+    debug:
+      msg: '{{ revision }}'
+
+  - name: Fetch bridge config
+    bridge:
+      state: gathered
+      provider: "{{ provider_spec }}"
+    register: bridge
+
+  - name: Display bridge config
+    debug:
+      msg: '{{ bridge }}'

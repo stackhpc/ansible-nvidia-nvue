@@ -1,0 +1,42 @@
+---
+
+- name: Test playbook for the config/revision module 
+  hosts: localhost
+  vars:
+    provider_spec:
+      cl_url: leaf01
+      cl_port: 8765
+      cl_username: username
+      cl_password: password
+
+  tasks:
+  - name: List all revisions
+    config:
+      state: gathered
+      provider: "{{ provider_spec }}"
+    register: revisions
+
+  - name: dump revisions
+    debug:
+      msg: '{{ revisions }}'
+
+  - name: Create new revision
+    config:
+      state: new
+      provider: "{{ provider_spec }}"
+    register: revision
+
+  - name: dump revision
+    debug:
+      msg: '{{ revision.revid }}'
+
+  - name: List newly created revision
+    config:
+      state: gathered
+      revid: "{{ revision.revid }}"
+      provider: "{{ provider_spec }}"
+    register: revision
+
+  - name: dump revision
+    debug:
+      msg: '{{ revision }}'

@@ -1,0 +1,107 @@
+---
+
+- name: test CL system settings
+  hosts: localhost
+  vars:
+    provider_spec:
+      cl_url: 192.168.200.6
+      cl_port: 8765
+      cl_username: cumulus
+      cl_password: CumulusLinux!
+
+  tasks:
+
+  - name: Create new revision
+    config:
+      state: new
+      provider: "{{ provider_spec }}"
+    register: revision
+
+  - name: dump revision
+    debug:
+      msg: '{{ revision.revid }}'
+
+  - name: Set interface
+    interface:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        - id: 'eth0'
+          ip:
+            address:
+              - id: '192.168.200.6/24'
+            vrf: 'mgmt'
+          type: 'eth'
+        - id: 'lo'
+          ip:
+            address:
+              - id: '10.10.10.1/32'
+          type: 'loopback'
+        - id: 'swp51'
+          link:
+            state:
+              - id: 'up'
+          type: 'swp'
+        - id: 'swp52'
+          link:
+            state:
+              - id: 'up'
+          type: 'swp'
+      provider: "{{ provider_spec }}"
+
+  - name: Set bridge
+    bridge:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        - id: 'br_default'
+          type: 'vlan-aware'
+          vlan:
+            - id: '10'
+              vni:
+                - id: '10'
+                  flooding:
+                    head_end_replication: 
+                      - id: '10.10.10.2'
+                      - id: '10.10.10.3'
+            - id: '20'
+              vni:
+                - id: '20'
+                  flooding:
+                    head_end_replication: 
+                      - id: '10.10.10.4'
+      provider: "{{ provider_spec }}"
+    
+  - name: Set vxlan
+    vxlan:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        enable: 'on'
+        source: 
+          address: '10.10.10.1'
+      provider: "{{ provider_spec }}"
+
+  - name: Configure swp interface
+    interface:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        - id: 'swp1'
+          bridge:
+            domain:
+              - id: 'br_default'
+                access: 10
+        - id: 'swp2'
+          bridge:
+            domain:
+              - id: 'br_default'
+                access: 10
+      provider: "{{ provider_spec }}"
+
+  - name: Apply new revision
+    config:
+      state: apply
+      revid: '{{ revision.revid }}'
+      provider: "{{ provider_spec }}"
+    register: revision

@@ -1,0 +1,85 @@
+---
+
+- name: Test playbook to update interface settings
+  hosts: localhost
+  vars:
+    provider_spec:
+      cl_url: leaf01
+      cl_port: 8765
+      cl_username: username
+      cl_password: password
+
+  tasks:
+
+  - name: Create new revision
+    config:
+      state: new
+      provider: "{{ provider_spec }}"
+    register: revision
+
+  - name: dump revision
+    debug:
+      msg: '{{ revision.revid }}'
+
+  - name: Set interface
+    interface:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        - id: 'eth0'
+          ip:
+            address:
+              - id: '192.168.200.6/24'
+          type: 'eth'
+        - id: lo
+          ip:
+            address:
+              - id: '10.10.10.1/32'
+          type: 'loopback'
+        - id: 'swp51'
+          link:
+            state:
+              - id: 'up'
+          type: 'swp'
+        - id: 'swp52'
+          link:
+            state:
+              - id: 'up'
+          type: 'swp'
+        - id: 'swp53'
+          link:
+            state:
+              - id: 'up'
+          type: 'swp'
+        - id: 'swp54'
+          link:
+            state:
+              - id: 'up'
+          type: 'swp'
+      provider: "{{ provider_spec }}"
+    register: interface
+
+  - name: dump previous output
+    debug:
+      msg: '{{ interface }}'
+  
+  - name: Apply new revision
+    config:
+      state: apply
+      revid: '{{ revision.revid }}'
+      provider: "{{ provider_spec }}"
+    register: revision
+
+  - name: dump previous output
+    debug:
+      msg: '{{ revision }}'
+
+  - name: Fetch interface config
+    interface:
+      state: gathered
+      provider: "{{ provider_spec }}"
+    register: interface
+
+  - name: Display interface config
+    debug:
+      msg: '{{ interface }}'

@@ -1,0 +1,374 @@
+---
+
+- name: test CL system settings
+  hosts: localhost
+  vars:
+    provider_spec:
+      cl_url: 192.168.200.6
+      cl_port: 8765
+      cl_username: cumulus
+      cl_password: CumulusLinux!
+
+  tasks:
+
+  - name: Create new revision
+    config:
+      state: new
+      provider: "{{ provider_spec }}"
+    register: revision
+
+  - name: dump revision
+    debug:
+      msg: '{{ revision.revid }}'
+
+  - name: Set system settings
+    system:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        hostname: 'leaf01'
+        timezone: 'Etc/UTC'
+        message:
+          post_login: |
+                    #####################################################################################
+                    #                     You are successfully logged in to: leaf01                     #
+                    #####################################################################################
+          pre_login: |
+                    #####################################################################################
+                    #  Welcome to NVIDIA Cumulus VX (TM) 5.1                                            #
+                    #  NVIDIA Cumulus VX (TM) is a community supported virtual appliance designed       #
+                    #  for experiencing, testing and prototyping NVIDIA Cumulus'"'"' latest technology. #
+                    #  For any questions or technical support, visit our community site at:             #
+                    #  https://www.nvidia.com/en-us/support                                             #
+                    #####################################################################################
+      provider: "{{ provider_spec }}"
+
+  - name: Set interface
+    interface:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        - id: 'eth0'
+          ip:
+            address:
+              - id: '192.168.200.6/24'
+            vrf: 'mgmt'
+          type: 'eth'
+        - id: 'lo'
+          ip:
+            address:
+              - id: '10.10.10.1/32'
+          type: 'loopback'
+        - id: 'swp51'
+          link:
+            state:
+              - id: 'up'
+          type: 'swp'
+        - id: 'swp52'
+          link:
+            state:
+              - id: 'up'
+          type: 'swp'
+        - id: 'swp53'
+          link:
+            state:
+              - id: 'up'
+          type: 'swp'
+        - id: 'swp54'
+          link:
+            state:
+              - id: 'up'
+          type: 'swp'
+      provider: "{{ provider_spec }}"
+
+  - name: Set bridge
+    bridge:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        - id: 'br_default'
+          type: 'vlan-aware'
+          vlan:
+            - id: '10'
+              vni:
+                - id: '10'
+            - id: '20'
+              vni:
+                - id: '20'
+            - id: '30'
+              vni:
+                - id: '30'
+      provider: "{{ provider_spec }}"
+    
+  - name: Set next set of interfaces
+    interface:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        - id: 'peerlink'
+          bond:
+            member:
+              - id: 'swp49'
+              - id: 'swp50'
+          bridge:
+            domain:
+              - id: 'br_default'
+          type: 'peerlink'
+        - id: 'peerlink.4094'
+          base_interface: 'peerlink'
+          vlan: '4094'
+          type: 'sub'
+      provider: "{{ provider_spec }}"
+
+  - name: Set evpn
+    evpn:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        enable: 'on'
+      provider: "{{ provider_spec }}"
+
+  - name: Set mlag
+    mlag:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        enable: 'on'
+        init_delay: 10
+        mac_address: '44:38:39:BE:EF:AA'
+        backup:
+          - id: '10.10.10.2'
+        peer_ip: 'linklocal'
+        priority: 1000
+      provider: "{{ provider_spec }}"
+    
+  - name: Set vxlan
+    vxlan:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        enable: 'on'
+        source: 
+          address: '10.10.10.1'
+        mlag:
+          shared_address: '10.0.1.12'
+        arp_nd_suppress: 'on'
+      provider: "{{ provider_spec }}"
+
+  - name: Set router
+    router:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        bgp:
+          enable: 'on'
+          autonomous_system: 65101
+          router_id: '10.10.10.1'
+        vrr:
+          enable: 'on'
+      provider: "{{ provider_spec }}"
+
+  - name: Set vrf
+    vrf:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        - id: 'BLUE'
+          evpn:
+            enable: 'on'
+            vni: 
+              - id: 4002
+          router:
+            bgp:
+              address_family: 
+                ipv4_unicast:
+                  enable: 'on'
+                  redistribute:
+                    connected: 
+                      enable: 'on'
+                  route_export:
+                    to_evpn:
+                      enable: 'on'
+                l2vpn_evpn:
+                  enable: 'on'
+              autonomous_system: '65101'
+              enable: 'on'
+              router_id: '10.10.10.1'
+        - id: 'RED'
+          evpn:
+            enable: 'on'
+            vni: 
+              - id: 4001
+          router:
+            bgp:
+              address_family: 
+                ipv4_unicast:
+                  enable: 'on'
+                  redistribute:
+                    connected: 
+                      enable: 'on'
+                  route_export:
+                    to_evpn:
+                      enable: 'on'
+                l2vpn_evpn:
+                  enable: 'on'
+              autonomous_system: 65101
+              enable: 'on'
+              router_id: '10.10.10.1'
+        - id: 'default'
+          router:
+            bgp:
+              address_family: 
+                ipv4_unicast:
+                  enable: 'on'
+                  redistribute:
+                    connected: 
+                      enable: 'on'
+                l2vpn_evpn:
+                  enable: 'on'
+              autonomous_system: 65101
+              enable: 'on'
+              router_id: '10.10.10.1'
+              neighbor:
+                - id: 'peerlink.4094'
+                  peer_group: 'underlay'
+                  type: 'unnumbered'
+                - id: 'swp51'
+                  peer_group: 'underlay'
+                  type: 'unnumbered'
+                - id: 'swp52'
+                  peer_group: 'underlay'
+                  type: 'unnumbered'
+                - id: 'swp53'
+                  peer_group: 'underlay'
+                  type: 'unnumbered'
+                - id: 'swp54'
+                  peer_group: 'underlay'
+                  type: 'unnumbered'
+              peer_group:
+                - id: 'underlay'
+                  address_family:
+                    l2vpn_evpn:
+                      enable: 'on'
+                  remote_as: 'external'
+        - id: 'mgmt'
+          router:
+            static: 
+            - id: '0.0.0.0/0'
+              address_family: 'ipv4-unicast'
+              via:
+                - id: '192.168.200.1'
+                  type: 'ipv4-address'
+        
+      provider: "{{ provider_spec }}"
+
+  - name: Set VLAN interfaces
+    interface:
+      state: merged
+      revid: '{{ revision.revid }}'
+      config:
+        - id: 'vlan10'
+          ip:
+            address: 
+              - id: '10.1.10.2/24'
+            vrr:
+              address: 
+                - id: '10.1.10.2/24'
+              state: 
+                - id: 'up'
+              mac_address: '00:00:00:00:00:10'
+            vrf: 'RED'
+          vlan: 10
+          type: 'svi'
+        - id: 'vlan20'
+          ip:
+            address: 
+              - id: '10.1.20.2/24'
+            vrr:
+              address: 
+                - id: '10.1.20.2/24'
+              state: 
+                - id: 'up'
+              mac_address: '00:00:00:00:00:20'
+            vrf: 'RED'
+          vlan: 20
+          type: 'svi'
+        - id: 'vlan30'
+          ip:
+            address: 
+              - id: '10.1.30.2/24'
+            vrr:
+              address: 
+                - id: '10.1.30.2/24'
+              state: 
+                - id: 'up'
+              mac_address: '00:00:00:00:00:30'
+            vrf: 'BLUE'
+          vlan: 30
+          type: 'svi'
+        - id: 'bond1'
+          bond:
+            lacp_bypass: 'on'
+            mlag:
+              enable: 'on'
+              id: 1
+            member:
+              - id: 'swp1'
+          bridge:
+            domain:
+              - id: 'br_default'
+                access: 10
+                stp:
+                  admin_edge: 'on'
+                  auto_edge: 'on'
+                  bpdu_guard: 'on'
+          type: 'bond'
+          link:
+            mtu: 9000
+        - id: 'bond2'
+          bond:
+            lacp_bypass: 'on'
+            mlag:
+              enable: 'on'
+              id: 2
+            member:
+              - id: 'swp2'
+          bridge:
+            domain:
+              - id: 'br_default'
+                access: 20
+                stp:
+                  admin_edge: 'on'
+                  auto_edge: 'on'
+                  bpdu_guard: 'on'
+          type: 'bond'
+          link:
+            mtu: 9000
+        - id: 'bond3'
+          bond:
+            lacp_bypass: 'on'
+            mlag:
+              enable: 'on'
+              id: 3
+            member:
+              - id: 'swp3'
+          bridge:
+            domain:
+              - id: 'br_default'
+                access: 30
+                stp:
+                  admin_edge: 'on'
+                  auto_edge: 'on'
+                  bpdu_guard: 'on'
+          type: 'bond'
+          link:
+            mtu: 9000
+        
+      provider: "{{ provider_spec }}"
+
+  - name: Apply new revision
+    config:
+      state: apply
+      revid: '{{ revision.revid }}'
+      provider: "{{ provider_spec }}"
+    register: revision
