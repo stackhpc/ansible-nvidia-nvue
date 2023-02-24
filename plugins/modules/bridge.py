@@ -22,7 +22,8 @@ options:
         elements: dict
         suboptions:
             rev:
-                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches, such as startup and applied. This could be a branch name, tag name or specific commit.
+                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches, such as startup and applied. 
+                             This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
             omit:
@@ -35,7 +36,7 @@ options:
                 type: list
     config:
         description: Provided configuration
-        type: list 
+        type: list
         elements: dict
         suboptions:
             id:
@@ -43,7 +44,8 @@ options:
                 required: true
                 type: str
             untagged:
-                description: Interfaces added to this domain will, by default, be trunk interfaces with a single untagged vlan. Untagged packets on domain ports will be put in this vlan. If none, then untagged packets will be dropped.
+                description: Interfaces added to this domain will, by default, be trunk interfaces with a single untagged vlan. Untagged packets on domain ports will be put in this vlan. 
+                             If none, then untagged packets will be dropped.
                 required: false
                 type: int
             encap:
@@ -51,7 +53,7 @@ options:
                 default: 802.1Q
                 required: false
                 type: str
-            encap:
+            mac_address:
                 description: Override global mac address.
                 default: auto
                 required: false
@@ -77,7 +79,7 @@ options:
                         type: list
                         elements: dict
                         suboptions:
-                            id: 
+                            id:
                                 description: VNI
                                 required: false
                                 type: str
@@ -97,7 +99,8 @@ options:
                                             - off
                                             - auto
                                     multicast_group:
-                                        description: BUM traffic is sent to the specified multicast group and will be received by receivers who are interested in that group. This usually requires PIM-SM to be used in the network.
+                                        description: BUM traffic is sent to the specified multicast group and will be received by receivers who are interested in that group. 
+                                                     This usually requires PIM-SM to be used in the network.
                                         type: str
                                         required: false
                                     head_end_replication:
@@ -106,7 +109,7 @@ options:
                                         type: list
                                         elements: dict
                                         suboptions:
-                                            id: 
+                                            id:
                                                 description: An IPv4 address.
                                                 required: false
                                                 type: str
@@ -117,11 +120,11 @@ options:
         required: false
 
 
-    state: 
+    state:
         description: Defines the action to be taken
         required: true
         type: string
-        choices: 
+        choices:
             - gathered
             - deleted
             - merged
@@ -145,13 +148,14 @@ RETURN = r'''
 from ansible.module_utils.basic import AnsibleModule
 from ..module_utils.cl_common import run
 
+
 def main():
     # define paremeters to connect to the CL instance
     provider_spec = dict(
         cl_url=dict(type='str', required=True),
         cl_port=dict(type='str', required=True),
-        cl_username = dict(type='str', required=True),
-        cl_password = dict(type='str', required=True, no_log=True)
+        cl_username=dict(type='str', required=True),
+        cl_password=dict(type='str', required=True, no_log=True)
     )
 
     # define supported filters for the endpoint
@@ -160,23 +164,23 @@ def main():
         omit=dict(type='list', required=False),
         include=dict(type='list', required=False)
     )
-    
+
     # define the bridge spec - used for creation/modification
     bridge_spec = dict(
         id=dict(type='str', required=True),
-        untagged=dict(type='int',required=False),
-        type=dict(type='str',required=False, default="vlan-aware"),
-        encap=dict(type='str',required=False, default="802.1Q"),
-        mac_address=dict(type='str',required=False),
-        vlan=dict(type='list',required=False,options=dict(
-            id=dict(type='str',required=False),
-            vni=dict(type='list',required=False,options=dict(
-                id=dict(type='str',required=False)),
-                flooding=dict(type='dict',required=False,options=dict(
-                    enable=dict(type='str', required=False, default='auto',choices=['on','off','auto']),
-                    multicast_group=dict(type='str',required=False),
-                    head_end_replication=dict(type='list',required=False,options=dict(
-                        id=dict(type='str',required=False)
+        untagged=dict(type='int', required=False),
+        type=dict(type='str', required=False, default="vlan-aware"),
+        encap=dict(type='str', required=False, default="802.1Q"),
+        mac_address=dict(type='str', required=False),
+        vlan=dict(type='list', required=False, options=dict(
+            id=dict(type='str', required=False),
+            vni=dict(type='list', required=False, options=dict(
+                id=dict(type='str', required=False)),
+                flooding=dict(type='dict', required=False, options=dict(
+                    enable=dict(type='str', required=False, default='auto', choices=['on','off','auto']),
+                    multicast_group=dict(type='str', required=False),
+                    head_end_replication=dict(type='list', required=False, options=dict(
+                        id=dict(type='str', required=False)
                     ))
                 ))
             )
@@ -186,10 +190,10 @@ def main():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         provider=dict(type='dict', required=True, options=provider_spec),
-        state=dict(type='str', required=True,choices=["gathered","deleted","merged"]),
+        state=dict(type='str', required=True, choices=["gathered","deleted","merged"]),
         revid=dict(type='str', required=False),
         domainid=dict(type='str', required=False),
-        config=dict(type='list',required=False,elements='dict',options=bridge_spec),
+        config=dict(type='list', required=False, elements='dict', options=bridge_spec),
         filters=dict(type='dict', required=False, options=filter_spec)
     )
 
@@ -210,22 +214,22 @@ def main():
         module.exit_json(**result)
 
     endpoint = "bridge"
-    if(module.params["state"] == "gathered"):
+    if module.params["state"] == "gathered":
         if module.params["domainid"] is not None:
             endpoint = endpoint + "/domain/" + module.params["domainid"]
-    elif(module.params["state"] == "deleted"):
+    elif module.params["state"] == "deleted":
         if module.params["domainid"] is not None:
             endpoint = endpoint + "/domain/" + module.params["domainid"]
     else:
         endpoint = endpoint + "/domain"
 
-    result = run(endpoint,module.params)
+    result = run(endpoint, module.params)
 
     # during the execution of the module, if there is an exception or a
     # conditional state that effectively causes a failure, run
     # AnsibleModule.fail_json() to pass in the message and the result
     if result["status_code"] != 200:
-        module.fail_json(msg='Your request failed',**result)
+        module.fail_json(msg='Your request failed', **result)
 
     # in the event of a successful module execution, you will want to
     # simple AnsibleModule.exit_json(), passing the key/value results

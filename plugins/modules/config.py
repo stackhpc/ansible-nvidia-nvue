@@ -38,7 +38,8 @@ options:
             - new
             - apply
     revid:
-        description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches, such as startup and applied. This could be a branch name, tag name or specific commit.
+        description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches, such as startup and applied.
+                     This could be a branch name, tag name or specific commit.
         required: false
         type: str
 
@@ -70,13 +71,14 @@ RETURN = r'''
 from ansible.module_utils.basic import AnsibleModule
 from ..module_utils.cl_common import run
 
+
 def main():
     # define paremeters to connect to the CL instance
     provider_spec = dict(
         cl_url=dict(type='str', required=True),
         cl_port=dict(type='str', required=True),
-        cl_username = dict(type='str', required=True),
-        cl_password = dict(type='str', required=True, no_log=True)
+        cl_username=dict(type='str', required=True),
+        cl_password=dict(type='str', required=True, no_log=True)
     )
 
     # define supported filters for the endpoint
@@ -84,7 +86,7 @@ def main():
         omit=dict(type='list', required=False),
         include=dict(type='list', required=False)
     )
-    
+
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         provider=dict(type='dict', required=True, options=provider_spec),
@@ -103,7 +105,7 @@ def main():
     # supports check mode
     module = AnsibleModule(
         argument_spec=module_args,
-        required_if = required_if,
+        required_if=required_if,
         supports_check_mode=True
     )
 
@@ -114,17 +116,17 @@ def main():
         module.exit_json(**result)
 
     endpoint = "revision"
-    if(module.params["state"] == "gathered"):
+    if module.params["state"] == "gathered":
         if module.params["revid"] is not None:
-            endpoint = endpoint + "/" + module.params["revid"]         
+            endpoint = endpoint + "/" + module.params["revid"]
 
-    result = run(endpoint,module.params)
+    result = run(endpoint, module.params)
 
     # during the execution of the module, if there is an exception or a
     # conditional state that effectively causes a failure, run
     # AnsibleModule.fail_json() to pass in the message and the result
     if result["status_code"] != 200:
-        module.fail_json(msg='Your request failed',**result)
+        module.fail_json(msg='Your request failed', **result)
 
     # in the event of a successful module execution, you will want to
     # simple AnsibleModule.exit_json(), passing the key/value results

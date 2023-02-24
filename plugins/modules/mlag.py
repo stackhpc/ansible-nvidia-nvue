@@ -22,7 +22,8 @@ options:
         elements: dict
         suboptions:
             rev:
-                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches, such as startup and applied. This could be a branch name, tag name or specific commit.
+                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches,
+                             such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
             omit:
@@ -106,13 +107,14 @@ RETURN = r'''
 from ansible.module_utils.basic import AnsibleModule
 from ..module_utils.cl_common import run
 
+
 def main():
     # define paremeters to connect to the CL instance
     provider_spec = dict(
         cl_url=dict(type='str', required=True),
         cl_port=dict(type='str', required=True),
-        cl_username = dict(type='str', required=True),
-        cl_password = dict(type='str', required=True, no_log=True)
+        cl_username=dict(type='str', required=True),
+        cl_password=dict(type='str', required=True, no_log=True)
     )
 
     # define supported filters for the endpoint
@@ -124,23 +126,23 @@ def main():
     
     # define the bridge spec - used for creation/modification
     mlag_spec = dict(
-        enable=dict(type='str', required=False, default='off',choices=['on','off']),
-        backup=dict(type='list',required=False,options=dict(
+        enable=dict(type='str', required=False, default='off', choices=['on','off']),
+        backup=dict(type='list', required=False, options=dict(
             id=dict(type='str', required=False),
-            vrf=dict(type="str",required=False)
+            vrf=dict(type="str", required=False)
         )),
-        init_delay=dict(type='int',required=False),
-        peer_ip=dict(type='str',required=False),
-        mac_address=dict(type='str',required=False),
-        priority=dict(type='int',required=False)
+        init_delay=dict(type='int', required=False),
+        peer_ip=dict(type='str', required=False),
+        mac_address=dict(type='str', required=False),
+        priority=dict(type='int', required=False)
     )
 
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         provider=dict(type='dict', required=True, options=provider_spec),
-        state=dict(type='str', required=True,choices=['gathered','deleted','merged']),
+        state=dict(type='str', required=True, choices=['gathered','deleted','merged']),
         revid=dict(type='str', required=False),
-        config=dict(type='dict',required=False,options=mlag_spec),
+        config=dict(type='dict', required=False, options=mlag_spec),
         filters=dict(type='dict', required=False, options=filter_spec)
     )
 
@@ -161,13 +163,13 @@ def main():
 
     endpoint = 'mlag'
 
-    result = run(endpoint,module.params)
+    result = run(endpoint, module.params)
 
     # during the execution of the module, if there is an exception or a
     # conditional state that effectively causes a failure, run
     # AnsibleModule.fail_json() to pass in the message and the result
     if result['status_code'] != 200:
-        module.fail_json(msg='Your request failed',**result)
+        module.fail_json(msg='Your request failed', **result)
 
     # in the event of a successful module execution, you will want to
     # simple AnsibleModule.exit_json(), passing the key/value results

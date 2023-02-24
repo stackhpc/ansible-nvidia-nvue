@@ -22,7 +22,8 @@ options:
         elements: dict
         suboptions:
             rev:
-                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches, such as startup and applied. This could be a branch name, tag name or specific commit.
+                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches,
+                             such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
             omit:
@@ -35,7 +36,7 @@ options:
                 type: list
     config:
         description: Provided configuration
-        type: dict 
+        type: dict
         elements: dict
         suboptions:
             bgp:
@@ -57,7 +58,8 @@ options:
                         required: false
                         type: int
                     router_id:
-                        description: BGP router-id for all VRFs, if a common one is used. If "none", then router-id must be set for every VRF. This is the default.
+                        description: BGP router-id for all VRFs, if a common one is used. If "none", then router-id must be set for every VRF.
+                                     This is the default.
                         required: false
                         type: string
             ospf:
@@ -136,11 +138,11 @@ options:
                                 description: Timeout value for S,G stream, in seconds.
                                 required: false
                                 type: int
-    state: 
+    state:
         description: Defines the action to be taken
         required: true
         type: string
-        choices: 
+        choices:
             - gathered
             - deleted
             - merged
@@ -164,13 +166,14 @@ RETURN = r'''
 from ansible.module_utils.basic import AnsibleModule
 from ..module_utils.cl_common import run
 
+
 def main():
     # define paremeters to connect to the CL instance
     provider_spec = dict(
         cl_url=dict(type='str', required=True),
         cl_port=dict(type='str', required=True),
-        cl_username = dict(type='str', required=True),
-        cl_password = dict(type='str', required=True, no_log=True)
+        cl_username=dict(type='str', required=True),
+        cl_password=dict(type='str', required=True, no_log=True)
     )
 
     # define supported filters for the endpoint
@@ -184,26 +187,26 @@ def main():
     # define the router spec - used for creation/modification
     router_spec = dict(
         bgp=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str',required=False,default='off',choices=['on','off']),
-            autonomous_system=dict(type='int',required=False),
-            router_id=dict(type='str',required=False)
+            enable=dict(type='str', required=False, default='off', choices=['on','off']),
+            autonomous_system=dict(type='int', required=False),
+            router_id=dict(type='str', required=False)
         )),
         ospf=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str',required=False,default='off',choices=['on','off']),
+            enable=dict(type='str', required=False, default='off', choices=['on','off']),
             timers=dict(type='dict', required=False, options=dict(
                 spf=dict(type='dict', required=False, options=dict(
-                    delay=dict(type='int',required=False),
-                    holdtime=dict(type='int',required=False),
-                    max_holdtime=dict(type='int',required=False)
+                    delay=dict(type='int', required=False),
+                    holdtime=dict(type='int', required=False),
+                    max_holdtime=dict(type='int', required=False)
             )))
         ))),
         vrr=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str',required=False,default='off',choices=['on','off'])
+            enable=dict(type='str', required=False, default='off', choices=['on','off'])
         )),
         pim=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str',required=False,default='off',choices=['on','off']),
+            enable=dict(type='str', required=False, default='off', choices=['on','off']),
             timers=dict(type='dict', required=False, options=dict(
-                    keep_alive=dict(type='int',required=False)
+                keep_alive=dict(type='int', required=False)
             ))
         ))
     )
@@ -211,9 +214,9 @@ def main():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         provider=dict(type='dict', required=True, options=provider_spec),
-        state=dict(type='str', required=True,choices=["gathered","deleted","merged"]),
+        state=dict(type='str', required=True, choices=["gathered","deleted","merged"]),
         revid=dict(type='str', required=False),
-        config=dict(type='dict',required=False,options=router_spec),
+        config=dict(type='dict', required=False, options=router_spec),
         filters=dict(type='dict', required=False, options=filter_spec)
     )
 
@@ -241,13 +244,13 @@ def main():
         if module.params["filters"]["rev"] is None:
             module.params["filters"]["rev"] = 'applied'
 
-    result = run(endpoint,module.params)
+    result = run(endpoint, module.params)
 
     # during the execution of the module, if there is an exception or a
     # conditional state that effectively causes a failure, run
     # AnsibleModule.fail_json() to pass in the message and the result
     if result["status_code"] != 200:
-        module.fail_json(msg='Your request failed',**result)
+        module.fail_json(msg='Your request failed', **result)
 
     # in the event of a successful module execution, you will want to
     # simple AnsibleModule.exit_json(), passing the key/value results

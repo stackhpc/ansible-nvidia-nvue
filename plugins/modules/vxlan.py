@@ -22,7 +22,8 @@ options:
         elements: dict
         suboptions:
             rev:
-                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches, such as startup and applied. This could be a branch name, tag name or specific commit.
+                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches,
+                             such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
             omit:
@@ -47,7 +48,8 @@ options:
                     - on
                     - off
             mac_learning:
-                description: Controls dynamic MAC learning over VXLAN tunnels based on received packets. This applies to all overlays (VNIs), but can be overridden by VNI-specific configuration.
+                description: Controls dynamic MAC learning over VXLAN tunnels based on received packets. This applies to all overlays (VNIs),
+                             but can be overridden by VNI-specific configuration.
                 required: false
                 type: str
                 default: off
@@ -68,7 +70,8 @@ options:
                 elements: dict
                 suboptions:
                     address:
-                        description: IP addresses of this node's VTEP or 'auto'. If 'auto', use the primary IP loopback (not 127.0.0.1). This is the default.
+                        description: IP addresses of this node's VTEP or 'auto'. If 'auto', use the primary IP loopback (not 127.0.0.1).
+                                     This is the default.
                         required: false
                         type: str
                         default: auto
@@ -84,7 +87,7 @@ options:
                         default: none
 
 
-    state: 
+    state:
         description: Defines the action to be taken
         required: true
         type: string
@@ -112,13 +115,14 @@ RETURN = r'''
 from ansible.module_utils.basic import AnsibleModule
 from ..module_utils.cl_common import run
 
+
 def main():
     # define paremeters to connect to the CL instance
     provider_spec = dict(
         cl_url=dict(type='str', required=True),
         cl_port=dict(type='str', required=True),
-        cl_username = dict(type='str', required=True),
-        cl_password = dict(type='str', required=True, no_log=True)
+        cl_username=dict(type='str', required=True),
+        cl_password=dict(type='str', required=True, no_log=True)
     )
 
     # define supported filters for the endpoint
@@ -130,23 +134,23 @@ def main():
     
     # define the bridge spec - used for creation/modification
     vxlan_spec = dict(
-        enable=dict(type='str', required=False, default='off',choices=['on','off']),
-        mac_learning=dict(type='str', required=False, default='off',choices=['on','off']),
-        arp_nd_suppress=dict(type='str', required=False, default='on',choices=['on','off']),
-        source=dict(type='dict',required=False,options=dict(
-            address=dict(type="str",required=False,default="auto")
+        enable=dict(type='str', required=False, default='off', choices=['on','off']),
+        mac_learning=dict(type='str', required=False, default='off', choices=['on','off']),
+        arp_nd_suppress=dict(type='str', required=False, default='on', choices=['on','off']),
+        source=dict(type='dict', required=False, options=dict(
+            address=dict(type="str", required=False, default="auto")
         )),
-        mlag=dict(type='dict',required=False,options=dict(
-            shared_address=dict(type="str",required=False,default="none")
+        mlag=dict(type='dict', required=False, options=dict(
+            shared_address=dict(type="str", required=False, default="none")
         ))
     )
 
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         provider=dict(type='dict', required=True, options=provider_spec),
-        state=dict(type='str', required=True,choices=['gathered','deleted','merged']),
+        state=dict(type='str', required=True, choices=['gathered','deleted','merged']),
         revid=dict(type='str', required=False),
-        config=dict(type='dict',required=False,options=vxlan_spec),
+        config=dict(type='dict', required=False, options=vxlan_spec),
         filters=dict(type='dict', required=False, options=filter_spec)
     )
 

@@ -13,7 +13,8 @@ short_description: This is the Cumulus Linux EVPN module
 
 version_added: '1.0.0'
 
-description: This is a Cumulus Linux module to interact with the EVPN object. Enables the EVPN control plane. When enabled, it also means that the EVPN service offered is vlan-based service and an EVI is auto-created for each extended VLAN.
+description: This is a Cumulus Linux module to interact with the EVPN object. Enables the EVPN control plane. When enabled, it also means that the EVPN service offered is vlan-based service and 
+             an EVI is auto-created for each extended VLAN.
 
 options:
     filters:
@@ -22,7 +23,8 @@ options:
         elements: dict
         suboptions:
             rev:
-                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches, such as startup and applied. This could be a branch name, tag name or specific commit.
+                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches, such as startup and applied. 
+                             This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
             omit:
@@ -35,7 +37,7 @@ options:
                 type: list
     config:
         description: Provided configuration
-        type: dict 
+        type: dict
         elements: dict
         suboptions:
             enable:
@@ -86,7 +88,8 @@ options:
                 elements: dict
                 suboptions:
                     nexthop_setting:
-                        description: Specifies the next hop IP and MAC (Router MAC) to use in the advertisement of type-5 routes and 'self' type-2 routes ('self' = SVI IP/MAC). Relevant only in an MLAG configuration.
+                        description: Specifies the next hop IP and MAC (Router MAC) to use in the advertisement of type-5 routes and 'self' type-2 routes ('self' = SVI IP/MAC). 
+                                     Relevant only in an MLAG configuration.
                         required: false
                         type: str
                         default: system-ip-mac
@@ -102,7 +105,9 @@ options:
                             - on
                             - off
                     default_gateway:
-                        description: This configuration should be turned 'on' only in a centralized-routing deployment and only on the centralized GW router(s). If 'on', the IP addresses of SVIs in all EVIs are announced as type-2 routes with the gateway extended community. The purpose is for remote L2-only VTEPs to do ARP suppression and for hosts to learn of the gateway's IP to MAC binding.
+                        description: This configuration should be turned 'on' only in a centralized-routing deployment and only on the centralized GW router(s).
+                                     If 'on', the IP addresses of SVIs in all EVIs are announced as type-2 routes with the gateway extended community.
+                                     The purpose is for remote L2-only VTEPs to do ARP suppression and for hosts to learn of the gateway's IP to MAC binding.
                         required: false
                         type: str
                         default: off
@@ -139,13 +144,14 @@ RETURN = r'''
 from ansible.module_utils.basic import AnsibleModule
 from ..module_utils.cl_common import run
 
+
 def main():
     # define paremeters to connect to the CL instance
     provider_spec = dict(
         cl_url=dict(type='str', required=True),
         cl_port=dict(type='str', required=True),
-        cl_username = dict(type='str', required=True),
-        cl_password = dict(type='str', required=True, no_log=True)
+        cl_username=dict(type='str', required=True),
+        cl_password=dict(type='str', required=True, no_log=True)
     )
 
     # define supported filters for the endpoint
@@ -154,30 +160,31 @@ def main():
         omit=dict(type='list', required=False),
         include=dict(type='list', required=False)
     )
-    
+
     # define the bridge spec - used for creation/modification
     evpn_spec = dict(
-        enable=dict(type='str', required=False, default='off',choices=['on','off']),
-        dad=dict(type='dict',required=False,options=dict(
-            enable=dict(type='str', required=False, default='off',choices=['on','off'])
+        enable=dict(type='str', required=False, default='off', choices=['on','off']),
+        dad=dict(type='dict', required=False, options=dict(
+            enable=dict(type='str', required=False, default='off', choices=['on','off'])
         )),
-        multihoming=dict(type='dict',required=False,options=dict(
-            enable=dict(type='str', required=False, default='off',choices=['on','off']),
-            startup_delay=dict(type='int',required=False,default=180)
+        multihoming=dict(type='dict', required=False, options=dict(
+            enable=dict(type='str', required=False, default='off', choices=['on','off']),
+            startup_delay=dict(type='int', required=False, default=180)
         )),
-        route_advertise=dict(type='dict',required=False,options=dict(
-            nexthop_setting=dict(type='str', required=False, default='system-ip-mac',choices=['system-ip-mac','shared-ip-mac']),
-            svi_ip=dict(type='str', required=False, default='off',choices=['on','off']),
-            default_gateway=dict(type='str', required=False, default='off',choices=['on','off'])
+        route_advertise=dict(type='dict', required=False, options=dict(
+            nexthop_setting=dict(type='str', required=False, default='system-ip-mac', choices=['system-ip-mac','shared-ip-mac']),
+            svi_ip=dict(type='str', required=False, default='off', choices=['on','off']),
+            default_gateway=dict(type='str', required=False, default='off', choices=['on','off'])
         ))
     )
 
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         provider=dict(type='dict', required=True, options=provider_spec),
-        state=dict(type='str', required=True,choices=['gathered','deleted','merged']),
+        state=dict(type='str', required=True, choices=['gathered','deleted','merged']),
         revid=dict(type='str', required=False),
-        config=dict(type='dict',required=False,options=evpn_spec),
+        config=dict(type='dict', required=False, 
+        options=evpn_spec),
         filters=dict(type='dict', required=False, options=filter_spec)
     )
 
@@ -198,13 +205,13 @@ def main():
 
     endpoint = 'evpn'
 
-    result = run(endpoint,module.params)
+    result = run(endpoint, module.params)
 
     # during the execution of the module, if there is an exception or a
     # conditional state that effectively causes a failure, run
     # AnsibleModule.fail_json() to pass in the message and the result
     if result['status_code'] != 200:
-        module.fail_json(msg='Your request failed',**result)
+        module.fail_json(msg='Your request failed', **result)
 
     # in the event of a successful module execution, you will want to
     # simple AnsibleModule.exit_json(), passing the key/value results

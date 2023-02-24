@@ -29,47 +29,47 @@ __metaclass__ = type
 # USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-import requests
+# import requests
 import urllib.parse
 import base64
 import json
 
+
 def new_revision(arguments):
-# Function to initiate a revision/changeset and retrieve a revision ID
-    result={}
+    # Function to initiate a revision/changeset and retrieve a revision ID
+    result = {}
     revision_url = arguments["base_url"] + "revision"
-    payload={}
+    payload = {}
     response = requests.request("POST", revision_url, headers=arguments["headers"], data=payload, verify=False)
     revid = urllib.parse.quote_plus(list(response.json().keys())[0])
     result["revid"] = urllib.parse.quote_plus(list(response.json().keys())[0])
     result["status_code"] = response.status_code
     return result
 
+
 def apply_revision(arguments,revid):
-# Function to apply a revision/changeset
+    # Function to apply a revision/changeset
     revision_url = arguments["base_url"] + "revision"
     payload={"state": "apply","auto-prompt":{"ays": "ays_yes"}}
     requests.request("PATCH", revision_url + "/" + revid, headers=arguments["headers"], data=json.dumps(payload), verify=False)
-    result = get_api("revision/" + revid,arguments)
+    result = get_api("revision/" + revid, arguments)
     return result
 
-def get_api(object,arguments):
-# function to fetch information fromt he API endpoint
-    result={"changed":False}
-    endpoint_url = arguments["base_url"] + object
 
+def get_api(object,arguments):
+    # function to fetch information fromt he API endpoint
+    result = {"changed":False}
+    endpoint_url = arguments["base_url"] + object
     # implemented for revid - need to implement for include and omit
     if arguments["filters"] is not None:
         if arguments["filters"]["rev"] is not None:
             endpoint_url = endpoint_url + "?rev=" + arguments["filters"]["rev"]
-
-    payload={}
+    payload = {}
     response = requests.request("GET", endpoint_url, headers=arguments["headers"], data=payload, verify=False)
-
     result["api_results"] = response.json()
     result["status_code"] = response.status_code
-
     return result
+
 
 def normalize_keys(config):
     """
@@ -90,6 +90,7 @@ def normalize_keys(config):
     else:
         return config
     return new_config
+
 
 def normalize_spec(config):
     """ 
@@ -147,15 +148,16 @@ def normalize_spec(config):
                 id = item.pop('id')
                 new_config[id] = item
                 for key,value in item.items():
-                    #if isinstance(value,list):
+                    # if isinstance(value,list):
                     new_config[id][key]=normalize_spec(value)
     else:
         return config
     return new_config
 
+
 def patch_api(object,arguments):
-# function to update configuration at the API endpoint
-    result={"changed":False}
+    # function to update configuration at the API endpoint
+    result = {"changed":False}
     # Create a new revision ID, if not already initiated using a previous step in the playbook
     if("revid" not in arguments):
         revid = new_revision(arguments)["revid"]
@@ -169,41 +171,39 @@ def patch_api(object,arguments):
 
     # If revision not already initiated using a previous step in the playbook, apply changes right away
     if("revid" not in arguments):
-        apply_revision(arguments,revid)
+        apply_revision(arguments, revid)
         # wait for the revision changes to get applied - modify to monitor status of revision
         sleep(5)
         result = get_api(object,arguments)
-        result["changed"]=True
+        result["changed"] = True
     else:
         # Since no changes have been applied yet, return the response from the PATCH operation
         result["api_results"] = response.json()
         result["status_code"] = response.status_code
     return result
 
+
 def del_api(object,arguments):
-# function to delete configuration at the API endpoint
-    result={"changed":False}
+    # function to delete configuration at the API endpoint
+    result = {"changed":False}
     # Create a new revision ID, if not already initiated using a previous step in the playbook
     if(revid in arguments):
         revid = new_revision(arguments)["revid"]
     else:
         revid = arguments["revid"]
-
     # Check logic 
     endpoint_url =  arguments["base_url"] + object + "?rev=" + revid
     response = requests.request("DELETE", endpoint_url, headers=arguments["header"], verify=False)
-    
     # If revision not already initiated using a previous step in the playbook, apply changes right away
     if(revid not in arguments):
-       apply_revision(arguments,revid)
-
+       apply_revision(arguments, revid)
      # wait for the revision changes to get applied - modify to monitor status of revision
     sleep(5)
-
     # since the endpoint contains the ID fof the object that was reconfigured, extract the base object by splitting at the first /
-    result = get_api( object.split('/')[0],arguments)
+    result = get_api( object.split('/')[0], arguments)
     result["changed"]=True
     return result
+
 
 def run(object,pb_arguments):
     # Based on values in arguments passed from the playbook, set common variables in arguments
@@ -223,14 +223,12 @@ def run(object,pb_arguments):
     # Check if a revision has already been initiated and passed as an argument
     if('revid' in pb_arguments):
         arguments["revid"] = pb_arguments["revid"]
-
     # Check if this is a revision request
     if object == "revision":
         if pb_arguments["state"] == "new":
             result = new_revision(arguments)
         elif pb_arguments["state"] == "apply":
             result = apply_revision(arguments,arguments["revid"])
-
     # check request state - Gathered => Fetch data; Patched => Update data; Deleted => Delete data
     if pb_arguments["state"] == "gathered":
         result = get_api(object,arguments)
@@ -238,6 +236,5 @@ def run(object,pb_arguments):
         result = patch_api(object,arguments)
     elif pb_arguments["state"] == "deleted":
         result = del_api(object,arguments)
-
     return result
   

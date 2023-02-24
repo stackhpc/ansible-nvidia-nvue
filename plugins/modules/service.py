@@ -22,7 +22,8 @@ options:
         elements: dict
         suboptions:
             rev:
-                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches, such as startup and applied. This could be a branch name, tag name or specific commit.
+                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches,
+                             such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
             omit:
@@ -35,7 +36,7 @@ options:
                 type: list
     config:
         description: Provided configuration
-        type: dict 
+        type: dict
         elements: dict
         suboptions:
             dns:
@@ -54,7 +55,7 @@ options:
                         type: list
                         elements: dict
                         suboptions:
-                            id: 
+                            id:
                                 description: Remote DNS Server.
                                 required: false
                                 type: str
@@ -74,11 +75,11 @@ options:
                         type: list
                         elements: dict
                         suboptions:
-                            id: 
+                            id:
                                 description: Remote NTP Server.
                                 required: false
                                 type: str
-                            iburst: 
+                            iburst:
                                 description: When the server is unreachable, send a burst of eight packets instead of the usual one.
                                 required: false
                                 type: str
@@ -102,16 +103,16 @@ options:
                         type: list
                         elements: dict
                         suboptions:
-                            id: 
+                            id:
                                 description: Remote syslog server.
                                 required: false
                                 type: str
-                            port: 
+                            port:
                                 description: Port number of the remote syslog server.
                                 required: false
                                 type: int
                                 default: 514
-                            protocol: 
+                            protocol:
                                 description: Protocol, udp or tcp, of the remote syslog server.
                                 required: false
                                 type: str
@@ -121,11 +122,11 @@ options:
                                     - tcp
 
 
-    state: 
+    state:
         description: Defines the action to be taken
         required: true
         type: string
-        choices: 
+        choices:
             - gathered
             - deleted
             - merged
@@ -149,13 +150,14 @@ RETURN = r'''
 from ansible.module_utils.basic import AnsibleModule
 from ..module_utils.cl_common import run
 
+
 def main():
     # define paremeters to connect to the CL instance
     provider_spec = dict(
         cl_url=dict(type='str', required=True),
         cl_port=dict(type='str', required=True),
-        cl_username = dict(type='str', required=True),
-        cl_password = dict(type='str', required=True, no_log=True)
+        cl_username=dict(type='str', required=True),
+        cl_password=dict(type='str', required=True, no_log=True)
     )
 
     # define supported filters for the endpoint
@@ -169,24 +171,24 @@ def main():
     # define the service spec - used for creation/modification
     service_spec = dict(
         dns=dict(type='list', required=False, elements='dict', options=dict(
-            id=dict(type='str',required=False),
-            server=dict(type='list',required=False,elements='dict',options=dict(
-                id=dict(type='str',required=False)
+            id=dict(type='str', required=False),
+            server=dict(type='list', required=False,elements='dict', options=dict(
+                id=dict(type='str', required=False)
             ))
         )),
         ntp=dict(type='list', required=False, elements='dict', options=dict(
-            id=dict(type='str',required=False),
-            server=dict(type='list',required=False,elements='dict',options=dict(
-                id=dict(type='str',required=False),
-                iburst=dict(type='str',required=False,default='on',choices=['on','off'])
+            id=dict(type='str', required=False),
+            server=dict(type='list', required=False, elements='dict', options=dict(
+                id=dict(type='str', required=False),
+                iburst=dict(type='str', required=False, default='on', choices=['on','off'])
             ))
         )),
         syslog=dict(type='list', required=False, elements='dict', options=dict(
-            id=dict(type='str',required=False),
-            server=dict(type='list',required=False,elements='dict',options=dict(
-                id=dict(type='str',required=False),
-                port=dict(type='str',required=False,default='514'),
-                protocol=dict(type='str',required=False,default='udp',choices=['udp','tcp'])
+            id=dict(type='str', required=False),
+            server=dict(type='list', required=False, elements='dict', options=dict(
+                id=dict(type='str', required=False),
+                port=dict(type='str', required=False, default='514'),
+                protocol=dict(type='str', required=False, default='udp', choices=['udp','tcp'])
             ))
         ))
     )
@@ -194,9 +196,9 @@ def main():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         provider=dict(type='dict', required=True, options=provider_spec),
-        state=dict(type='str', required=True,choices=["gathered","deleted","merged"]),
+        state=dict(type='str', required=True, choices=["gathered","deleted","merged"]),
         revid=dict(type='str', required=False),
-        config=dict(type='dict',required=False,options=service_spec),
+        config=dict(type='dict', required=False, options=service_spec),
         filters=dict(type='dict', required=False, options=filter_spec)
     )
 
@@ -217,13 +219,13 @@ def main():
 
     endpoint = "service"
 
-    result = run(endpoint,module.params)
+    result = run(endpoint, module.params)
 
     # during the execution of the module, if there is an exception or a
     # conditional state that effectively causes a failure, run
     # AnsibleModule.fail_json() to pass in the message and the result
     if result["status_code"] != 200:
-        module.fail_json(msg='Your request failed',**result)
+        module.fail_json(msg='Your request failed', **result)
 
     # in the event of a successful module execution, you will want to
     # simple AnsibleModule.exit_json(), passing the key/value results
