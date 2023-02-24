@@ -22,8 +22,8 @@ options:
         elements: dict
         suboptions:
             rev:
-                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches, such as startup and applied. 
-                             This could be a branch name, tag name or specific commit.
+                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
+                             branches, such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
             omit:
@@ -44,8 +44,8 @@ options:
                 required: true
                 type: str
             untagged:
-                description: Interfaces added to this domain will, by default, be trunk interfaces with a single untagged vlan. Untagged packets on domain ports will be put in this vlan. 
-                             If none, then untagged packets will be dropped.
+                description: Interfaces added to this domain will, by default, be trunk interfaces with a single untagged vlan.
+                             Untagged packets on domain ports will be put in this vlan. If none, then untagged packets will be dropped.
                 required: false
                 type: int
             encap:
@@ -99,8 +99,8 @@ options:
                                             - off
                                             - auto
                                     multicast_group:
-                                        description: BUM traffic is sent to the specified multicast group and will be received by receivers who are interested in that group. 
-                                                     This usually requires PIM-SM to be used in the network.
+                                        description: BUM traffic is sent to the specified multicast group and will be received by receivers
+                                                     who are interested in that group. This usually requires PIM-SM to be used in the network.
                                         type: str
                                         required: false
                                     head_end_replication:
@@ -177,7 +177,7 @@ def main():
             vni=dict(type='list', required=False, options=dict(
                 id=dict(type='str', required=False)),
                 flooding=dict(type='dict', required=False, options=dict(
-                    enable=dict(type='str', required=False, default='auto', choices=['on','off','auto']),
+                    enable=dict(type='str', required=False, default='auto', choices=['on', 'off', 'auto']),
                     multicast_group=dict(type='str', required=False),
                     head_end_replication=dict(type='list', required=False, options=dict(
                         id=dict(type='str', required=False)
@@ -190,7 +190,7 @@ def main():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         provider=dict(type='dict', required=True, options=provider_spec),
-        state=dict(type='str', required=True, choices=["gathered","deleted","merged"]),
+        state=dict(type='str', required=True, choices=["gathered", "deleted", "merged"]),
         revid=dict(type='str', required=False),
         domainid=dict(type='str', required=False),
         config=dict(type='list', required=False, elements='dict', options=bridge_spec),

@@ -22,8 +22,8 @@ options:
         elements: dict
         suboptions:
             rev:
-                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches,
-                             such as startup and applied. This could be a branch name, tag name or specific commit.
+                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
+                             branches, such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
             omit:
@@ -66,7 +66,7 @@ options:
         description: Defines the action to be taken
         required: true
         type: string
-        choices: 
+        choices:
             - gathered
             - deleted
             - merged
@@ -107,7 +107,7 @@ def main():
         omit=dict(type='list', required=False),
         include=dict(type='list', required=False)
     )
-    
+
     # define the system spec - used for creation/modification
     system_spec = dict(
         hostname=dict(type='str', required=False, default='cumulus'),
@@ -122,7 +122,7 @@ def main():
     module_args = dict(
         provider=dict(type='dict', required=True, options=provider_spec),
         revid=dict(type='str', required=False),
-        state=dict(type='str', required=True, choices=["gathered","deleted","merged"]),
+        state=dict(type='str', required=True, choices=["gathered", "deleted", "merged"]),
         config=dict(type='dict', required=False, options=system_spec),
         filters=dict(type='dict', required=False, options=filter_spec)
     )

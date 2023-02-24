@@ -22,8 +22,8 @@ options:
         elements: dict
         suboptions:
             rev:
-                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches,
-                             such as startup and applied. This could be a branch name, tag name or specific commit.
+                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
+                             branches, such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
             omit:
@@ -167,7 +167,7 @@ def main():
         omit=dict(type='list', required=False),
         include=dict(type='list', required=False)
     )
-    
+
     # define the service spec - used for creation/modification
     service_spec = dict(
         dns=dict(type='list', required=False, elements='dict', options=dict(
@@ -180,7 +180,7 @@ def main():
             id=dict(type='str', required=False),
             server=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False),
-                iburst=dict(type='str', required=False, default='on', choices=['on','off'])
+                iburst=dict(type='str', required=False, default='on', choices=['on', 'off'])
             ))
         )),
         syslog=dict(type='list', required=False, elements='dict', options=dict(
@@ -188,7 +188,7 @@ def main():
             server=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False),
                 port=dict(type='str', required=False, default='514'),
-                protocol=dict(type='str', required=False, default='udp', choices=['udp','tcp'])
+                protocol=dict(type='str', required=False, default='udp', choices=['udp', 'tcp'])
             ))
         ))
     )
@@ -196,7 +196,7 @@ def main():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         provider=dict(type='dict', required=True, options=provider_spec),
-        state=dict(type='str', required=True, choices=["gathered","deleted","merged"]),
+        state=dict(type='str', required=True, choices=["gathered", "deleted", "merged"]),
         revid=dict(type='str', required=False),
         config=dict(type='dict', required=False, options=service_spec),
         filters=dict(type='dict', required=False, options=filter_spec)

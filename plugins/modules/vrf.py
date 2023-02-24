@@ -22,8 +22,8 @@ options:
         elements: dict
         suboptions:
             rev:
-                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches,
-                             such as startup and applied. This could be a branch name, tag name or specific commit.
+                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
+                             branches, such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
             omit:
@@ -63,7 +63,7 @@ options:
                         type: int
                     vni:
                         description: L3 VNI
-                        type: list 
+                        type: list
                         elements: dict
                         suboptions:
                             id:
@@ -135,7 +135,8 @@ options:
                                                 elements: dict
                                                 suboptions:
                                                     to_evpn:
-                                                        description: Controls for exporting routes from this VRF for this address-family into EVPN (as type-5 routes).
+                                                        description: Controls for exporting routes from this VRF for this address-family
+                                                                     into EVPN (as type-5 routes).
                                                         required: false
                                                         type: dict
                                                         elements: dict
@@ -226,8 +227,8 @@ options:
                                             - numbered
                                             - unnumbered
                                     remote_as:
-                                        description: ASN for the BGP neighbor(s) using this configuration. If specified as 'external', it means an EBGP configuration but the actual ASN is immaterial.
-                                                     If specified as 'internal', it means an IBGP configuration.
+                                        description: ASN for the BGP neighbor(s) using this configuration. If specified as 'external', it means an EBGP configuration
+                                                     but the actual ASN is immaterial. If specified as 'internal', it means an IBGP configuration.
                                         required: false
                                         type: str
                                     address_family:
@@ -261,8 +262,8 @@ options:
                                         required: false
                                         type: str
                                     remote_as:
-                                        description: ASN for the BGP neighbor(s) using this configuration. If specified as 'external', it means an EBGP configuration but the actual ASN is immaterial.
-                                                     If specified as 'internal', it means an IBGP configuration.
+                                        description: ASN for the BGP neighbor(s) using this configuration. If specified as 'external', it means an EBGP configuration
+                                                     but the actual ASN is immaterial. If specified as 'internal', it means an IBGP configuration.
                                         required: false
                                         type: str
                                     address_family:
@@ -473,11 +474,11 @@ options:
                                             - ipv6-address
                                             - blackhole
                                             - reject
-    state: 
+    state:
         description: Defines the action to be taken
         required: true
         type: string
-        choices: 
+        choices:
             - gathered
             - deleted
             - merged
@@ -519,7 +520,7 @@ def main():
     vrf_spec = dict(
         id=dict(type='str', required=True),
         evpn=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str', required=False, choices=['on','off']),
+            enable=dict(type='str', required=False, choices=['on', 'off']),
             vlan=dict(type='int', required=False),
             vni=dict(type='list', required=False, elements='dict',options=dict(
                 id=dict(type='str', required=False))
@@ -527,42 +528,42 @@ def main():
         )),
         router=dict(type='dict', required=False, options=dict(
             bgp=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on','off'], default='off'),
+                enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
                 autonomous_system=dict(type='int', required=False),
                 router_id=dict(type='str', required=False),
                 address_family=dict(type='dict', required=False, options=dict(
                     ipv4_unicast=dict(type='dict', required=False, options=dict(
-                        enable=dict(type='str', required=False, choices=['on','off'], default='on'),
+                        enable=dict(type='str', required=False, choices=['on', 'off'], default='on'),
                         network=dict(type='list', required=False, elements='dict', options=dict(
                             id=dict(type='str', required=False)
                         )),
                         route_export=dict(type='dict', required=False, options=dict(
                             to_evpn=dict(type='dict', required=False, options=dict(
-                                enable=dict(type='str', required=False, choices=['on','off'], default='off')
+                                enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
                             ))
                         )),
                         redistribute=dict(type='dict', required=False, options=dict(
                             connected=dict(type='dict', required=False, options=dict(
-                                enable=dict(type='str', required=False, choices=['on','off'], default='off')
+                                enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
                             )),
                             static=dict(type='dict', required=False, options=dict(
-                                enable=dict(type='str', required=False, choices=['on','off'], default='off')
+                                enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
                             ))
                         ))
                     )),
                     l2vpn_evpn=dict(type='dict', required=False, options=dict(
-                        enable=dict(type='str', required=False, choices=['on','off'], default='off')
+                        enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
                     ))
                 )),
                 neighbor=dict(type='list', required=False, elements='dict', options=dict(
                     id=dict(type='str', required=False),
-                    enable=dict(type='str', required=False,default='on', choices=['on','off']),
+                    enable=dict(type='str', required=False,default='on', choices=['on', 'off']),
                     peer_group=dict(type='str', required=False),
-                    type=dict(type='str', required=False, choices=['numbered','unnumbered']),
+                    type=dict(type='str', required=False, choices=['numbered', 'unnumbered']),
                     remote_as=dict(type='str', required=False),
                     address_family=dict(type='dict', required=False, options=dict(
                         l2vpn_evpn=dict(type='dict', required=False, options=dict(
-                            enable=dict(type='str', required=False, choices=['on','off'], default='off')
+                            enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
                         ))
                     ))
                 )),
@@ -570,13 +571,13 @@ def main():
                     id=dict(type='str', required=False),
                     remote_as=dict(type='str', required=False),
                     address_family=dict(type='dict', required=False, options=dict(
-                            ipv4_unicast=dict(type='dict', required=False, options=dict(
-                                enable=dict(type='str', required=False, choices=['on','off'], default='on')
-                            )),
-                            l2vpn_evpn=dict(type='dict', required=False, options=dict(
-                                enable=dict(type='str', required=False, choices=['on','off'], default='off')
-                            ))
+                        ipv4_unicast=dict(type='dict', required=False, options=dict(
+                            enable=dict(type='str', required=False, choices=['on', 'off'], default='on')
+                        )),
+                        l2vpn_evpn=dict(type='dict', required=False, options=dict(
+                            enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
                         ))
+                    ))
                 )),
                 route_import=dict(type='dict', required=False, options=dict(
                     from_evpn=dict(type='dict', required=False, options=dict(
@@ -587,14 +588,14 @@ def main():
                 ))
             )),
             ospf=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on','off'], default='off'),
+                enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
                 router_id=dict(type='str', required=False)
             )),
             pim=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on','off'], default='off'),
+                enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
                 ecmp=dict(type='dict', required=False, options=dict(
-                    enable=dict(type='str', required=False, choices=['on','off'], default='off'),
-                    rebalance=dict(type='str', required=False, choices=['on','off'], default='off')
+                    enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
+                    rebalance=dict(type='str', required=False, choices=['on', 'off'], default='off')
                 )),
                 address_family=dict(type='dict', required=False, options=dict(
                     ipv4_unicast=dict(type='dict', required=False, options=dict(

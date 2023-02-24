@@ -29,17 +29,17 @@ options:
                 description: Only include JSON properties matched by an include pattern in the response.
                 required: false
                 type: list
-    state: 
+    state:
         description: Defines the action to be taken
         required: true
         type: string
-        choices: 
+        choices:
             - gathered
             - new
             - apply
     revid:
-        description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches, such as startup and applied.
-                     This could be a branch name, tag name or specific commit.
+        description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches,
+                     such as startup and applied. This could be a branch name, tag name or specific commit.
         required: false
         type: str
 
@@ -90,13 +90,13 @@ def main():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         provider=dict(type='dict', required=True, options=provider_spec),
-        state=dict(type='str', required=True, choices=['new', 'apply','gathered']),
+        state=dict(type='str', required=True, choices=['new', 'apply', 'gathered']),
         revid=dict(type='str', required=False),
         filters=dict(type='dict', required=False, options=filter_spec)
     )
 
     required_if = [
-        ('state','apply',['revid'])
+        ('state', 'apply', ['revid'])
     ]
 
     # the AnsibleModule object will be our abstraction working with Ansible

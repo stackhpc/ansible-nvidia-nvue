@@ -22,8 +22,8 @@ options:
         elements: dict
         suboptions:
             rev:
-                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches,
-                             such as startup and applied. This could be a branch name, tag name or specific commit.
+                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
+                             branches, such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
             omit:
@@ -36,7 +36,7 @@ options:
                 type: list
     config:
         description: Provided configuration
-        type: dict 
+        type: dict
         elements: dict
         suboptions:
             enable:
@@ -79,11 +79,11 @@ options:
                 type: str
 
 
-    state: 
+    state:
         description: Defines the action to be taken
         required: true
         type: string
-        choices: 
+        choices:
             - gathered
             - deleted
             - merged
@@ -123,10 +123,10 @@ def main():
         omit=dict(type='list', required=False),
         include=dict(type='list', required=False)
     )
-    
+
     # define the bridge spec - used for creation/modification
     mlag_spec = dict(
-        enable=dict(type='str', required=False, default='off', choices=['on','off']),
+        enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
         backup=dict(type='list', required=False, options=dict(
             id=dict(type='str', required=False),
             vrf=dict(type="str", required=False)
@@ -140,7 +140,7 @@ def main():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         provider=dict(type='dict', required=True, options=provider_spec),
-        state=dict(type='str', required=True, choices=['gathered','deleted','merged']),
+        state=dict(type='str', required=True, choices=['gathered', 'deleted', 'merged']),
         revid=dict(type='str', required=False),
         config=dict(type='dict', required=False, options=mlag_spec),
         filters=dict(type='dict', required=False, options=filter_spec)

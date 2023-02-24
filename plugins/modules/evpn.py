@@ -13,8 +13,8 @@ short_description: This is the Cumulus Linux EVPN module
 
 version_added: '1.0.0'
 
-description: This is a Cumulus Linux module to interact with the EVPN object. Enables the EVPN control plane. When enabled, it also means that the EVPN service offered is vlan-based service and 
-             an EVI is auto-created for each extended VLAN.
+description: This is a Cumulus Linux module to interact with the EVPN object. Enables the EVPN control plane. When enabled,
+             it also means that the EVPN service offered is vlan-based service and an EVI is auto-created for each extended VLAN.
 
 options:
     filters:
@@ -23,8 +23,8 @@ options:
         elements: dict
         suboptions:
             rev:
-                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches, such as startup and applied. 
-                             This could be a branch name, tag name or specific commit.
+                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
+                             branches, such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
             omit:
@@ -88,8 +88,8 @@ options:
                 elements: dict
                 suboptions:
                     nexthop_setting:
-                        description: Specifies the next hop IP and MAC (Router MAC) to use in the advertisement of type-5 routes and 'self' type-2 routes ('self' = SVI IP/MAC). 
-                                     Relevant only in an MLAG configuration.
+                        description: Specifies the next hop IP and MAC (Router MAC) to use in the advertisement of type-5 routes and 'self' type-2
+                                     routes ('self' = SVI IP/MAC). Relevant only in an MLAG configuration.
                         required: false
                         type: str
                         default: system-ip-mac
@@ -97,7 +97,8 @@ options:
                             - system-ip-mac
                             - shared-ip-mac
                     svi_ip:
-                        description: If 'on', the IP addresses of SVIs in all EVIs are announced as type-2 routes. This configuration should not be enabled if SVI IPs are reused in the network.
+                        description: If 'on', the IP addresses of SVIs in all EVIs are announced as type-2 routes.
+                                     This configuration should not be enabled if SVI IPs are reused in the network.
                         required: false
                         type: str
                         default: off
@@ -116,11 +117,11 @@ options:
                             - off
 
 
-    state: 
+    state:
         description: Defines the action to be taken
         required: true
         type: string
-        choices: 
+        choices:
             - gathered
             - deleted
             - merged
@@ -163,28 +164,27 @@ def main():
 
     # define the bridge spec - used for creation/modification
     evpn_spec = dict(
-        enable=dict(type='str', required=False, default='off', choices=['on','off']),
+        enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
         dad=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str', required=False, default='off', choices=['on','off'])
+            enable=dict(type='str', required=False, default='off', choices=['on', 'off'])
         )),
         multihoming=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str', required=False, default='off', choices=['on','off']),
+            enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
             startup_delay=dict(type='int', required=False, default=180)
         )),
         route_advertise=dict(type='dict', required=False, options=dict(
-            nexthop_setting=dict(type='str', required=False, default='system-ip-mac', choices=['system-ip-mac','shared-ip-mac']),
-            svi_ip=dict(type='str', required=False, default='off', choices=['on','off']),
-            default_gateway=dict(type='str', required=False, default='off', choices=['on','off'])
+            nexthop_setting=dict(type='str', required=False, default='system-ip-mac', choices=['system-ip-mac', 'shared-ip-mac']),
+            svi_ip=dict(type='str', required=False, default='off', choices=['on', 'off']),
+            default_gateway=dict(type='str', required=False, default='off', choices=['on', 'off'])
         ))
     )
 
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         provider=dict(type='dict', required=True, options=provider_spec),
-        state=dict(type='str', required=True, choices=['gathered','deleted','merged']),
+        state=dict(type='str', required=True, choices=['gathered', 'deleted', 'merged']),
         revid=dict(type='str', required=False),
-        config=dict(type='dict', required=False, 
-        options=evpn_spec),
+        config=dict(type='dict', required=False, options=evpn_spec),
         filters=dict(type='dict', required=False, options=filter_spec)
     )
 

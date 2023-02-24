@@ -22,8 +22,8 @@ options:
         elements: dict
         suboptions:
             rev:
-                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches, such as startup and applied. 
-                             This could be a branch name, tag name or specific commit.
+                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
+                             branches, such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
             omit:
@@ -139,8 +139,8 @@ options:
                                 required: false
                                 type: int
                             vlan:
-                                description: Set of allowed vlans for this bridge domain on this interface. If "all", inherit all vlans from the bridge domain, if appropriate.
-                                             This is the default.
+                                description: Set of allowed vlans for this bridge domain on this interface. If "all", inherit all vlans from the
+                                             bridge domain, if appropriate. This is the default.
                                 required: false
                                 type: list
                                 elements: dict
@@ -155,7 +155,7 @@ options:
                                 type: dict
                                 elements: dict
                                 suboptions:
-                                    admin_edge: 
+                                    admin_edge:
                                         description: Admin Edge.
                                         required: false
                                         type: str
@@ -394,12 +394,13 @@ options:
                                         choices:
                                             - on
                                             - off
-                                    local_id: 
-                                        description: Ethernet segment local-id. If provided, it will be combined with the global multihoming mac-address to 
-                                                     create the ethernet segment identifier, which must be unique for each segment and match other bonds in the segment.
+                                    local_id:
+                                        description: Ethernet segment local-id. If provided, it will be combined with the global multihoming mac-address to
+                                                     create the ethernet segment identifier, which must be unique for each segment
+                                                     and match other bonds in the segment.
                                         required: false
                                         type: int
-                                    identifier: 
+                                    identifier:
                                         description: Ethernet segment identifier. This must be unique for each segment and match other bonds in the segment.
                                         required: false
                                         type: str
@@ -446,7 +447,7 @@ options:
         description: Defines the action to be taken
         required: true
         type: string
-        choices: 
+        choices:
             - gathered
             - deleted
             - merged
@@ -490,13 +491,13 @@ def main():
         description=dict(type='str', required=False),
         type=dict(type='str', required=False, choices=['swp', 'eth', 'bond', 'loopback', 'svi', 'sub', 'peerlink', 'tunnel']),
         bond=dict(type='dict', required=False, options=dict(
-            mode=dict(type='str', required=False, choices=['lacp','static'], default='lacp'),
-            lacp_bypass=dict(type='str', required=False, choices=['on','off'], default='off'),
+            mode=dict(type='str', required=False, choices=['lacp', 'static'], default='lacp'),
+            lacp_bypass=dict(type='str', required=False, choices=['on', 'off'], default='off'),
             member=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False)
             )),
             mlag=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on','off'], default='off'),
+                enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
                 id=dict(type='int', required=False)
             ))
         )),
@@ -505,9 +506,9 @@ def main():
                 id=dict(type='str', required=False),
                 access=dict(type='int', required=False),
                 stp=dict(type='dict',required=False,options=dict(
-                    admin_edge=dict(type='str', required=False, choices=['on','off']),
-                    auto_edge=dict(type='str', required=False, choices=['on','off']),
-                    bpdu_guard=dict(type='str', required=False, choices=['on','off'])
+                    admin_edge=dict(type='str', required=False, choices=['on', 'off']),
+                    auto_edge=dict(type='str', required=False, choices=['on', 'off']),
+                    bpdu_guard=dict(type='str', required=False, choices=['on', 'off'])
                 )),
                 vlan=dict(type='list', required=False, elements='dict', options=dict(
                     id=dict(type='str', required=False)
@@ -516,10 +517,11 @@ def main():
         )),
         router=dict(type='dict', required=False, options=dict(
             ospf=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on','off'], default='off'),
+                enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
                 area=dict(type='str', required=False),
-                network_type=dict(type='str', required=False, choices=['broadcast', 'non-broadcast', 'point-to-point', 'point-to-multipoint'], default='broadcast'),
-                passive=dict(type='str', required=False, choices=['on','off']),
+                network_type=dict(type='str', required=False, choices=['broadcast', 'non-broadcast', 'point-to-point', 'point-to-multipoint'],
+                                  default='broadcast'),
+                passive=dict(type='str', required=False, choices=['on', 'off']),
                 timers=dict(type='dict', required=False, options=dict(
                     dead_interval=dict(type='str', required=False),
                     hello_interval=dict(type='int', required=False),
@@ -527,11 +529,11 @@ def main():
                 ))
             )),
             pim=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on','off'], default='off'),
+                enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
                 address_family=dict(type='dict', required=False, options=dict(
                     ipv4_unicast=dict(type='dict', required=False, options=dict(
                         use_source=dict(type='str', required=False)
-                    ))    
+                    ))
                 ))
             ))
         )),
@@ -547,7 +549,7 @@ def main():
             )),
             vrf=dict(type='str', required=False, default='default'),
             vrr=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on','off'], default='off'),
+                enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
                 address=dict(type='list', required=False, elements='dict', options=dict(
                     id=dict(type='str', required=False)
                 )),
@@ -557,14 +559,14 @@ def main():
                 ))
             )),
             igmp=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on','off'], default='off')
+                enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
             ))
         )),
         evpn=dict(type='dict', required=False, options=dict(
             multihoming=dict(type='dict', required=False, options=dict(
-                uplink=dict(type='str', required=False, choices=['on','off'], default='off'),
+                uplink=dict(type='str', required=False, choices=['on', 'off'], default='off'),
                 segment=dict(type='dict', required=False, options=dict(
-                    enable=dict(type='str', required=False, choices=['on','off'], default='off'),
+                    enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
                     local_id=dict(type='int', required=False),
                     identifier=dict(type='str', required=False),
                     mac_address=dict(type='str', required=False, default='auto'),
@@ -586,7 +588,7 @@ def main():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         provider=dict(type='dict', required=True, options=provider_spec),
-        state=dict(type='str', required=True, choices=["gathered","deleted","merged"]),
+        state=dict(type='str', required=True, choices=["gathered", "deleted", "merged"]),
         revid=dict(type='str', required=False),
         interfaceid=dict(type='str', required=False),
         config=dict(type='list', required=False, elements='dict', options=interface_spec),

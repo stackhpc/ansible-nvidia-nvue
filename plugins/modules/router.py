@@ -22,8 +22,8 @@ options:
         elements: dict
         suboptions:
             rev:
-                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches,
-                             such as startup and applied. This could be a branch name, tag name or specific commit.
+                description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
+                             branches, such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
             omit:
@@ -183,28 +183,28 @@ def main():
         omit=dict(type='list', required=False),
         include=dict(type='list', required=False)
     )
-    
+
     # define the router spec - used for creation/modification
     router_spec = dict(
         bgp=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str', required=False, default='off', choices=['on','off']),
+            enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
             autonomous_system=dict(type='int', required=False),
             router_id=dict(type='str', required=False)
         )),
         ospf=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str', required=False, default='off', choices=['on','off']),
+            enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
             timers=dict(type='dict', required=False, options=dict(
                 spf=dict(type='dict', required=False, options=dict(
                     delay=dict(type='int', required=False),
                     holdtime=dict(type='int', required=False),
                     max_holdtime=dict(type='int', required=False)
-            )))
-        ))),
+                )))
+            ))),
         vrr=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str', required=False, default='off', choices=['on','off'])
+            enable=dict(type='str', required=False, default='off', choices=['on', 'off'])
         )),
         pim=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str', required=False, default='off', choices=['on','off']),
+            enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
             timers=dict(type='dict', required=False, options=dict(
                 keep_alive=dict(type='int', required=False)
             ))
@@ -214,7 +214,7 @@ def main():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         provider=dict(type='dict', required=True, options=provider_spec),
-        state=dict(type='str', required=True, choices=["gathered","deleted","merged"]),
+        state=dict(type='str', required=True, choices=["gathered", "deleted", "merged"]),
         revid=dict(type='str', required=False),
         config=dict(type='dict', required=False, options=router_spec),
         filters=dict(type='dict', required=False, options=filter_spec)
