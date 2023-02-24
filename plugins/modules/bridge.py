@@ -119,7 +119,7 @@ options:
 
     state: 
         description: Defines the action to be taken
-        required:true
+        required: true
         type: string
         choices: 
             - gathered
