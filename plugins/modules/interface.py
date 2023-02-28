@@ -451,6 +451,16 @@ options:
             - gathered
             - deleted
             - merged
+    force:
+        description: When true, replies "yes" to NVUE prompts.
+        required: false
+        default: false
+        type: bool
+    wait:
+        description: How long to poll for "merged/deleted" operation results.
+        required: false
+        default: 0
+        type: int
 
 author:
     - Krishna Vasudevan
@@ -477,13 +487,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 
 
 def main():
-    # define paremeters to connect to the CL instance
-    provider_spec = dict(
-        cl_url=dict(type='str', required=True),
-        cl_port=dict(type='str', required=True),
-        cl_username=dict(type='str', required=True),
-        cl_password=dict(type='str', required=True, no_log=True)
-    )
     # define supported filters for the endpoint
     filter_spec = dict(
         rev=dict(type='str', required=False, default='operational'),
@@ -592,7 +595,8 @@ def main():
 
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
-        provider=dict(type='dict', required=True, options=provider_spec),
+        force=dict(type='bool', required=False, default=False),
+        wait=dict(type="int", required=False, default=0),
         state=dict(type='str', required=True, choices=["gathered", "deleted", "merged"]),
         revid=dict(type='str', required=False),
         interfaceid=dict(type='str', required=False),
@@ -609,7 +613,7 @@ def main():
     # supports check mode
     module = AnsibleModule(
         argument_spec=module_args,
-        required_if = required_if
+        required_if=required_if,
         supports_check_mode=True
     )
 
@@ -621,7 +625,7 @@ def main():
 
     path = "interface/"
     if module.params["interfaceid"] is not None:
-        path = path + "/" + module.params["interfaceid"]
+        path = path + module.params["interfaceid"]
     if module.params["state"] == "gathered":
         operation = "get"
     else:

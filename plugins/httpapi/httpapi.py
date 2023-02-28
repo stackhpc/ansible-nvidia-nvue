@@ -50,11 +50,95 @@ class HttpApi(HttpApiBase):
     def set_operation(self, data, path, **kwargs):
         # If revid is not passed as part of the list of paramaters, create a new revision ID
         self.revisionID = kwargs.get("revid", self.create_revision())
-        result = self.patch_revision(path, data)
+        normalized_keys_data = self.normalize_keys(data)
+        normalized_data = self.normalize_spec(normalized_keys_data)
+        result = self.patch_revision(path, normalized_data)
         if kwargs.get("revid"):
             return result
         else:
             return self.apply_config(**kwargs)
+        
+    def normalize_keys(self, data):
+        """
+        Function normalize all the keys - Replace all underscore seperated keys with hyphen seperated keys. For example, mac_flooding is replaced with mac-flooding
+        """
+        new_config = {}
+        if isinstance(data, dict):
+            if not bool(data):
+                return new_config
+            for key, value in data.items():
+                new_config[key.replace("_","-")] = self.normalize_keys(value)
+        elif isinstance(data, list):
+            if not len(data):
+                return new_config
+            new_config = []
+            for items in data:
+                new_config.append(self.normalize_keys(items))
+        else:
+            return data
+        return new_config
+
+
+    def normalize_spec(self, data):
+        """ 
+        Function to normalize config parameters
+        Remove the input value id and make it a dictionary with the rest of the values. For example, in bridges, we take id as an input:
+        config:
+            - id: br_default
+            untagged: 1
+            type: vlan-aware
+            vlan:
+                - id: 10
+                vni:
+                    - id: 10
+                - id: 20
+                vni: 
+                    - id: 20
+        This needs to be converted for the API as below:
+        {
+            'br_default': 
+            {
+                'type': 'vlan-aware', 
+                'untagged': '1', 
+                'vlan': 
+                {
+                    '10': 
+                    {
+                        'vni': 
+                        {
+                            '10': {}
+                        }
+                    }, 
+                    '20': 
+                    {
+                        'vni': 
+                        {
+                            '20': {}
+                        }
+                    }
+                }
+            }
+        }
+
+        """
+        new_config = {}
+        if isinstance(data, dict):
+            if not bool(data):
+                return new_config
+            for key, value in data.items():
+                new_config[key] = self.normalize_spec(value)
+        elif isinstance(data, list):
+            if not len(data):
+                return new_config
+            for item in data:
+                if("id" in item):
+                    id = item.pop('id')
+                    new_config[id] = item
+                    for key, value in item.items():
+                        new_config[id][key]=self.normalize_spec(value)
+        else:
+            return data
+        return new_config
 
     def create_revision(self):
         path = "/".join([self.prefix, "revision"])

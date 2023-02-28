@@ -37,6 +37,16 @@ options:
             - gathered
             - new
             - apply
+    force:
+        description: When true, replies "yes" to NVUE prompts.
+        required: false
+        default: false
+        type: bool
+    wait:
+        description: How long to poll for "merged/deleted" operation results.
+        required: false
+        default: 0
+        type: int
     revid:
         description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration branches,
                      such as startup and applied. This could be a branch name, tag name or specific commit.
@@ -78,14 +88,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 
 
 def main():
-    # define paremeters to connect to the CL instance
-    provider_spec = dict(
-        cl_url=dict(type='str', required=True),
-        cl_port=dict(type='str', required=True),
-        cl_username=dict(type='str', required=True),
-        cl_password=dict(type='str', required=True, no_log=True)
-    )
-
     # define supported filters for the endpoint
     filter_spec = dict(
         omit=dict(type='list', required=False),
@@ -94,7 +96,8 @@ def main():
 
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
-        provider=dict(type='dict', required=True, options=provider_spec),
+        force=dict(type='bool', required=False, default=False),
+        wait=dict(type="int", required=False, default=0),
         state=dict(type='str', required=True, choices=['new', 'apply', 'gathered']),
         revid=dict(type='str', required=False),
         filters=dict(type='dict', required=False, options=filter_spec)
@@ -147,26 +150,6 @@ def main():
         result["changed"] = True
     result["message"] = response
 
-    module.exit_json(**result)
-
-    # if the user is working with this module in only check mode we do not
-    # want to make any changes to the environment, just return the current
-    # state with no modifications
-    if module.check_mode:
-        module.exit_json(**result)
-
-    
-
-    result = run(endpoint, module.params)
-
-    # during the execution of the module, if there is an exception or a
-    # conditional state that effectively causes a failure, run
-    # AnsibleModule.fail_json() to pass in the message and the result
-    if result["status_code"] != 200:
-        module.fail_json(msg='Your request failed', **result)
-
-    # in the event of a successful module execution, you will want to
-    # simple AnsibleModule.exit_json(), passing the key/value results
     module.exit_json(**result)
 
 
