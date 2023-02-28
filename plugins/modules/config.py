@@ -68,8 +68,13 @@ RETURN = r'''
 
 '''
 
+import json
 from ansible.module_utils.basic import AnsibleModule
-from ..module_utils.cl_common import run
+from ansible.module_utils.connection import Connection
+from ansible.module_utils.six import string_types
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    dict_diff,
+)
 
 
 def main():
@@ -115,10 +120,42 @@ def main():
     if module.check_mode:
         module.exit_json(**result)
 
-    endpoint = "revision"
+    path = "revision/"
     if module.params["state"] == "gathered":
+        operation = "get"
         if module.params["revid"] is not None:
-            endpoint = endpoint + "/" + module.params["revid"]
+            path = path + module.params["revid"]
+    else:
+        operation = module.params["state"]
+    data = module.params["data"]
+    force = module.params["force"]
+    wait = module.params["wait"]
+    revid = module.params["revid"]
+
+    if isinstance(data, string_types):
+        data = json.loads(data)
+
+    warnings = list()
+    result = {"changed": False, "warnings": warnings}
+
+    running = None
+    commit = not module.check_mode
+
+    connection = Connection(module._socket_path)
+    response = connection.send_request(data, path, operation, force=force, wait=wait, revid=revid)
+    if operation == "set" and response:
+        result["changed"] = True
+    result["message"] = response
+
+    module.exit_json(**result)
+
+    # if the user is working with this module in only check mode we do not
+    # want to make any changes to the environment, just return the current
+    # state with no modifications
+    if module.check_mode:
+        module.exit_json(**result)
+
+    
 
     result = run(endpoint, module.params)
 

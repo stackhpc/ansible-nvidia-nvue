@@ -34,7 +34,7 @@ options:
                 description: Only include JSON properties matched by an include pattern in the response.
                 required: false
                 type: list
-    config:
+    data:
         description: Provided configuration
         type: list
         elements: dict
@@ -123,7 +123,7 @@ options:
     state:
         description: Defines the action to be taken
         required: true
-        type: string
+        type: str
         choices:
             - gathered
             - deleted
@@ -145,8 +145,13 @@ RETURN = r'''
 
 '''
 
+import json
 from ansible.module_utils.basic import AnsibleModule
-from ..module_utils.cl_common import run
+from ansible.module_utils.connection import Connection
+from ansible.module_utils.six import string_types
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    dict_diff,
+)
 
 
 def main():
@@ -171,7 +176,7 @@ def main():
         untagged=dict(type='int', required=False),
         type=dict(type='str', required=False, default="vlan-aware"),
         encap=dict(type='str', required=False, default="802.1Q"),
-        mac_address=dict(type='str', required=False),
+        mac_address=dict(type='str', required=False, default="auto"),
         vlan=dict(type='list', required=False, options=dict(
             id=dict(type='str', required=False),
             vni=dict(type='list', required=False, options=dict(
@@ -193,10 +198,13 @@ def main():
         state=dict(type='str', required=True, choices=["gathered", "deleted", "merged"]),
         revid=dict(type='str', required=False),
         domainid=dict(type='str', required=False),
-        config=dict(type='list', required=False, elements='dict', options=bridge_spec),
-        filters=dict(type='dict', required=False, options=filter_spec)
+        data=dict(type='list', required=False, elements='dict', options=bridge_spec),
+        filters=dict(type='dict', required=False, elements='dict', options=filter_spec)
     )
 
+    required_if = [
+        ["operation", "merged", ["data"]],
+    ]
     # the AnsibleModule object will be our abstraction working with Ansible
     # this includes instantiation, a couple of common attr would be the
     # args/params passed to the execution, as well as if the module
@@ -204,6 +212,7 @@ def main():
     module = AnsibleModule(
         argument_spec=module_args,
         mutually_exclusive=[["config", "domainid"]],
+        required_if = required_if
         supports_check_mode=True
     )
 
@@ -213,26 +222,34 @@ def main():
     if module.check_mode:
         module.exit_json(**result)
 
-    endpoint = "bridge"
+    path = "bridge/"
     if module.params["state"] == "gathered":
+        operation = "get"
         if module.params["domainid"] is not None:
-            endpoint = endpoint + "/domain/" + module.params["domainid"]
-    elif module.params["state"] == "deleted":
-        if module.params["domainid"] is not None:
-            endpoint = endpoint + "/domain/" + module.params["domainid"]
-    else:
-        endpoint = endpoint + "/domain"
+            path = path + "domain/" + module.params["domainid"]
+        else:
+            path = path + "domain/"
+            operation = "set"
+    data = module.params["data"]
+    force = module.params["force"]
+    wait = module.params["wait"]
+    revid = module.params["revid"]
 
-    result = run(endpoint, module.params)
+    if isinstance(data, string_types):
+        data = json.loads(data)
 
-    # during the execution of the module, if there is an exception or a
-    # conditional state that effectively causes a failure, run
-    # AnsibleModule.fail_json() to pass in the message and the result
-    if result["status_code"] != 200:
-        module.fail_json(msg='Your request failed', **result)
+    warnings = list()
+    result = {"changed": False, "warnings": warnings}
 
-    # in the event of a successful module execution, you will want to
-    # simple AnsibleModule.exit_json(), passing the key/value results
+    running = None
+    commit = not module.check_mode
+
+    connection = Connection(module._socket_path)
+    response = connection.send_request(data, path, operation, force=force, wait=wait, revid=revid)
+    if operation == "set" and response:
+        result["changed"] = True
+    result["message"] = response
+
     module.exit_json(**result)
 
 

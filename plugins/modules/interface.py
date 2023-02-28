@@ -34,7 +34,7 @@ options:
                 description: Only include JSON properties matched by an include pattern in the response.
                 required: false
                 type: list
-    config:
+    data:
         description: Provided configuration
         type: list
         elements: dict
@@ -467,8 +467,13 @@ RETURN = r'''
 # These are examples of possible return values, and in general should use other names for return values.
 '''
 
+import json
 from ansible.module_utils.basic import AnsibleModule
-from ..module_utils.cl_common import run
+from ansible.module_utils.connection import Connection
+from ansible.module_utils.six import string_types
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    dict_diff,
+)
 
 
 def main():
@@ -505,7 +510,7 @@ def main():
             domain=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False),
                 access=dict(type='int', required=False),
-                stp=dict(type='dict',required=False,options=dict(
+                stp=dict(type='dict', required=False, options=dict(
                     admin_edge=dict(type='str', required=False, choices=['on', 'off']),
                     auto_edge=dict(type='str', required=False, choices=['on', 'off']),
                     bpdu_guard=dict(type='str', required=False, choices=['on', 'off'])
@@ -591,16 +596,20 @@ def main():
         state=dict(type='str', required=True, choices=["gathered", "deleted", "merged"]),
         revid=dict(type='str', required=False),
         interfaceid=dict(type='str', required=False),
-        config=dict(type='list', required=False, elements='dict', options=interface_spec),
+        data=dict(type='list', required=False, elements='dict', options=interface_spec),
         filters=dict(type='dict', required=False, options=filter_spec)
     )
 
+    required_if = [
+        ["operation", "merged", ["data"]],
+    ]
     # the AnsibleModule object will be our abstraction working with Ansible
     # this includes instantiation, a couple of common attr would be the
     # args/params passed to the execution, as well as if the module
     # supports check mode
     module = AnsibleModule(
         argument_spec=module_args,
+        required_if = required_if
         supports_check_mode=True
     )
 
@@ -610,19 +619,33 @@ def main():
     if module.check_mode:
         module.exit_json(**result)
 
-    endpoint = "interface"
+    path = "interface/"
     if module.params["interfaceid"] is not None:
-        endpoint = endpoint + "/" + module.params["interfaceid"]
-    result = run(endpoint, module.params)
+        path = path + "/" + module.params["interfaceid"]
+    if module.params["state"] == "gathered":
+        operation = "get"
+    else:
+        operation = "set"
+    data = module.params["data"]
+    force = module.params["force"]
+    wait = module.params["wait"]
+    revid = module.params["revid"]
 
-    # during the execution of the module, if there is an exception or a
-    # conditional state that effectively causes a failure, run
-    # AnsibleModule.fail_json() to pass in the message and the result
-    if result["status_code"] != 200:
-        module.fail_json(msg='Your request failed', **result)
+    if isinstance(data, string_types):
+        data = json.loads(data)
 
-    # in the event of a successful module execution, you will want to
-    # simple AnsibleModule.exit_json(), passing the key/value results
+    warnings = list()
+    result = {"changed": False, "warnings": warnings}
+
+    running = None
+    commit = not module.check_mode
+
+    connection = Connection(module._socket_path)
+    response = connection.send_request(data, path, operation, force=force, wait=wait, revid=revid)
+    if operation == "set" and response:
+        result["changed"] = True
+    result["message"] = response
+
     module.exit_json(**result)
 
 

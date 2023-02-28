@@ -103,6 +103,7 @@ def main():
         "wait": {"type": "int", "required": False, "default": 0},
         "path": {"type": "str", "required": False, "default": "/"},
         "data": {"type": "dict", "required": False, "default": {}},
+        "revid": {"type": "str", "required": False}
     }
 
     required_if = [
@@ -120,6 +121,7 @@ def main():
     operation = module.params["operation"]
     force = module.params["force"]
     wait = module.params["wait"]
+    revid = module.params["revid"]
 
     if isinstance(data, string_types):
         data = json.loads(data)
@@ -131,7 +133,7 @@ def main():
     commit = not module.check_mode
 
     connection = Connection(module._socket_path)
-    response = connection.send_request(data, path, operation, force=force, wait=wait)
+    response = connection.send_request(data, path, operation, force=force, wait=wait, revid=revid)
     if operation == "set" and response:
         result["changed"] = True
     result["message"] = response

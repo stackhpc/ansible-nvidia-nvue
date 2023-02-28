@@ -29,11 +29,16 @@ class HttpApi(HttpApiBase):
         self.headers = {"Content-Type": "application/json"}
 
     def send_request(self, data, path, operation, **kwargs):
+        if path == "revision/":
+            if operation == "new":
+                return self.create_revision()
+            elif operation == "apply":
+                return self.apply_config()
         if operation == "set":
             return self.set_operation(data, path, **kwargs)
         elif operation == "get":
             params = {"rev": "applied"}
-            path = f"{self.prefix}/?{urllib.parse.urlencode(params)}"
+            path = f"{self.prefix}/{path}?{urllib.parse.urlencode(params)}"
             return self.get_operation(path)
 
     def get_operation(self, path):
@@ -43,12 +48,13 @@ class HttpApi(HttpApiBase):
         return handle_response(response, response_data)
 
     def set_operation(self, data, path, **kwargs):
-
-        self.revisionID = self.create_revision()
-
-        self.patch_revision(path, data)
-
-        return self.apply_config(**kwargs)
+        # If revid is not passed as part of the list of paramaters, create a new revision ID
+        self.revisionID = kwargs.get("revid", self.create_revision())
+        result = self.patch_revision(path, data)
+        if kwargs.get("revid"):
+            return result
+        else:
+            return self.apply_config(**kwargs)
 
     def create_revision(self):
         path = "/".join([self.prefix, "revision"])
@@ -61,7 +67,6 @@ class HttpApi(HttpApiBase):
             return k
 
     def patch_revision(self, path, data):
-
         params = {"rev": self.revisionID}
         path = f"{self.prefix}/?{urllib.parse.urlencode(params)}"
 
