@@ -57,17 +57,18 @@ class HttpApi(HttpApiBase):
             return result
         else:
             return self.apply_config(**kwargs)
-        
+
     def normalize_keys(self, data):
         """
-        Function normalize all the keys - Replace all underscore seperated keys with hyphen seperated keys. For example, mac_flooding is replaced with mac-flooding
+        Function normalize all the keys - Replace all underscore seperated keys with hyphen seperated keys. 
+        For example, mac_flooding is replaced with mac-flooding
         """
         new_config = {}
         if isinstance(data, dict):
             if not bool(data):
                 return new_config
             for key, value in data.items():
-                new_config[key.replace("_","-")] = self.normalize_keys(value)
+                new_config[key.replace("_", "-")] = self.normalize_keys(value)
         elif isinstance(data, list):
             if not len(data):
                 return new_config
@@ -78,9 +79,8 @@ class HttpApi(HttpApiBase):
             return data
         return new_config
 
-
     def normalize_spec(self, data):
-        """ 
+        """
         Function to normalize config parameters
         Remove the input value id and make it a dictionary with the rest of the values. For example, in bridges, we take id as an input:
         config:
@@ -92,26 +92,26 @@ class HttpApi(HttpApiBase):
                 vni:
                     - id: 10
                 - id: 20
-                vni: 
+                vni:
                     - id: 20
         This needs to be converted for the API as below:
         {
-            'br_default': 
+            'br_default':
             {
-                'type': 'vlan-aware', 
-                'untagged': '1', 
-                'vlan': 
+                'type': 'vlan-aware',
+                'untagged': '1',
+                'vlan':
                 {
-                    '10': 
+                    '10':
                     {
-                        'vni': 
+                        'vni':
                         {
                             '10': {}
                         }
-                    }, 
-                    '20': 
+                    },
+                    '20':
                     {
-                        'vni': 
+                        'vni':
                         {
                             '20': {}
                         }
@@ -131,11 +131,11 @@ class HttpApi(HttpApiBase):
             if not len(data):
                 return new_config
             for item in data:
-                if("id" in item):
+                if "id" in item:
                     id = item.pop('id')
                     new_config[id] = item
                     for key, value in item.items():
-                        new_config[id][key]=self.normalize_spec(value)
+                        new_config[id][key] = self.normalize_spec(value)
         else:
             return data
         return new_config

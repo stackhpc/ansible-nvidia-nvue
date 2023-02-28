@@ -65,7 +65,7 @@ options:
     state:
         description: Defines the action to be taken
         required: true
-        type: string
+        type: str
         choices:
             - gathered
             - deleted
