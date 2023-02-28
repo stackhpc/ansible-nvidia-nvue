@@ -659,12 +659,6 @@ def main():
         supports_check_mode=True
     )
 
-    # if the user is working with this module in only check mode we do not
-    # want to make any changes to the environment, just return the current
-    # state with no modifications
-    if module.check_mode:
-        module.exit_json(**result)
-
     path = "vrf/"
     if module.params["vrfid"] is not None:
         path = path + module.params["vrfid"]
@@ -685,6 +679,12 @@ def main():
 
     running = None
     commit = not module.check_mode
+
+    # if the user is working with this module in only check mode we do not
+    # want to make any changes to the environment, just return the current
+    # state with no modifications
+    if module.check_mode:
+        module.exit_json(**result)
 
     connection = Connection(module._socket_path)
     response = connection.send_request(data, path, operation, force=force, wait=wait, revid=revid)

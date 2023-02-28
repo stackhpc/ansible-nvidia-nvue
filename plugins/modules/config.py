@@ -117,12 +117,6 @@ def main():
         supports_check_mode=True
     )
 
-    # if the user is working with this module in only check mode we do not
-    # want to make any changes to the environment, just return the current
-    # state with no modifications
-    if module.check_mode:
-        module.exit_json(**result)
-
     path = "revision/"
     if module.params["state"] == "gathered":
         operation = "get"
@@ -143,6 +137,12 @@ def main():
 
     running = None
     commit = not module.check_mode
+
+    # if the user is working with this module in only check mode we do not
+    # want to make any changes to the environment, just return the current
+    # state with no modifications
+    if module.check_mode:
+        module.exit_json(**result)
 
     connection = Connection(module._socket_path)
     response = connection.send_request(data, path, operation, force=force, wait=wait, revid=revid)

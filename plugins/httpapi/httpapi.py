@@ -60,7 +60,7 @@ class HttpApi(HttpApiBase):
 
     def normalize_keys(self, data):
         """
-        Function normalize all the keys - Replace all underscore seperated keys with hyphen seperated keys. 
+        Function normalize all the keys - Replace all underscore seperated keys with hyphen seperated keys.
         For example, mac_flooding is replaced with mac-flooding
         """
         new_config = {}
