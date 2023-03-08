@@ -478,6 +478,7 @@ RETURN = r'''
 '''
 
 import json
+import q
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 from ansible.module_utils.six import string_types
@@ -605,7 +606,7 @@ def main():
     )
 
     required_if = [
-        ["operation", "merged", ["data"]],
+        ["state", "merged", ["data"]],
     ]
     # the AnsibleModule object will be our abstraction working with Ansible
     # this includes instantiation, a couple of common attr would be the
@@ -617,9 +618,9 @@ def main():
         supports_check_mode=True
     )
 
-    path = "interface/"
+    path = "interface"
     if module.params["interfaceid"] is not None:
-        path = path + module.params["interfaceid"]
+        path = path + "/" + module.params["interfaceid"]
     if module.params["state"] == "gathered":
         operation = "get"
     else:

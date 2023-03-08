@@ -98,6 +98,7 @@ RETURN = r'''
 '''
 
 import json
+import q
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 from ansible.module_utils.six import string_types
@@ -148,7 +149,7 @@ def main():
         supports_check_mode=True
     )
 
-    path = "system/"
+    path = "system"
     if module.params["state"] == "gathered":
         operation = "get"
     else:
@@ -174,6 +175,7 @@ def main():
         module.exit_json(**result)
 
     connection = Connection(module._socket_path)
+    q(path)
     response = connection.send_request(data, path, operation, force=force, wait=wait, revid=revid)
     if operation == "set" and response:
         result["changed"] = True

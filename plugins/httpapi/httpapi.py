@@ -14,7 +14,7 @@ description:
 """
 
 import urllib
-
+import q
 import json
 import time
 
@@ -29,16 +29,22 @@ class HttpApi(HttpApiBase):
         self.headers = {"Content-Type": "application/json"}
 
     def send_request(self, data, path, operation, **kwargs):
-        if path == "revision/":
+        q(self)
+        q(path)
+        if path == "revision":
             if operation == "new":
                 return self.create_revision()
             elif operation == "apply":
+                self.revisionID=kwargs.get("revid")
                 return self.apply_config()
         if operation == "set":
             return self.set_operation(data, path, **kwargs)
         elif operation == "get":
             params = {"rev": "applied"}
+            if path == "/":
+                path = ""
             path = f"{self.prefix}/{path}?{urllib.parse.urlencode(params)}"
+            q(path)
             return self.get_operation(path)
 
     def get_operation(self, path):
@@ -152,7 +158,9 @@ class HttpApi(HttpApiBase):
 
     def patch_revision(self, path, data):
         params = {"rev": self.revisionID}
-        path = f"{self.prefix}/?{urllib.parse.urlencode(params)}"
+        if path == "/":
+            path = ""
+        path = f"{self.prefix}/{path}?{urllib.parse.urlencode(params)}"
 
         response, response_data = self.connection.send(
             path, json.dumps(data), headers=self.headers, method="PATCH"

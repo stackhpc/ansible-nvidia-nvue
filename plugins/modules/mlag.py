@@ -155,7 +155,7 @@ def main():
     )
 
     required_if = [
-        ["operation", "merged", ["data"]],
+        ["state", "merged", ["data"]],
     ]
     # the AnsibleModule object will be our abstraction working with Ansible
     # this includes instantiation, a couple of common attr would be the
@@ -167,7 +167,7 @@ def main():
         supports_check_mode=True
     )
 
-    path = "mlag/"
+    path = "mlag"
     if module.params["state"] == "gathered":
         operation = "get"
     else:
@@ -193,6 +193,7 @@ def main():
         module.exit_json(**result)
 
     connection = Connection(module._socket_path)
+    q(path)
     response = connection.send_request(data, path, operation, force=force, wait=wait, revid=revid)
     if operation == "set" and response:
         result["changed"] = True
