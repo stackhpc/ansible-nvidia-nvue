@@ -38,7 +38,7 @@ Please note that this is for internal use only!
 - setup.sh: Use the script to prepare and setup your system with the new collections
 	- The script updates the Ansible version to 2.11, prepares the directory structure to install the new collection, and installs the new collection from the development branch of the gitlab code.
 	- Run the following commands to download the script onto your oob-mgmt-server and run it
-		>`$ wget https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/raw/devel/examples/nvair-demo/setup.sh` <br>
+		>`$ wget https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/raw/develop/examples/nvair-demo/setup.sh` <br>
 		`$ chmod +x setup.sh` <br>
 		`$ ./setup.sh`
 
