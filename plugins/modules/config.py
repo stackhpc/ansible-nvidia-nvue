@@ -125,13 +125,9 @@ def main():
             path = path + "/" + module.params["revid"]
     else:
         operation = module.params["state"]
-    data = module.params["data"]
     force = module.params["force"]
     wait = module.params["wait"]
     revid = module.params["revid"]
-
-    if isinstance(data, string_types):
-        data = json.loads(data)
 
     warnings = list()
     result = {"changed": False, "warnings": warnings}
@@ -147,7 +143,7 @@ def main():
 
     connection = Connection(module._socket_path)
     q(path)
-    response = connection.send_request(data, path, operation, force=force, wait=wait, revid=revid)
+    response = connection.send_request("", path, operation, force=force, wait=wait, revid=revid)
     if operation == "set" and response:
         result["changed"] = True
     result["message"] = response
