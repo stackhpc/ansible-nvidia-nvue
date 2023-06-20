@@ -79,7 +79,6 @@ RETURN = r'''
 '''
 
 import json
-import q
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 from ansible.module_utils.six import string_types
@@ -142,11 +141,10 @@ def main():
         module.exit_json(**result)
 
     connection = Connection(module._socket_path)
-    q(path)
     response = connection.send_request("", path, operation, force=force, wait=wait, revid=revid)
     if operation == "set" and response:
         result["changed"] = True
-    result["message"] = response
+    result["revid"] = response
 
     module.exit_json(**result)
 

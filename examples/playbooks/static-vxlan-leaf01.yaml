@@ -1,20 +1,19 @@
 ---
 
-- name: test CL system settings
-  hosts: localhost
+- name: Test playbook to setup static VXLAN
+  hosts: cumulus
+  connection: ansible.netcommon.httpapi
+  gather_facts: false
   vars:
-    provider_spec:
-      cl_url: 192.168.200.6
-      cl_port: 8765
-      cl_username: cumulus
-      cl_password: CumulusLinux!
-
+    ansible_network_os: nvidia.nvue.httpapi
+    ansible_httpapi_port: 8765 
+    ansible_httpapi_use_ssl: true 
+    ansible_httpapi_validate_certs: false 
+  
   tasks:
-
   - name: Create new revision
-    config:
+    nvidia.nvue.config:
       state: new
-      provider: "{{ provider_spec }}"
     register: revision
 
   - name: dump revision
@@ -22,14 +21,14 @@
       msg: '{{ revision.revid }}'
 
   - name: Set interface
-    interface:
+    nvidia.nvue.interface:
       state: merged
       revid: '{{ revision.revid }}'
-      config:
+      data:
         - id: 'eth0'
           ip:
             address:
-              - id: '192.168.200.6/24'
+              - id: '192.168.200.11/24'
             vrf: 'mgmt'
           type: 'eth'
         - id: 'lo'
@@ -47,13 +46,12 @@
             state:
               - id: 'up'
           type: 'swp'
-      provider: "{{ provider_spec }}"
 
   - name: Set bridge
-    bridge:
+    nvidia.nvue.bridge:
       state: merged
       revid: '{{ revision.revid }}'
-      config:
+      data:
         - id: 'br_default'
           type: 'vlan-aware'
           vlan:
@@ -70,23 +68,21 @@
                   flooding:
                     head_end_replication: 
                       - id: '10.10.10.4'
-      provider: "{{ provider_spec }}"
     
   - name: Set vxlan
     vxlan:
       state: merged
       revid: '{{ revision.revid }}'
-      config:
+      data:
         enable: 'on'
         source: 
           address: '10.10.10.1'
-      provider: "{{ provider_spec }}"
 
   - name: Configure swp interface
-    interface:
+    nvidia.nvue.interface:
       state: merged
       revid: '{{ revision.revid }}'
-      config:
+      data:
         - id: 'swp1'
           bridge:
             domain:
@@ -97,11 +93,24 @@
             domain:
               - id: 'br_default'
                 access: 10
-      provider: "{{ provider_spec }}"
 
   - name: Apply new revision
-    config:
+    nvidia.nvue.config:
       state: apply
       revid: '{{ revision.revid }}'
-      provider: "{{ provider_spec }}"
+      force: yes
+      wait: 10
     register: revision
+
+  - name: dump previous output
+    debug:
+      msg: '{{ revision }}'
+
+  - name: Get the current config
+    nvidia.nvue.api:
+      operation: get
+    register: output
+
+  - name: Print current config
+    ansible.builtin.debug:
+      msg: "{{ output }}"

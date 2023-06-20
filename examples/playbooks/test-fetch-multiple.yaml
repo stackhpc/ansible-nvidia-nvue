@@ -1,36 +1,30 @@
----
-
-- name: Test playbook to display information using the various modules 
-  hosts: localhost
+- name: NVUE API
+  hosts: cumulus
+  connection: ansible.netcommon.httpapi
+  gather_facts: false
   vars:
-    provider_spec:
-      cl_url: leaf01
-      cl_port: 8765
-      cl_username: username
-      cl_password: password
+    ansible_network_os: nvidia.nvue.httpapi
+    ansible_httpapi_port: 8765 
+    ansible_httpapi_use_ssl: true 
+    ansible_httpapi_validate_certs: false 
 
   tasks:
   - name: List all bridges
-    bridge:
+    nvidia.nvue.bridge:
       state: gathered
-      provider: "{{ provider_spec }}"
 
   - name: List all interfaces
-    interface:
+    nvidia.nvue.interface:
       state: gathered
-      provider: "{{ provider_spec }}"
 
   - name: List system
-    system:
+    nvidia.nvue.system:
       state: gathered
-      provider: "{{ provider_spec }}"
 
   - name: List service
-    service:
+    nvidia.nvue.service:
       state: gathered
-      provider: "{{ provider_spec }}"
 
   - name: List router
-    router:
+    nvidia.nvue.router:
       state: gathered
-      provider: "{{ provider_spec }}"

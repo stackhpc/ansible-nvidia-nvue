@@ -193,7 +193,6 @@ def main():
         module.exit_json(**result)
 
     connection = Connection(module._socket_path)
-    q(path)
     response = connection.send_request(data, path, operation, force=force, wait=wait, revid=revid)
     if operation == "set" and response:
         result["changed"] = True

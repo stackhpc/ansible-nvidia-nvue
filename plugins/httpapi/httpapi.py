@@ -14,7 +14,6 @@ description:
 """
 
 import urllib
-import q
 import json
 import time
 
@@ -29,14 +28,12 @@ class HttpApi(HttpApiBase):
         self.headers = {"Content-Type": "application/json"}
 
     def send_request(self, data, path, operation, **kwargs):
-        q(self)
-        q(path)
         if path == "revision":
             if operation == "new":
                 return self.create_revision()
             elif operation == "apply":
                 self.revisionID=kwargs.get("revid")
-                return self.apply_config()
+                return self.apply_config(**kwargs)
         if operation == "set":
             return self.set_operation(data, path, **kwargs)
         elif operation == "get":
@@ -44,7 +41,6 @@ class HttpApi(HttpApiBase):
             if path == "/":
                 path = ""
             path = f"{self.prefix}/{path}?{urllib.parse.urlencode(params)}"
-            q(path)
             return self.get_operation(path)
 
     def get_operation(self, path):
@@ -55,7 +51,10 @@ class HttpApi(HttpApiBase):
 
     def set_operation(self, data, path, **kwargs):
         # If revid is not passed as part of the list of paramaters, create a new revision ID
-        self.revisionID = kwargs.get("revid", self.create_revision())
+        if kwargs.get("revid"):
+            self.revisionID = kwargs.get("revid")
+        else:
+            self.revisionID = self.create_revision()
         normalized_keys_data = self.normalize_keys(data)
         normalized_data = self.normalize_spec(normalized_keys_data)
         result = self.patch_revision(path, normalized_data)
@@ -148,7 +147,6 @@ class HttpApi(HttpApiBase):
 
     def create_revision(self):
         path = "/".join([self.prefix, "revision"])
-
         response, response_data = self.connection.send(
             path, dict(), method="POST", headers=self.headers
         )
@@ -161,7 +159,6 @@ class HttpApi(HttpApiBase):
         if path == "/":
             path = ""
         path = f"{self.prefix}/{path}?{urllib.parse.urlencode(params)}"
-
         response, response_data = self.connection.send(
             path, json.dumps(data), headers=self.headers, method="PATCH"
         )
@@ -196,7 +193,6 @@ class HttpApi(HttpApiBase):
                 break
             time.sleep(1)
             wait -= 1
-
         return result
 
 

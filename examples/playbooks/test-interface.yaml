@@ -1,20 +1,19 @@
 ---
 
 - name: Test playbook to update interface settings
-  hosts: localhost
+  hosts: cumulus
+  connection: ansible.netcommon.httpapi
+  gather_facts: false
   vars:
-    provider_spec:
-      cl_url: leaf01
-      cl_port: 8765
-      cl_username: username
-      cl_password: password
-
+    ansible_network_os: nvidia.nvue.httpapi
+    ansible_httpapi_port: 8765 
+    ansible_httpapi_use_ssl: true 
+    ansible_httpapi_validate_certs: false 
+  
   tasks:
-
   - name: Create new revision
-    config:
+    nvidia.nvue.config:
       state: new
-      provider: "{{ provider_spec }}"
     register: revision
 
   - name: dump revision
@@ -22,14 +21,14 @@
       msg: '{{ revision.revid }}'
 
   - name: Set interface
-    interface:
+    nvidia.nvue.interface:
       state: merged
       revid: '{{ revision.revid }}'
-      config:
-        - id: 'eth0'
+      data:
+        - id: eth0
           ip:
             address:
-              - id: '192.168.200.6/24'
+              - id: '192.168.200.11/24'
           type: 'eth'
         - id: lo
           ip:
@@ -56,7 +55,6 @@
             state:
               - id: 'up'
           type: 'swp'
-      provider: "{{ provider_spec }}"
     register: interface
 
   - name: dump previous output
@@ -64,10 +62,11 @@
       msg: '{{ interface }}'
   
   - name: Apply new revision
-    config:
+    nvidia.nvue.config:
       state: apply
       revid: '{{ revision.revid }}'
-      provider: "{{ provider_spec }}"
+      force: yes
+      wait: 10
     register: revision
 
   - name: dump previous output
@@ -75,9 +74,8 @@
       msg: '{{ revision }}'
 
   - name: Fetch interface config
-    interface:
+    nvidia.nvue.interface:
       state: gathered
-      provider: "{{ provider_spec }}"
     register: interface
 
   - name: Display interface config
