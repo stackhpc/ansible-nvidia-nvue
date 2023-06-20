@@ -3,12 +3,6 @@
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
-from ansible.module_utils.six.moves.urllib.error import HTTPError
-from ansible_collections.ansible.netcommon.plugins.plugin_utils.httpapi_base \
-    import HttpApiBase
-import urllib
-import json
-import time
 
 __metaclass__ = type
 
@@ -20,6 +14,13 @@ description:
 - This connection plugin provides a connection to devices with
   NVIDIA's NVUE API over HTTP(S)-based
 """
+
+from ansible.module_utils.six.moves.urllib.error import HTTPError
+from ansible_collections.ansible.netcommon.plugins.plugin_utils.httpapi_base \
+    import HttpApiBase
+import urllib
+import json
+import time
 
 
 class HttpApi(HttpApiBase):

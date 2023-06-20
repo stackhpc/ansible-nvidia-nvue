@@ -4,10 +4,6 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import (absolute_import, division, print_function)
-import json
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.connection import Connection
-from ansible.module_utils.six import string_types
 
 __metaclass__ = type
 
@@ -30,6 +26,7 @@ options:
             rev:
                 description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
                              branches, such as startup and applied. This could be a branch name, tag name or specific commit.
+                default: operational
                 required: false
                 type: str
             omit:
@@ -121,13 +118,17 @@ options:
                                                 type: str
 
     domainid:
-        description: Name of the domain to fetch/delete
+        description: Name of the domain to fetch/delete.
         type: str
         required: false
 
+    revid:
+        description: Revision ID to query/to apply config to.
+        required: false
+        type: str
 
     state:
-        description: Defines the action to be taken
+        description: Defines the action to be taken.
         required: true
         type: str
         choices:
@@ -145,8 +146,9 @@ options:
         default: 0
         type: int
 
-author:
-    - Krishna Vasudevan
+author: 
+    - Nvidia NBU Team (@nvidia-nbu)
+    - Krishna Vasudevan (@krisvasudevan)
 '''
 
 EXAMPLES = r'''
@@ -160,6 +162,11 @@ RETURN = r'''
 # These are examples of possible return values, and in general should use other names for return values.
 
 '''
+
+import json
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.connection import Connection
+from ansible.module_utils.six import string_types
 
 
 def main():
@@ -177,14 +184,14 @@ def main():
         type=dict(type='str', required=False, default="vlan-aware"),
         encap=dict(type='str', required=False, default="802.1Q"),
         mac_address=dict(type='str', required=False, default="auto"),
-        vlan=dict(type='list', required=False, options=dict(
+        vlan=dict(type='list', required=False, elements='dict', options=dict(
             id=dict(type='str', required=False),
-            vni=dict(type='list', required=False, options=dict(
+            vni=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False)),
                 flooding=dict(type='dict', required=False, options=dict(
                     enable=dict(type='str', required=False, default='auto', choices=['on', 'off', 'auto']),
                     multicast_group=dict(type='str', required=False),
-                    head_end_replication=dict(type='list', required=False, options=dict(
+                    head_end_replication=dict(type='list', required=False, elements='dict', options=dict(
                         id=dict(type='str', required=False)
                     ))
                 ))
@@ -200,7 +207,7 @@ def main():
         revid=dict(type='str', required=False),
         domainid=dict(type='str', required=False),
         data=dict(type='list', required=False, elements='dict', options=bridge_spec),
-        filters=dict(type='dict', required=False, elements='dict', options=filter_spec)
+        filters=dict(type='dict', required=False, options=filter_spec)
     )
 
     required_if = [
@@ -212,7 +219,7 @@ def main():
     # supports check mode
     module = AnsibleModule(
         argument_spec=module_args,
-        mutually_exclusive=[["config", "domainid"]],
+        mutually_exclusive=[["data", "domainid"]],
         required_if=required_if,
         supports_check_mode=True
     )

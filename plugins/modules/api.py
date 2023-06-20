@@ -6,10 +6,6 @@
 
 
 from __future__ import absolute_import, division, print_function
-import json
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.connection import Connection
-from ansible.module_utils.six import string_types
 
 __metaclass__ = type
 
@@ -45,8 +41,13 @@ options:
         type: str
     data:
         description: Structured data used with "set" operations.
+        deafult: {}
         required: false
         type: dict
+    revid:
+        description: Revision ID to query/to apply config to
+        required: false
+        type: str
 """
 
 EXAMPLES = r"""
@@ -87,6 +88,11 @@ message:
     sample:
         "state": "applied"
 """
+
+import json
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.connection import Connection
+from ansible.module_utils.six import string_types
 
 
 def main():

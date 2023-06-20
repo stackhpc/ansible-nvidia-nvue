@@ -4,10 +4,6 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import (absolute_import, division, print_function)
-import json
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.connection import Connection
-from ansible.module_utils.six import string_types
 
 __metaclass__ = type
 
@@ -480,8 +476,12 @@ options:
                                             - ipv6-address
                                             - blackhole
                                             - reject
+    revid:
+        description: Revision ID to query/to apply config to.
+        required: false
+        type: str
     state:
-        description: Defines the action to be taken
+        description: Defines the action to be taken.
         required: true
         type: str
         choices:
@@ -499,8 +499,9 @@ options:
         default: 0
         type: int
 
-author:
-    - Krishna Vasudevan
+author: 
+    - Nvidia NBU Team (@nvidia-nbu)
+    - Krishna Vasudevan (@krisvasudevan)
 '''
 
 EXAMPLES = r'''
@@ -513,6 +514,11 @@ EXAMPLES = r'''
 RETURN = r'''
 # These are examples of possible return values, and in general should use other names for return values.
 '''
+
+import json
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.connection import Connection
+from ansible.module_utils.six import string_types
 
 
 def main():
