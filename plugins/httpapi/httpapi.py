@@ -1,7 +1,14 @@
 # Copyright: (c) 2022, NVIDIA <nvidia.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+from ansible.module_utils.six.moves.urllib.error import HTTPError
+from ansible_collections.ansible.netcommon.plugins.plugin_utils.httpapi_base \
+    import HttpApiBase
+import urllib
+import json
+import time
 
 __metaclass__ = type
 
@@ -10,18 +17,13 @@ author: Nvidia NBU Team (@nvidia-nbu)
 name: httpapi
 short_description: httpapi plugin for NVIDIA's NVUE API
 description:
-- This connection plugin provides a connection to devices with NVIDIA's NVUE API over HTTP(S)-based
+- This connection plugin provides a connection to devices with
+  NVIDIA's NVUE API over HTTP(S)-based
 """
-
-import urllib
-import json
-import time
-
-from ansible.module_utils.six.moves.urllib.error import HTTPError
-from ansible_collections.ansible.netcommon.plugins.plugin_utils.httpapi_base import HttpApiBase
 
 
 class HttpApi(HttpApiBase):
+
     def __init__(self, connection):
         super(HttpApi, self).__init__(connection)
         self.prefix = "/nvue_v1"
@@ -32,7 +34,7 @@ class HttpApi(HttpApiBase):
             if operation == "new":
                 return self.create_revision()
             elif operation == "apply":
-                self.revisionID=kwargs.get("revid")
+                self.revisionID = kwargs.get("revid")
                 return self.apply_config(**kwargs)
         if operation == "set":
             return self.set_operation(data, path, **kwargs)
@@ -50,7 +52,10 @@ class HttpApi(HttpApiBase):
         return handle_response(response, response_data)
 
     def set_operation(self, data, path, **kwargs):
-        # If revid is not passed as part of the list of paramaters, create a new revision ID
+        """
+          If revid is not passed as part of the list of paramaters,
+          create a new revision ID
+        """
         if kwargs.get("revid"):
             self.revisionID = kwargs.get("revid")
         else:
@@ -65,7 +70,8 @@ class HttpApi(HttpApiBase):
 
     def normalize_keys(self, data):
         """
-        Function normalize all the keys - Replace all underscore seperated keys with hyphen seperated keys.
+        Function normalize all the keys
+        Replace all underscore seperated keys with hyphen seperated keys.
         For example, mac_flooding is replaced with mac-flooding
         """
         new_config = {}
@@ -87,7 +93,9 @@ class HttpApi(HttpApiBase):
     def normalize_spec(self, data):
         """
         Function to normalize config parameters
-        Remove the input value id and make it a dictionary with the rest of the values. For example, in bridges, we take id as an input:
+        Remove the input value id and make it a dictionary
+        with the rest of the values.
+        For example, in bridges, we take id as an input:
         config:
             - id: br_default
             untagged: 1
@@ -169,7 +177,8 @@ class HttpApi(HttpApiBase):
 
         force = kwargs.get("force", False)
         wait = kwargs.get("wait", 0)
-        path = "/".join([self.prefix, "revision", self.revisionID.replace("/", "%2F")])
+        path = "/".join(
+            [self.prefix, "revision", self.revisionID.replace("/", "%2F")])
 
         data = {"state": "apply"}
         if force:

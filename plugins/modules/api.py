@@ -1,10 +1,15 @@
 #!/usr/bin/python
 
 # Copyright: (c) 2022, NVIDIA <nvidia.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 
 from __future__ import absolute_import, division, print_function
+import json
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.connection import Connection
+from ansible.module_utils.six import string_types
 
 __metaclass__ = type
 
@@ -68,7 +73,8 @@ EXAMPLES = r"""
 """
 
 RETURN = r"""
-# These are examples of possible return values, and in general should use other names for return values.
+# These are examples of possible return values,
+# and in general should use other names for return values.
 changed:
   description: whether a configuration was changed
   returned: always
@@ -81,14 +87,6 @@ message:
     sample:
         "state": "applied"
 """
-
-import json
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.connection import Connection
-from ansible.module_utils.six import string_types
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    dict_diff,
-)
 
 
 def main():

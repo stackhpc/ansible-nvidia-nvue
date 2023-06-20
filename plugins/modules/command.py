@@ -7,6 +7,7 @@
 # Original design: https://github.com/ansible-collections/community.network/blob/main/plugins/modules/network/cumulus/nclu.py
 
 from __future__ import absolute_import, division, print_function
+from ansible.module_utils.basic import AnsibleModule
 
 __metaclass__ = type
 
@@ -97,8 +98,6 @@ message:
     returned: always
     sample: "Failed on line \"set system m123ssage pre-login \"WARNING\"\"\nInvalid Command: set system m123ssage pre-login WARNING\n"
 """
-
-from ansible.module_utils.basic import AnsibleModule
 
 
 def run_nvue_cmd(module, command, errmsg=None):
