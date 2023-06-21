@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
 # Copyright: (c) 2022, NVIDIA <nvidia.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 
 from __future__ import absolute_import, division, print_function
@@ -40,8 +41,13 @@ options:
         type: str
     data:
         description: Structured data used with "set" operations.
+        default: {}
         required: false
         type: dict
+    revid:
+        description: Revision ID to query/to apply config to
+        required: false
+        type: str
 """
 
 EXAMPLES = r"""
@@ -68,7 +74,8 @@ EXAMPLES = r"""
 """
 
 RETURN = r"""
-# These are examples of possible return values, and in general should use other names for return values.
+# These are examples of possible return values,
+# and in general should use other names for return values.
 changed:
   description: whether a configuration was changed
   returned: always
@@ -86,9 +93,6 @@ import json
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 from ansible.module_utils.six import string_types
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    dict_diff,
-)
 
 
 def main():
@@ -103,6 +107,7 @@ def main():
         "wait": {"type": "int", "required": False, "default": 0},
         "path": {"type": "str", "required": False, "default": "/"},
         "data": {"type": "dict", "required": False, "default": {}},
+        "revid": {"type": "str", "required": False}
     }
 
     required_if = [
@@ -120,6 +125,7 @@ def main():
     operation = module.params["operation"]
     force = module.params["force"]
     wait = module.params["wait"]
+    revid = module.params["revid"]
 
     if isinstance(data, string_types):
         data = json.loads(data)
@@ -131,7 +137,7 @@ def main():
     commit = not module.check_mode
 
     connection = Connection(module._socket_path)
-    response = connection.send_request(data, path, operation, force=force, wait=wait)
+    response = connection.send_request(data, path, operation, force=force, wait=wait, revid=revid)
     if operation == "set" and response:
         result["changed"] = True
     result["message"] = response

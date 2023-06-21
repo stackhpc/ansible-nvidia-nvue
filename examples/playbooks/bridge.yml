@@ -1,0 +1,66 @@
+---
+
+- name: Test playbook to update bridge settings
+  hosts: cumulus
+  connection: ansible.netcommon.httpapi
+  gather_facts: false
+  vars:
+    ansible_network_os: nvidia.nvue.httpapi
+    ansible_httpapi_port: 8765
+    ansible_httpapi_use_ssl: true
+    ansible_httpapi_validate_certs: false
+
+  tasks:
+    - name: Create new revision
+      nvidia.nvue.config:
+        state: new
+      register: revision
+
+    - name: dump revision
+      debug:
+        msg: '{{ revision.revid }}'
+
+    - name: Set bridge
+      nvidia.nvue.bridge:
+        state: merged
+        revid: '{{ revision.revid }}'
+        data:
+          - id: 'br_default'
+            type: 'vlan-aware'
+            vlan:
+              - id: '10'
+                vni:
+                  - id: '10'
+              - id: '20'
+                vni:
+                  - id: '20'
+              - id: '30'
+                vni:
+                  - id: '30'
+      register: bridge
+
+    - name: dump previous output
+      debug:
+        msg: '{{ bridge }}'
+
+    - name: Apply new revision
+      nvidia.nvue.config:
+        state: apply
+        revid: '{{ revision.revid }}'
+        force: true
+        wait: 10
+      register: revision
+
+    - name: dump previous output
+      debug:
+        msg: '{{ revision }}'
+
+    - name: Fetch bridge config
+      nvidia.nvue.bridge:
+        state: gathered
+        provider: "{{ provider_spec }}"
+      register: bridge
+
+    - name: Display bridge config
+      debug:
+        msg: '{{ bridge }}'

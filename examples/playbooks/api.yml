@@ -1,0 +1,55 @@
+- name: NVUE API
+  hosts: cumulus
+  connection: ansible.netcommon.httpapi
+  gather_facts: false
+  vars:
+    ansible_network_os: nvidia.nvue.httpapi
+    ansible_httpapi_port: 8765
+    ansible_httpapi_use_ssl: true
+    ansible_httpapi_validate_certs: false
+
+  tasks:
+    - name: Example of using host variables
+      nvidia.nvue.api:
+        operation: set
+        force: true
+        wait: 15
+        data: "{{ dict(host_variables) }}"
+
+    - name: Get the current config
+      nvidia.nvue.api:
+        operation: get
+      register: output
+
+    - name: Print current config
+      ansible.builtin.debug:
+        msg: "{{ output['message']['system'] | to_nice_json }}"
+
+    - name: Example of interpolating variables
+      nvidia.nvue.api:
+        operation: set
+        force: true
+        wait: 15
+        data:
+          system:
+            message:
+              "pre-login": "{{ MSG }}"
+      vars:
+        MSG: WARNING
+
+    - name: Get the current config
+      nvidia.nvue.api:
+        operation: get
+      register: output
+
+    - name: Print current config
+      ansible.builtin.debug:
+        msg: "{{ output['message']['system'] | to_nice_json }}"
+
+    - name: Delete system pre-login message
+      nvidia.nvue.api:
+        operation: set
+        force: true
+        data:
+          system:
+            message:
