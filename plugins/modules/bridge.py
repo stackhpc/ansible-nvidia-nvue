@@ -156,24 +156,6 @@ EXAMPLES = r'''
   nvidia.nvue.bridge:
     state: gathered
 
-- name: Set bridge configuration
-    nvidia.nvue.bridge:
-      state: merged
-      data:
-        - id: 'br_default'
-          type: 'vlan-aware'
-          vlan:
-            - id: '10'
-              vni:
-                - id: '10'
-            - id: '20'
-              vni:
-                - id: '20'
-            - id: '30'
-              vni:
-                - id: '30'
-      force: yes
-      wait: 10
 '''
 
 RETURN = r'''
