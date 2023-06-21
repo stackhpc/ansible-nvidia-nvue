@@ -22,64 +22,63 @@ description: This is a Cumulus Linux module to interact with the EVPN object. En
 
 options:
     filters:
-        description: Filters used while fetching information about evpn
+        description: Filters used while fetching information about router
         type: dict
-        elements: dict
         suboptions:
             rev:
                 description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
                              branches, such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
+                default: operational
             omit:
                 description: Drop any JSON properties matched by an omit pattern from the response.
                 required: false
                 type: list
+                elements: str
             include:
                 description: Only include JSON properties matched by an include pattern in the response.
                 required: false
                 type: list
+                elements: str
     data:
         description: Provided configuration
         type: dict
-        elements: dict
         suboptions:
             enable:
                 description: Turn the feature 'on' or 'off'.
                 required: false
                 type: str
-                default: off
+                default: 'off'
                 choices:
-                    - on
-                    - off
+                    - 'on'
+                    - 'off'
             dad:
                 description: Advertise
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     enable:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: off
+                        default: 'off'
                         choices:
-                            - on
-                            - off
+                            - 'on'
+                            - 'off'
             multihoming:
                 description: Multihoming global configuration parameters
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     enable:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: off
+                        default: 'off'
                         choices:
-                            - on
-                            - off
+                            - 'on'
+                            - 'off'
                     startup_delay:
                         description: The duration for which a switch holds the Ethernet segment-bond in a protodown state after a reboot or process restart.
                         required: false
@@ -89,7 +88,6 @@ options:
                 description: Route advertising
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     nexthop_setting:
                         description: Specifies the next hop IP and MAC (Router MAC) to use in the advertisement of type-5 routes and 'self' type-2
@@ -105,20 +103,20 @@ options:
                                      This configuration should not be enabled if SVI IPs are reused in the network.
                         required: false
                         type: str
-                        default: off
+                        default: 'off'
                         choices:
-                            - on
-                            - off
+                            - 'on'
+                            - 'off'
                     default_gateway:
                         description: This configuration should be turned 'on' only in a centralized-routing deployment and only on the centralized GW router(s).
                                      If 'on', the IP addresses of SVIs in all EVIs are announced as type-2 routes with the gateway extended community.
                                      The purpose is for remote L2-only VTEPs to do ARP suppression and for hosts to learn of the gateway's IP to MAC binding.
                         required: false
                         type: str
-                        default: off
+                        default: 'off'
                         choices:
-                            - on
-                            - off
+                            - 'on'
+                            - 'off'
 
     revid:
         description: Revision ID to query/to apply config to.
@@ -170,8 +168,8 @@ def main():
     # define supported filters for the endpoint
     filter_spec = dict(
         rev=dict(type='str', required=False, default='operational'),
-        omit=dict(type='list', required=False),
-        include=dict(type='list', required=False)
+        omit=dict(type='list', required=False, elements='str'),
+        include=dict(type='list', required=False, elements='str')
     )
 
     # define the bridge spec - used for creation/modification

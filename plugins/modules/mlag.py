@@ -19,40 +19,41 @@ description: This is a Cumulus Linux module to interact with the MLAG object.
 
 options:
     filters:
-        description: Filters used while fetching information about mlag
+        description: Filters used while fetching information about router
         type: dict
-        elements: dict
         suboptions:
             rev:
                 description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
                              branches, such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
+                default: operational
             omit:
                 description: Drop any JSON properties matched by an omit pattern from the response.
                 required: false
                 type: list
+                elements: str
             include:
                 description: Only include JSON properties matched by an include pattern in the response.
                 required: false
                 type: list
+                elements: str
     data:
         description: Provided configuration
         type: dict
-        elements: dict
         suboptions:
             enable:
                 description: Turn the feature 'on' or 'off'.
                 required: false
                 type: str
-                default: off
+                default: 'off'
                 choices:
-                    - on
-                    - off
+                    - 'on'
+                    - 'off'
             backup:
                 description: MLAG Backup
                 required: false
-                type: dict
+                type: list
                 elements: dict
                 suboptions:
                     id:
@@ -74,7 +75,7 @@ options:
             priority:
                 description: MLAG Priority
                 required: false
-                type: str
+                type: int
             peer_ip:
                 description: Peer IP address
                 required: false
@@ -131,14 +132,14 @@ def main():
     # define supported filters for the endpoint
     filter_spec = dict(
         rev=dict(type='str', required=False, default='operational'),
-        omit=dict(type='list', required=False),
-        include=dict(type='list', required=False)
+        omit=dict(type='list', required=False, elements='str'),
+        include=dict(type='list', required=False, elements='str')
     )
 
     # define the bridge spec - used for creation/modification
     mlag_spec = dict(
         enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
-        backup=dict(type='list', required=False, options=dict(
+        backup=dict(type='list', required=False, elements='dict', options=dict(
             id=dict(type='str', required=False),
             vrf=dict(type="str", required=False)
         )),

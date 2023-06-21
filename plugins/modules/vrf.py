@@ -21,21 +21,23 @@ options:
     filters:
         description: Filters used while fetching information about the system
         type: dict
-        elements: dict
         suboptions:
             rev:
                 description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
                              branches, such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
+                default: operational
             omit:
                 description: Drop any JSON properties matched by an omit pattern from the response.
                 required: false
                 type: list
+                elements: str
             include:
                 description: Only include JSON properties matched by an include pattern in the response.
                 required: false
                 type: list
+                elements: str
     data:
         description: Provided configuration
         type: list
@@ -49,16 +51,15 @@ options:
                 description: EVPN control plane config and info for VRF.
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     enable:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: off
+                        default: 'off'
                         choices:
-                            - on
-                            - off
+                            - 'on'
+                            - 'off'
                     vlan:
                         description: VLAN ID
                         required: false
@@ -76,22 +77,20 @@ options:
                 description: Router configuration on the VRF.
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     bgp:
                         description: BGP VRF configuration.
                         required: false
                         type: dict
-                        elements: dict
                         suboptions:
                             enable:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: off
+                                default: 'off'
                                 choices:
-                                    - on
-                                    - off
+                                    - 'on'
+                                    - 'off'
                             autonomous_system:
                                 description: ASN for this VRF. If "auto", inherit from the global config. This is the default.
                                 required: false
@@ -104,22 +103,20 @@ options:
                                 description: Address family specific configuration.
                                 required: false
                                 type: dict
-                                elements: dict
                                 suboptions:
                                     ipv4_unicast:
                                         description: IPv4 unicast address family.
                                         required: false
                                         type: dict
-                                        elements: dict
                                         suboptions:
                                             enable:
                                                 description: Turn the feature 'on' or 'off'.
                                                 required: false
                                                 type: str
-                                                default: on
+                                                default: 'on'
                                                 choices:
-                                                    - on
-                                                    - off
+                                                    - 'on'
+                                                    - 'off'
                                             network:
                                                 description: IPv4 static networks.
                                                 required: false
@@ -134,71 +131,65 @@ options:
                                                 description: Route export.
                                                 required: false
                                                 type: dict
-                                                elements: dict
                                                 suboptions:
                                                     to_evpn:
                                                         description: Controls for exporting routes from this VRF for this address-family
                                                                      into EVPN (as type-5 routes).
                                                         required: false
                                                         type: dict
-                                                        elements: dict
                                                         suboptions:
                                                             enable:
                                                                 description: Turn the feature 'on' or 'off'.
                                                                 required: false
                                                                 type: str
-                                                                default: off
+                                                                default: 'off'
                                                                 choices:
-                                                                    - on
-                                                                    - off
+                                                                    - 'on'
+                                                                    - 'off'
                                             redistribute:
                                                 description: Route redistribute.
                                                 required: false
                                                 type: dict
-                                                elements: dict
                                                 suboptions:
                                                     connected:
                                                         description: Route redistribution of IPv4 connected routes.
                                                         required: false
                                                         type: dict
-                                                        elements: dict
                                                         suboptions:
                                                             enable:
                                                                 description: Turn the feature 'on' or 'off'.
                                                                 required: false
                                                                 type: str
-                                                                default: off
+                                                                default: 'off'
                                                                 choices:
-                                                                    - on
-                                                                    - off
+                                                                    - 'on'
+                                                                    - 'off'
                                                     static:
                                                         description: Route redistribution of IPv4 static routes.
                                                         required: false
                                                         type: dict
-                                                        elements: dict
                                                         suboptions:
                                                             enable:
                                                                 description: Turn the feature 'on' or 'off'.
                                                                 required: false
                                                                 type: str
-                                                                default: off
+                                                                default: 'off'
                                                                 choices:
-                                                                    - on
-                                                                    - off
+                                                                    - 'on'
+                                                                    - 'off'
                                     l2vpn_evpn:
                                         description: L2VPN EVPN address family.
                                         required: false
                                         type: dict
-                                        elements: dict
                                         suboptions:
                                             enable:
                                                 description: Turn the feature 'on' or 'off'.
                                                 required: false
                                                 type: str
-                                                default: off
+                                                default: 'off'
                                                 choices:
-                                                    - on
-                                                    - off
+                                                    - 'on'
+                                                    - 'off'
                             neighbor:
                                 description: Peers.
                                 required: false
@@ -207,16 +198,16 @@ options:
                                 suboptions:
                                     id:
                                         description: Interface.
-                                        required: true
+                                        required: false
                                         type: str
                                     enable:
                                         description: Turn the feature 'on' or 'off'.
                                         required: false
                                         type: str
-                                        default: on
+                                        default: 'on'
                                         choices:
-                                            - on
-                                            - off
+                                            - 'on'
+                                            - 'off'
                                     peer_group:
                                         description: Optional peer-group to which the peer is attached to inherit the group's configuration.
                                         required: false
@@ -237,22 +228,20 @@ options:
                                         description: Address family specific configuration.
                                         required: false
                                         type: dict
-                                        elements: dict
                                         suboptions:
                                             l2vpn_evpn:
                                                 description: Peer L2VPN EVPN address family.
                                                 required: false
                                                 type: dict
-                                                elements: dict
                                                 suboptions:
                                                     enable:
                                                         description: Turn the feature 'on' or 'off'.
                                                         required: false
                                                         type: str
-                                                        default: off
+                                                        default: 'off'
                                                         choices:
-                                                            - on
-                                                            - off
+                                                            - 'on'
+                                                            - 'off'
                             peer_group:
                                 description: Peer groups.
                                 required: false
@@ -272,47 +261,42 @@ options:
                                         description: Address family specific configuration.
                                         required: false
                                         type: dict
-                                        elements: dict
                                         suboptions:
                                             ipv4_unicast:
                                                 description: Peer IPv4 unicast address family. Always on, unless disabled globaly.
                                                 required: false
                                                 type: dict
-                                                elements: dict
                                                 suboptions:
                                                     enable:
                                                         description: Turn the feature 'on' or 'off'.
                                                         required: false
                                                         type: str
-                                                        default: on
+                                                        default: 'on'
                                                         choices:
-                                                            - on
-                                                            - off
+                                                            - 'on'
+                                                            - 'off'
                                             l2vpn_evpn:
                                                 description: Peer L2VPN EVPN address family.
                                                 required: false
                                                 type: dict
-                                                elements: dict
                                                 suboptions:
                                                     enable:
                                                         description: Turn the feature 'on' or 'off'.
                                                         required: false
                                                         type: str
-                                                        default: off
+                                                        default: 'off'
                                                         choices:
-                                                            - on
-                                                            - off
+                                                            - 'on'
+                                                            - 'off'
                             route_import:
                                 description: Controls for importing of IPv4 and IPv6 routes from this VRF.
                                 required: false
                                 type: dict
-                                elements: dict
                                 suboptions:
                                     from_evpn:
                                         description: Controls for importing EVPN type-2 and type-5 routes into this VRF.
                                         required: false
                                         type: dict
-                                        elements: dict
                                         suboptions:
                                             route_target:
                                                 description: List of the RTs to attach to host or prefix routes when importing them into VRF or "auto".
@@ -329,16 +313,15 @@ options:
                         description: OSPF VRF configuration.
                         required: false
                         type: dict
-                        elements: dict
                         suboptions:
                             enable:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: off
+                                default: 'off'
                                 choices:
-                                    - on
-                                    - off
+                                    - 'on'
+                                    - 'off'
                             router_id:
                                 description: BGP router-id for this VRF. If "auto", inherit from the global config. This is the default.
                                 required: false
@@ -347,51 +330,47 @@ options:
                         description: PIM VRF configuration.
                         required: false
                         type: dict
-                        elements: dict
                         suboptions:
                             enable:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: off
+                                default: 'off'
                                 choices:
-                                    - on
-                                    - off
+                                    - 'on'
+                                    - 'off'
                             ecmp:
                                 description: Choose all available ECMP paths for a particular RPF. If 'off', the first nexthop found will be used.
                                              This is the default.
                                 required: false
                                 type: dict
-                                elements: dict
                                 suboptions:
                                     enable:
                                         description: Turn the feature 'on' or 'off'.
                                         required: false
                                         type: str
-                                        default: off
+                                        default: 'off'
                                         choices:
-                                            - on
-                                            - off
+                                            - 'on'
+                                            - 'off'
                                     rebalance:
                                         description: Recalculate all multicast streams in the event of path going down.
                                                      If 'off', only the impacted streams by path going down recalculated. This is the default.
                                         required: false
                                         type: str
-                                        default: off
+                                        default: 'off'
                                         choices:
-                                            - on
-                                            - off
+                                            - 'on'
+                                            - 'off'
                             address_family:
                                 description: Address family specific configuration.
                                 required: false
                                 type: dict
-                                elements: dict
                                 suboptions:
                                     ipv4_unicast:
                                         description: IPv4 unicast address family.
                                         required: false
                                         type: dict
-                                        elements: dict
                                         suboptions:
                                             rp:
                                                 description: RP address and associated group range.
@@ -480,6 +459,10 @@ options:
         description: Revision ID to query/to apply config to.
         required: false
         type: str
+    vrfid:
+        description: Specific VRF to query/modify.
+        required: false
+        type: str
     state:
         description: Defines the action to be taken.
         required: true
@@ -525,14 +508,14 @@ def main():
     # define supported filters for the endpoint
     filter_spec = dict(
         rev=dict(type='str', required=False, default='operational'),
-        omit=dict(type='list', required=False),
-        include=dict(type='list', required=False)
+        omit=dict(type='list', required=False, elements='str'),
+        include=dict(type='list', required=False, elements='str')
     )
     #  define the VRF spec - used for creation/modification
     vrf_spec = dict(
         id=dict(type='str', required=True),
         evpn=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str', required=False, choices=['on', 'off']),
+            enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
             vlan=dict(type='int', required=False),
             vni=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False))
@@ -541,7 +524,7 @@ def main():
         router=dict(type='dict', required=False, options=dict(
             bgp=dict(type='dict', required=False, options=dict(
                 enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
-                autonomous_system=dict(type='int', required=False),
+                autonomous_system=dict(type='str', required=False),
                 router_id=dict(type='str', required=False),
                 address_family=dict(type='dict', required=False, options=dict(
                     ipv4_unicast=dict(type='dict', required=False, options=dict(
@@ -631,7 +614,7 @@ def main():
             static=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False),
                 address_family=dict(type='str', required=False, default='ipv4-unicast'),
-                via=dict(type='list', required=False, options=dict(
+                via=dict(type='list', required=False, elements='dict', options=dict(
                     id=dict(type='str', required=False),
                     type=dict(type='str', required=False, choices=['interface', 'ipv4-address', 'ipv6-address', 'blackhole', 'reject'])
                 ))
@@ -644,7 +627,7 @@ def main():
         force=dict(type='bool', required=False, default=False),
         wait=dict(type="int", required=False, default=0),
         revid=dict(type='str', required=False),
-        state=dict(type='str', required=True),
+        state=dict(type='str', required=True, choices=['gathered', 'deleted', 'merged']),
         vrfid=dict(type='str', required=False),
         data=dict(type='list', required=False, elements='dict', options=vrf_spec),
         filters=dict(type='dict', required=False, options=filter_spec)

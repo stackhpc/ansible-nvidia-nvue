@@ -21,40 +21,40 @@ options:
     filters:
         description: Filters used while fetching information about router
         type: dict
-        elements: dict
         suboptions:
             rev:
                 description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
                              branches, such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
+                default: applied
             omit:
                 description: Drop any JSON properties matched by an omit pattern from the response.
                 required: false
                 type: list
+                elements: str
             include:
                 description: Only include JSON properties matched by an include pattern in the response.
                 required: false
                 type: list
+                elements: str
     data:
         description: Provided configuration
         type: dict
-        elements: dict
         suboptions:
             bgp:
                 description: BGP global configuration.
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     enable:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: off
+                        default: 'off'
                         choices:
-                            - on
-                            - off
+                            - 'on'
+                            - 'off'
                     autonomous_system:
                         description: ASN for all VRFs, if a single AS is in use. If "none", then ASN must be set for every VRF. This is the default.
                         required: false
@@ -63,32 +63,29 @@ options:
                         description: BGP router-id for all VRFs, if a common one is used. If "none", then router-id must be set for every VRF.
                                      This is the default.
                         required: false
-                        type: string
+                        type: str
             ospf:
                 description: OSPF global configuration.
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     enable:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: off
+                        default: 'off'
                         choices:
-                            - on
-                            - off
+                            - 'on'
+                            - 'off'
                     timers:
                         description: Timers.
                         required: false
                         type: dict
-                        elements: dict
                         suboptions:
                             spf:
                                 description: SPF timers.
                                 required: false
                                 type: dict
-                                elements: dict
                                 suboptions:
                                     delay:
                                         description: Delay (msec) from first change received till SPF calculation.
@@ -106,35 +103,32 @@ options:
                 description: VRR global configuration.
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     enable:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: off
+                        default: 'off'
                         choices:
-                            - on
-                            - off
+                            - 'on'
+                            - 'off'
             pim:
                 description: PIM global configuration.
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     enable:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: off
+                        default: 'off'
                         choices:
-                            - on
-                            - off
+                            - 'on'
+                            - 'off'
                     timers:
                         description: Timers.
                         required: false
                         type: dict
-                        elements: dict
                         suboptions:
                             keep_alive:
                                 description: Timeout value for S,G stream, in seconds.
@@ -191,8 +185,8 @@ def main():
     # since router object doesn't support querying the operational state, we will default to applied state
     filter_spec = dict(
         rev=dict(type='str', required=False, default='applied'),
-        omit=dict(type='list', required=False),
-        include=dict(type='list', required=False)
+        omit=dict(type='list', required=False, elements='str'),
+        include=dict(type='list', required=False, elements='str')
     )
 
     # define the router spec - used for creation/modification

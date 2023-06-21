@@ -21,25 +21,26 @@ options:
     filters:
         description: Filters used while fetching information about services
         type: dict
-        elements: dict
         suboptions:
             rev:
                 description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
                              branches, such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
+                default: applied
             omit:
                 description: Drop any JSON properties matched by an omit pattern from the response.
                 required: false
                 type: list
+                elements: str
             include:
                 description: Only include JSON properties matched by an include pattern in the response.
                 required: false
                 type: list
+                elements: str
     data:
         description: Provided configuration
         type: dict
-        elements: dict
         suboptions:
             dns:
                 description: Collection of DNS.
@@ -85,10 +86,10 @@ options:
                                 description: When the server is unreachable, send a burst of eight packets instead of the usual one.
                                 required: false
                                 type: str
-                                default: on
+                                default: 'on'
                                 choices:
-                                    - on
-                                    - off
+                                    - 'on'
+                                    - 'off'
             syslog:
                 description: Collection of syslog.
                 required: false
@@ -175,8 +176,8 @@ def main():
     # since router object doesn't support querying the operational state, we will default to applied state
     filter_spec = dict(
         rev=dict(type='str', required=False, default='applied'),
-        omit=dict(type='list', required=False),
-        include=dict(type='list', required=False)
+        omit=dict(type='list', required=False, elements='str'),
+        include=dict(type='list', required=False, elements='str')
     )
 
     # define the service spec - used for creation/modification
@@ -198,7 +199,7 @@ def main():
             id=dict(type='str', required=False),
             server=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False),
-                port=dict(type='str', required=False, default='514'),
+                port=dict(type='int', required=False, default='514'),
                 protocol=dict(type='str', required=False, default='udp', choices=['udp', 'tcp'])
             ))
         ))

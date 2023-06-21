@@ -21,25 +21,26 @@ options:
     filters:
         description: Filters used while fetching information about the system
         type: dict
-        elements: dict
         suboptions:
             rev:
                 description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
                              branches, such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
+                default: applied
             omit:
                 description: Drop any JSON properties matched by an omit pattern from the response.
                 required: false
                 type: list
+                elements: str
             include:
                 description: Only include JSON properties matched by an include pattern in the response.
                 required: false
                 type: list
+                elements: str
     data:
         description: Provided configuration
         type: dict
-        elements: dict
         suboptions:
             hostname:
                 description: Static hostname for the switch.
@@ -54,7 +55,6 @@ options:
                 description: System pre-login and post-login messages.
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     pre_login:
                         description: Configure pre-login banner.
@@ -115,8 +115,8 @@ def main():
     # since router object doesn't support querying the operational state, we will default to applied state
     filter_spec = dict(
         rev=dict(type='str', required=False, default='applied'),
-        omit=dict(type='list', required=False),
-        include=dict(type='list', required=False)
+        omit=dict(type='list', required=False, elements='str'),
+        include=dict(type='list', required=False, elements='str')
     )
 
     # define the system spec - used for creation/modification

@@ -19,24 +19,25 @@ description: This is a Cumulus Linux module to interact with the bridges object 
 
 options:
     filters:
-        description: Filters used while fetching information about bridges
+        description: Filters used while fetching information about router
         type: dict
-        elements: dict
         suboptions:
             rev:
                 description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
                              branches, such as startup and applied. This could be a branch name, tag name or specific commit.
-                default: operational
                 required: false
                 type: str
+                default: operational
             omit:
                 description: Drop any JSON properties matched by an omit pattern from the response.
                 required: false
                 type: list
+                elements: str
             include:
                 description: Only include JSON properties matched by an include pattern in the response.
                 required: false
                 type: list
+                elements: str
     data:
         description: Provided configuration
         type: list
@@ -90,7 +91,6 @@ options:
                                 description: Handling of BUM traffic
                                 required: false
                                 type: dict
-                                elements: dict
                                 suboptions:
                                     enable:
                                         description: Turn the feature 'on' or 'off' or 'auto'.
@@ -98,8 +98,8 @@ options:
                                         type: str
                                         default: auto
                                         choices:
-                                            - on
-                                            - off
+                                            - 'on'
+                                            - 'off'
                                             - auto
                                     multicast_group:
                                         description: BUM traffic is sent to the specified multicast group and will be received by receivers
@@ -187,15 +187,15 @@ def main():
         vlan=dict(type='list', required=False, elements='dict', options=dict(
             id=dict(type='str', required=False),
             vni=dict(type='list', required=False, elements='dict', options=dict(
-                id=dict(type='str', required=False)),
+                id=dict(type='str', required=False),
                 flooding=dict(type='dict', required=False, options=dict(
-                    enable=dict(type='str', required=False, default='auto', choices=['on', 'off', 'auto']),
+                    enable=dict(type='str', required=False, choices=['on', 'off', 'auto'], default='auto'),
                     multicast_group=dict(type='str', required=False),
                     head_end_replication=dict(type='list', required=False, elements='dict', options=dict(
                         id=dict(type='str', required=False)
                     ))
                 ))
-            )
+            ))
         ))
     )
 

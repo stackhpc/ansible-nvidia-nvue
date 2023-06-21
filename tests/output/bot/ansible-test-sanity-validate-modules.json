@@ -2,8 +2,8 @@
     "docs": "https://docs.ansible.com/ansible-core/2.13/dev_guide/testing/sanity/validate-modules.html", 
     "results": [
         {
-            "message": "The test `ansible-test sanity --test validate-modules` [[explain](https://docs.ansible.com/ansible-core/2.13/dev_guide/testing/sanity/validate-modules.html)] failed with 1 error:", 
-            "output": "plugins/modules/api.py:0:0: doc-type-does-not-match-spec: Argument 'operation' in argument_spec defines type as <class 'str'> but documentation defines type as 'str'"
+            "message": "The test `ansible-test sanity --test validate-modules` [[explain](https://docs.ansible.com/ansible-core/2.13/dev_guide/testing/sanity/validate-modules.html)] failed with 3 errors:", 
+            "output": "plugins/modules/system.py:0:0: invalid-argument-name: Argument 'message' in argument_spec  found in datamust not be one of message,syslog_facility as it is used internally by Ansible Core Engine\nplugins/modules/system.py:0:0: nonexistent-parameter-documented: Argument 'message' found in data is listed in DOCUMENTATION.options, but not accepted by the module argument_spec\nplugins/modules/system.py:0:0: required_if-unknown-key: required_if must have its key operation in argument_spec"
         }
     ], 
     "verified": false

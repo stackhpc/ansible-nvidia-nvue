@@ -19,18 +19,19 @@ description: This is a Cumulus Linux module to initialize/apply a revision.
 
 options:
     filters:
-        description: Filters used while fetching information about revision
+        description: Filters used while fetching information about router
         type: dict
-        elements: dict
         suboptions:
             omit:
                 description: Drop any JSON properties matched by an omit pattern from the response.
                 required: false
                 type: list
+                elements: str
             include:
                 description: Only include JSON properties matched by an include pattern in the response.
                 required: false
                 type: list
+                elements: str
     state:
         description: Defines the action to be taken.
         required: true

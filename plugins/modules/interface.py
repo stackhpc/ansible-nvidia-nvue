@@ -19,23 +19,25 @@ description: This is a Cumulus Linux module to interact with the interfaces obje
 
 options:
     filters:
-        description: Filters used while fetching information about interfaces
+        description: Filters used while fetching information about router
         type: dict
-        elements: dict
         suboptions:
             rev:
                 description: The default is to query the operational state. However, this parameter can be used to query desired state on configuration
                              branches, such as startup and applied. This could be a branch name, tag name or specific commit.
                 required: false
                 type: str
+                default: operational
             omit:
                 description: Drop any JSON properties matched by an omit pattern from the response.
                 required: false
                 type: list
+                elements: str
             include:
                 description: Only include JSON properties matched by an include pattern in the response.
                 required: false
                 type: list
+                elements: str
     data:
         description: Provided configuration
         type: list
@@ -74,7 +76,6 @@ options:
                 description: Bond configuration on the interface.
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     mode:
                         description: Bond mode.
@@ -88,10 +89,10 @@ options:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: off
+                        default: 'off'
                         choices:
-                            - on
-                            - off
+                            - 'on'
+                            - 'off'
                     member:
                         description: Bond member interface
                         required: false
@@ -106,25 +107,23 @@ options:
                         description: Bond MLAG config
                         required: false
                         type: dict
-                        elements: dict
                         suboptions:
                             enable:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: off
+                                default: 'off'
                                 choices:
-                                    - on
-                                    - off
+                                    - 'on'
+                                    - 'off'
                             id:
                                 description: MLAG ID
                                 required: false
-                                type: str
+                                type: int
             bridge:
                 description: Bridge configuration on the interface.
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     domain:
                         description: Bridge domain.
@@ -155,53 +154,50 @@ options:
                                 description: Bridge STP config.
                                 required: false
                                 type: dict
-                                elements: dict
                                 suboptions:
                                     admin_edge:
                                         description: Admin Edge.
                                         required: false
                                         type: str
                                         choices:
-                                            - on
-                                            - off
+                                            - 'on'
+                                            - 'off'
                                     auto_edge:
                                         description: Auto Edge.
                                         required: false
                                         type: str
                                         choices:
-                                            - on
-                                            - off
+                                            - 'on'
+                                            - 'off'
                                     bpdu_guard:
                                         description: BPDU Guard.
                                         required: false
                                         type: str
                                         choices:
-                                            - on
-                                            - off
+                                            - 'on'
+                                            - 'off'
             router:
                 description: Interface router.
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     ospf:
                         description: OSPF interface configuration.
                         required: false
                         type: dict
-                        elements: dict
                         suboptions:
                             enable:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: off
+                                default: 'off'
                                 choices:
-                                    - on
-                                    - off
+                                    - 'on'
+                                    - 'off'
                             area:
                                 description: Area number for enabling ospf on this interface.
                                 required: false
-                                type: string
+                                type: str
                             network_type:
                                 description: Network type.
                                 required: false
@@ -217,13 +213,12 @@ options:
                                 required: false
                                 type: str
                                 choices:
-                                    - on
-                                    - off
+                                    - 'on'
+                                    - 'off'
                             timers:
                                 description: Timers configuration.
                                 required: false
                                 type: dict
-                                elements: dict
                                 suboptions:
                                     dead_interval:
                                         description: Length of time, in seconds, without a hello before declaring the neighbor dead.
@@ -242,37 +237,33 @@ options:
                         description: PIM interface configuration.
                         required: false
                         type: dict
-                        elements: dict
                         suboptions:
                             enable:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: off
+                                default: 'off'
                                 choices:
-                                    - on
-                                    - off
-                        address_family:
-                            description: Address family specific configuration.
-                            required: false
-                            type: dict
-                            elements: dict
-                            suboptions:
-                                ipv4_unicast:
-                                    description: IPv4 unicast address family.
-                                    required: false
-                                    type: dict
-                                    elements: dict
-                                    suboptions:
-                                        use_source:
-                                            description: Use unique source address in PIM Hello source field.
-                                            required: false
-                                            type: str
+                                    - 'on'
+                                    - 'off'
+                            address_family:
+                                description: Address family specific configuration.
+                                required: false
+                                type: dict
+                                suboptions:
+                                    ipv4_unicast:
+                                        description: IPv4 unicast address family.
+                                        required: false
+                                        type: dict
+                                        suboptions:
+                                            use_source:
+                                                description: Use unique source address in PIM Hello source field.
+                                                required: false
+                                                type: str
             link:
                 description: Link configuration on the interface.
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     mtu:
                         description: MTU size.
@@ -292,7 +283,6 @@ options:
                 description: IP configuration on the interface.
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     address:
                         description: IP address on the interface.
@@ -313,16 +303,15 @@ options:
                         description: VRR
                         required: false
                         type: dict
-                        elements: dict
                         suboptions:
                             enable:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: off
+                                default: 'off'
                                 choices:
-                                    - on
-                                    - off
+                                    - 'on'
+                                    - 'off'
                             address:
                                 description: VRR address on the interface.
                                 required: false
@@ -351,51 +340,47 @@ options:
                         description: Configuration for IGMP.
                         required: false
                         type: dict
-                        elements: dict
                         suboptions:
                             enable:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: off
+                                default: 'off'
                                 choices:
-                                    - on
-                                    - off
+                                    - 'on'
+                                    - 'off'
             evpn:
                 description: EVPN control plane config and info for VRF.
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     multihoming:
                         description: Multihoming interface configuration parameters.
                         required: false
                         type: dict
-                        elements: dict
                         suboptions:
                             uplink:
                                 description: Enable evpn multihoming tracking to prevent traffic loss due to NVE connectivity loss,
                                              uplink's operational state is tracked when enabled.
                                 required: false
                                 type: str
-                                default: off
+                                default: 'off'
                                 choices:
-                                    - on
-                                    - off
+                                    - 'on'
+                                    - 'off'
                             segment:
                                 description: Multihoming interface segment.
                                 required: false
                                 type: dict
-                                elements: dict
                                 suboptions:
                                     enable:
                                         description: Turn the feature 'on' or 'off'.
                                         required: false
                                         type: str
-                                        default: off
+                                        default: 'off'
                                         choices:
-                                            - on
-                                            - off
+                                            - 'on'
+                                            - 'off'
                                     local_id:
                                         description: Ethernet segment local-id. If provided, it will be combined with the global multihoming mac-address to
                                                      create the ethernet segment identifier, which must be unique for each segment
@@ -421,7 +406,6 @@ options:
                 description: The state of the interface.
                 required: false
                 type: dict
-                elements: dict
                 suboptions:
                     source_ip:
                         description: Source underlay IP address.
@@ -439,7 +423,7 @@ options:
                     mode:
                         description: Tunnel mode.
                         required: false
-                        type: string
+                        type: str
                         default: gre
                     interface:
                         description: Physical underlay interface to used for Tunnel packets.
@@ -447,6 +431,10 @@ options:
                         type: str
     revid:
         description: Revision ID to query/to apply config to.
+        required: false
+        type: str
+    interfaceid:
+        description: Specific interface to query/modify.
         required: false
         type: str
     state:
@@ -494,8 +482,8 @@ def main():
     # define supported filters for the endpoint
     filter_spec = dict(
         rev=dict(type='str', required=False, default='operational'),
-        omit=dict(type='list', required=False),
-        include=dict(type='list', required=False)
+        omit=dict(type='list', required=False, elements='str'),
+        include=dict(type='list', required=False, elements='str')
     )
     #  define the interface spec - used for creation/modification
     interface_spec = dict(
@@ -551,7 +539,7 @@ def main():
         )),
         link=dict(type='dict', required=False, options=dict(
             mtu=dict(type='int', required=False),
-            state=dict(type='list', required=False, elemenst='dict', options=dict(
+            state=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False)
             ))
         )),
@@ -566,7 +554,7 @@ def main():
                     id=dict(type='str', required=False)
                 )),
                 mac_address=dict(type='str', required=False),
-                state=dict(type='list', required=False, elemenst='dict', options=dict(
+                state=dict(type='list', required=False, elements='dict', options=dict(
                     id=dict(type='str', required=False)
                 ))
             )),
