@@ -1,0 +1,40 @@
+---
+
+- name: Test playbook for the config/revision module
+  hosts: cumulus
+  connection: ansible.netcommon.httpapi
+  gather_facts: false
+  vars:
+    ansible_network_os: nvidia.nvue.httpapi
+    ansible_httpapi_port: 8765
+    ansible_httpapi_use_ssl: true
+    ansible_httpapi_validate_certs: false
+
+  tasks:
+    - name: List all revisions
+      nvidia.nvue.config:
+        state: gathered
+      register: revisions
+
+    - name: dump revisions
+      debug:
+        msg: '{{ revisions }}'
+
+    - name: Create new revision
+      nvidia.nvue.config:
+        state: new
+      register: revision
+
+    - name: dump revision
+      debug:
+        msg: '{{ revision.revid }}'
+
+    - name: List newly created revision
+      nvidia.nvue.config:
+        state: gathered
+        revid: "{{ revision.revid }}"
+      register: revision
+
+    - name: dump revision
+      debug:
+        msg: '{{ revision }}'

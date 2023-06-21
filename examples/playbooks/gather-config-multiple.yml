@@ -1,0 +1,30 @@
+- name: NVUE API
+  hosts: cumulus
+  connection: ansible.netcommon.httpapi
+  gather_facts: false
+  vars:
+    ansible_network_os: nvidia.nvue.httpapi
+    ansible_httpapi_port: 8765
+    ansible_httpapi_use_ssl: true
+    ansible_httpapi_validate_certs: false
+
+  tasks:
+    - name: List all bridges
+      nvidia.nvue.bridge:
+        state: gathered
+
+    - name: List all interfaces
+      nvidia.nvue.interface:
+        state: gathered
+
+    - name: List system
+      nvidia.nvue.system:
+        state: gathered
+
+    - name: List service
+      nvidia.nvue.service:
+        state: gathered
+
+    - name: List router
+      nvidia.nvue.router:
+        state: gathered

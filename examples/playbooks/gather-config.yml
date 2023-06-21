@@ -1,0 +1,28 @@
+- name: NVUE API
+  hosts: cumulus
+  connection: ansible.netcommon.httpapi
+  gather_facts: false
+  vars:
+    ansible_network_os: nvidia.nvue.httpapi
+    ansible_httpapi_port: 8765
+    ansible_httpapi_use_ssl: true
+    ansible_httpapi_validate_certs: false
+
+  tasks:
+    - name: Get the current config
+      nvidia.nvue.api:
+        operation: get
+      register: output
+
+    - name: Print current config
+      ansible.builtin.debug:
+        msg: "{{ output }}"
+
+    - name: Get the current interface config
+      nvidia.nvue.interface:
+        state: gathered
+      register: interface
+
+    - name: Print current interface
+      ansible.builtin.debug:
+        msg: "{{ interface }}"
