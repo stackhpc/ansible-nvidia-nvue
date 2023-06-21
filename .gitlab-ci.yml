@@ -17,14 +17,8 @@ sanity:
 
 ansible-lint:
   stage: test
-  before_script:
-    - apt-get update -qy
-    - apt-get install -y python-dev python-pip
-    - git submodule update --init
-    - pip install --upgrade ansible ansible-lint
-    - ansible --version
-    - ansible-lint --version
+  image: registry.gitlab.com/pipeline-components/ansible-lint:latest
   script:
-    - ansible-lint ~/.ansible/collections/ansible_collections/nvidia/nvue/examples/playbooks/*.yml
+    - ansible-lint --show-relpath
   artifacts:
     expire_in: 1 week
