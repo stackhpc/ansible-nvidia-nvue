@@ -30,7 +30,7 @@ Supports Python 3.8 and higher.
 
 ## Installing this collection
 
-### Installing from Ansible Galaxy
+### Installing from Ansible Galaxy - Once certification is complete
 
 You can install the NVIDIA NVUE collection with the Ansible Galaxy CLI:
 
