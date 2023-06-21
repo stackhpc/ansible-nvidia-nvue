@@ -14,3 +14,11 @@ sanity:
     - make test
   artifacts:
     expire_in: 1 week
+
+ansible-lint:
+  stage: test
+  image: registry.gitlab.com/pipeline-components/ansible-lint:latest
+  script:
+    - ansible-lint --show-relpath
+  artifacts:
+    expire_in: 1 week
