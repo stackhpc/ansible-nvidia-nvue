@@ -51,7 +51,7 @@ collections:
 You can install the NVIDIA NVUE collection using the git URL:
 
 ```
-ansible-galaxy collection install git+https://gitlab.com/nvidia-networking/systems-engineering/nvue.git,dev
+ansible-galaxy collection install git+https://gitlab.com/nvidia-networking/systems-engineering/nvue.git
 ```
 
 ## Using this collection
