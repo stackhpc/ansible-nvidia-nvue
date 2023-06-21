@@ -1,32 +1,32 @@
 - name: Test
   hosts: cumulus
-  gather_facts: true   
+  gather_facts: true
 
   tasks:
     - name: Set system pre-login message
-      nvidia.nvue.command: 
+      nvidia.nvue.command:
         commands:
-        - set system message pre-login "{{ MSG }}"
+          - set system message pre-login "{{ MSG }}""
         atomic: true
         assume_yes: true
       vars:
         MSG: WARNING
 
     - name: Failing task
-      nvidia.nvue.command: 
+      nvidia.nvue.command:
         commands:
-        - set system message post-login "WELCOME"
-        - set system m123ssage pre-login "WARNING"
+          - set system message post-login "WELCOME"
+          - set system m123ssage pre-login "WARNING"
       ignore_errors: true
 
     - name: Set system DNS
-      nvidia.nvue.command: 
+      nvidia.nvue.command:
         commands:
-        - unset service syslog default server 1.1.1.1
-        - set service syslog default server 8.8.8.8
+          - unset service syslog default server 1.1.1.1
+          - set service syslog default server 8.8.8.8
 
     - name: Set prefix lists
-      nvidia.nvue.command: 
+      nvidia.nvue.command:
         template: |
           {% for rule in rules %}
           set router policy prefix-list PL rule {{ rule.id }} match {{ rule.match }}
@@ -36,17 +36,17 @@
         assume_yes: true
       vars:
         rules:
-        - id: 10
-          match: 1.1.1.1/32
-          action: permit
-        - id: 20
-          match: 8.8.8.8/32
-          action: deny
+          - id: 10
+            match: 1.1.1.1/32
+            action: permit
+          - id: 20
+            match: 8.8.8.8/32
+            action: deny
 
     - name: Show current config
-      nvidia.nvue.command: 
+      nvidia.nvue.command:
         commands:
-        - config show
+          - config show
         apply: false
       register: output
 

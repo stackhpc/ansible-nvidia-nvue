@@ -9,7 +9,7 @@
     ansible_httpapi_port: 8765
     ansible_httpapi_use_ssl: true
     ansible_httpapi_validate_certs: false
-  
+
   tasks:
     - name: Create new revision
       nvidia.nvue.config:

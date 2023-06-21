@@ -9,7 +9,7 @@
     ansible_httpapi_port: 8765
     ansible_httpapi_use_ssl: true
     ansible_httpapi_validate_certs: false
-  
+
   tasks:
     - name: Create new revision
       nvidia.nvue.config:
@@ -94,14 +94,14 @@
           enable: 'on'
           multihoming:
             enable: 'on'
-      
+
     - name: Set vxlan
       nvidia.nvue.vxlan:
         state: merged
         revid: '{{ revision.revid }}'
         data:
           enable: 'on'
-          source: 
+          source:
             address: '10.10.10.1'
           arp_nd_suppress: 'on'
 
@@ -125,15 +125,15 @@
           - id: 'BLUE'
             evpn:
               enable: 'on'
-              vni: 
+              vni:
                 - id: 4002
             router:
               bgp:
-                address_family: 
+                address_family:
                   ipv4_unicast:
                     enable: 'on'
                     redistribute:
-                      connected: 
+                      connected:
                         enable: 'on'
                     route_export:
                       to_evpn:
@@ -146,15 +146,15 @@
           - id: 'RED'
             evpn:
               enable: 'on'
-              vni: 
+              vni:
                 - id: 4001
             router:
               bgp:
-                address_family: 
+                address_family:
                   ipv4_unicast:
                     enable: 'on'
                     redistribute:
-                      connected: 
+                      connected:
                         enable: 'on'
                     route_export:
                       to_evpn:
@@ -167,11 +167,11 @@
           - id: 'default'
             router:
               bgp:
-                address_family: 
+                address_family:
                   ipv4_unicast:
                     enable: 'on'
                     redistribute:
-                      connected: 
+                      connected:
                         enable: 'on'
                   l2vpn_evpn:
                     enable: 'on'
@@ -193,12 +193,12 @@
                     remote_as: 'external'
           - id: 'mgmt'
             router:
-              static: 
-              - id: '0.0.0.0/0'
-                address_family: 'ipv4-unicast'
-                via:
-                  - id: '192.168.200.1'
-                    type: 'ipv4-address'
+              static:
+                - id: '0.0.0.0/0'
+                  address_family: 'ipv4-unicast'
+                  via:
+                    - id: '192.168.200.1'
+                      type: 'ipv4-address'
 
     - name: Set VLAN interfaces
       nvidia.nvue.interface:
@@ -207,12 +207,12 @@
         data:
           - id: 'vlan10'
             ip:
-              address: 
+              address:
                 - id: '10.1.10.2/24'
               vrr:
-                address: 
+                address:
                   - id: '10.1.10.2/24'
-                state: 
+                state:
                   - id: 'up'
                 mac_address: '00:00:00:00:00:10'
               vrf: 'RED'
@@ -220,12 +220,12 @@
             type: 'svi'
           - id: 'vlan20'
             ip:
-              address: 
+              address:
                 - id: '10.1.20.2/24'
               vrr:
-                address: 
+                address:
                   - id: '10.1.20.2/24'
-                state: 
+                state:
                   - id: 'up'
                 mac_address: '00:00:00:00:00:20'
               vrf: 'RED'
@@ -233,12 +233,12 @@
             type: 'svi'
           - id: 'vlan30'
             ip:
-              address: 
+              address:
                 - id: '10.1.30.2/24'
               vrr:
-                address: 
+                address:
                   - id: '10.1.30.2/24'
-                state: 
+                state:
                   - id: 'up'
                 mac_address: '00:00:00:00:00:30'
               vrf: 'BLUE'
