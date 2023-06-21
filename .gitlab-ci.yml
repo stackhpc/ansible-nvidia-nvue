@@ -14,3 +14,17 @@ sanity:
     - make test
   artifacts:
     expire_in: 1 week
+
+ansible-lint:
+  stage: test
+  before_script:
+    - apt-get update -qy
+    - apt-get install -y python-dev python-pip
+    - git submodule update --init
+    - pip install --upgrade ansible ansible-lint
+    - ansible --version
+    - ansible-lint --version
+  script:
+    - ansible-lint ~/.ansible/collections/ansible_collections/nvidia/nvue/examples/playbooks/*.yml
+  artifacts:
+    expire_in: 1 week
