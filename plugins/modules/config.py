@@ -55,7 +55,7 @@ options:
         required: false
         type: str
 
-author: 
+author:
     - Nvidia NBU Team (@nvidia-nbu)
     - Krishna Vasudevan (@krisvasudevan)
 '''
@@ -81,17 +81,15 @@ RETURN = r'''
 
 '''
 
-import json
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
-from ansible.module_utils.six import string_types
 
 
 def main():
     # define supported filters for the endpoint
     filter_spec = dict(
-        omit=dict(type='list', required=False),
-        include=dict(type='list', required=False)
+        omit=dict(type='list', elements='str', required=False),
+        include=dict(type='list', elements='str', required=False)
     )
 
     # define available arguments/parameters a user can pass to the module

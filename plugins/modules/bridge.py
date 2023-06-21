@@ -146,7 +146,7 @@ options:
         default: 0
         type: int
 
-author: 
+author:
     - Nvidia NBU Team (@nvidia-nbu)
     - Krishna Vasudevan (@krisvasudevan)
 '''
@@ -173,8 +173,8 @@ def main():
     # define supported filters for the endpoint
     filter_spec = dict(
         rev=dict(type='str', required=False, default='operational'),
-        omit=dict(type='list', required=False),
-        include=dict(type='list', required=False)
+        omit=dict(type='list', elements='str', required=False),
+        include=dict(type='list', elements='str', required=False)
     )
 
     # define the bridge spec - used for creation/modification

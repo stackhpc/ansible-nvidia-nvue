@@ -163,7 +163,7 @@ options:
         default: 0
         type: int
 
-author: 
+author:
     - Nvidia NBU Team (@nvidia-nbu)
     - Krishna Vasudevan (@krisvasudevan)
 '''

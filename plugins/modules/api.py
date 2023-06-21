@@ -41,7 +41,7 @@ options:
         type: str
     data:
         description: Structured data used with "set" operations.
-        deafult: {}
+        default: {}
         required: false
         type: dict
     revid:
