@@ -9,6 +9,16 @@ The NVIDIA NVUE Collection includes Ansible modules to help you interact with NV
 | ------ | ----------  |
 | nvidia.nvue.command | A wrapper around `nv` command line tool with added templating and automated dialog prompting. | 
 | nvidia.nvue.api | Send and retrieve NVUE configuration via REST API. | 
+| nvidia.nvue.bridge | Bridge configuration via REST API. | 
+| nvidia.nvue.config | Revisions via REST API. | 
+| nvidia.nvue.evpn | EVPN configuration via REST API. | 
+| nvidia.nvue.interface | Interface configuration via REST API. | 
+| nvidia.nvue.mlag | MLAG configuration via REST API. | 
+| nvidia.nvue.router | Router configuration via REST API. | 
+| nvidia.nvue.service | Service configuration via REST API. | 
+| nvidia.nvue.system | System configuration via REST API. | 
+| nvidia.nvue.vrf | VRF configuration via REST API. | 
+| nvidia.nvue.vxlan | VXLAN configuration via REST API. | 
 
 ## Ansible version compatibility
 
@@ -19,6 +29,8 @@ Tested with the Ansible Core 2.12 and 2.13
 Supports Python 3.8 and higher.
 
 ## Installing this collection
+
+### Installing from Ansible Galaxy
 
 You can install the NVIDIA NVUE collection with the Ansible Galaxy CLI:
 
@@ -32,6 +44,14 @@ You can also include it in a requirements.yml file and install it with `ansible-
 ---
 collections:
   - name: nvidia.nvue
+```
+
+### Installing from git
+
+You can install the NVIDIA NVUE collection using the git URL:
+
+```
+ansible-galaxy collection install git+https://gitlab.com/nvidia-networking/systems-engineering/nvue.git,dev
 ```
 
 ## Using this collection
@@ -61,13 +81,15 @@ You can call modules by their Fully Qualified Collection Name (FQCN), such as `n
 
 ## Examples
 
-For additional usage examples please refer to the `./examples` directory. For each module, you can find a playbook that shows some of the common ways of interacting with the collection modules:
+For additional usage examples please refer to the `./examples` directory. You can find playbooks that shows some of the common ways of interacting with the collection modules:
 
 | Module | Playbook | 
 | ------ | ---------|
 | nvidia.nvue.command | [command.yml](./examples/playbooks/command.yml) | 
 | nvidia.nvue.api | [api.yml](./examples/playbooks/api.yml) | 
-
+| nvidia.nvue.bridge | [test-bridge.yaml](./examples/playbooks/test-bridge.yaml) | 
+| nvidia.nvue.interface | [test-interface.yaml](./examples/playbooks/test-interface.yaml) | 
+| nvidia.nvue.config | [test-revision.yaml](./examples/playbooks/test-revision.yaml) | 
 
 ## Licensing
 
