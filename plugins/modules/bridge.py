@@ -156,11 +156,62 @@ EXAMPLES = r'''
   nvidia.nvue.bridge:
     state: gathered
 
-'''
+- name: Add VLAN details to the bridge
+  nvidia.nvue.bridge:
+    state: merged
+    force: yes
+    wait: 15
+    data:
+        - id: 'br_default'
+          type: 'vlan-aware'
+          vlan:
+            - id: '10'
+              vni:
+                - id: '10'
+    '''
 
 RETURN = r'''
 # These are examples of possible return values, and in general should use other names for return values.
-
+changed:
+  description: whether a configuration was changed
+  returned: always
+  type: bool
+  sample: true
+message:
+    description: details of the bridge (for gathered) or whether the change was applied (for merged)
+    type: dict
+    returned: always
+    sample:
+        - br_default:
+            ageing: 1800
+            encap: 802.1Q
+            mac-address: auto
+            multicast:
+                snooping:
+                    enable: on
+                    querier:
+                        enable: off
+            stp:
+                priority: 32768
+                state:
+                    up: {}
+            type: vlan-aware
+            untagged: 1
+            vlan:
+                '1':
+                    multicast:
+                        snooping:
+                            querier:
+                                source-ip: 0.0.0.0
+                    ptp:
+                        enable: off
+                    vni: {}
+            vlan-vni-offset: 0
+        - message: Config update by cumulus
+          state: applied
+          transition:
+            issue: {}
+            progress: ""
 '''
 
 import json
