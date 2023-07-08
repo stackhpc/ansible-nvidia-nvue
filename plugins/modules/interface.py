@@ -463,13 +463,61 @@ author:
 
 EXAMPLES = r'''
 # Pass in a message
-- name: Test with a message
+- name: Display all the interfaces in the environment
   nvidia.nvue.interface:
     state: gathered
+
+- name: Add IP address to an interface
+  nvidia.nvue.interface:
+    state: merged
+    force: yes
+    wait: 15
+    data:
+        - id: lo
+          ip:
+            address:
+                - id: '10.10.10.1/32'
+          type: 'loopback'
 '''
 
 RETURN = r'''
 # These are examples of possible return values, and in general should use other names for return values.
+changed:
+  description: whether a configuration was changed
+  returned: always
+  type: bool
+  sample: true
+message:
+    description: details of the interface (for gathered) or whether the change was applied (for merged)
+    type: dict
+    returned: always
+    sample:
+        - eth0:
+            acl: {}
+            ip:
+                address:
+                    dhcp: {}
+                gateway: {}
+                ipv4:
+                    forward: off
+                ipv6:
+                    enable: on
+                    forward: off
+                vrf: mgmt
+            link:
+                auto-negotiate: on
+                duplex: full
+                fec: auto
+                mtu: 9216
+                speed: auto
+                state:
+                    up: {}
+            type: eth
+        - message: Config update by cumulus
+          state: applied
+          transition:
+            issue: {}
+            progress: ""
 '''
 
 import json
