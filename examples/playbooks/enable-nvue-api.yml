@@ -1,0 +1,45 @@
+---
+
+- name: Enable REST API on all the switches
+  hosts: switches
+  remote_user: cumulus
+  handlers: 
+    - name: Restart nginx service
+      ansible.builtin.systemd:
+        state: restarted
+        name: nginx
+      become: true
+
+  tasks:
+    - name: Create a link to the NVUE Config file
+      ansible.builtin.file:
+        src: "/etc/nginx/sites-available/nvue.conf"
+        dest: "/etc/nginx/sites-enabled/nvue.conf"
+        state: link
+      become: true
+      notify: Restart nginx service
+        
+    - name: Add the listening port
+      ansible.builtin.lineinfile:
+        path: /etc/nginx/sites-available/nvue.conf
+        regexp: 'listen localhost:8765 ssl'
+        line: '  listen [::]:8765 ipv6only=off ssl;'
+      become: true
+      notify: Restart nginx service
+
+    - name: Flush handlers
+      meta: flush_handlers
+
+    - name: Test API Connectivity
+      register: apioutput
+      uri:
+        url: "https://127.0.0.1:8765/nvue_v1/revision"
+        validate_certs: false
+        user: "cumulus" 
+        password: "CumulusLinux!"
+        method: "GET"
+        status_code: 
+          - 200
+
+    - debug: 
+        var: apioutput
