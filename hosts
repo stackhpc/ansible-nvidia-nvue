@@ -1,9 +1,9 @@
 [leafs]
-leaf01
-leaf02
+leaf01 ansible_host=192.168.200.2
+leaf02 ansible_host=192.168.200.3
 
 [spines]
-spine01
+spine01 ansible_host=192.168.200.4
 
 [switches:children]
 leafs
@@ -13,17 +13,5 @@ spines
 ansible_user=cumulus
 ansible_password=cumulus
 
-[leaf01:vars]
-ansible_host=192.168.200.2
-
-[leaf02:vars]
-ansible_host=192.168.200.3
-
-[spine01:vars]
-ansible_host=192.168.200.4
-
 [servers]
-server01
-
-[server01:vars]
-ansible_host=192.168.200.4
+server01 ansible_host=192.168.200.4
