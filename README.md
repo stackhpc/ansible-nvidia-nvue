@@ -7,8 +7,8 @@ This branch contains NVUE and Ansible automation to configure different demo sce
 [![Slack Status](https://img.shields.io/badge/Slack-2800+-F1446F)](https://slack.cumulusnetworks.com)
 [![Code of Conduct](https://img.shields.io/badge/Contributing-Code%20of%20Conduct-1EB5BD)](https://docs.cumulusnetworks.com/contributor-guide/#contributor-covenant-code-of-conduct)
 
-<img src="https://www.ansible.com/hubfs/2016_Images/Assets/Ansible-Mark-Large-RGB-BlackOutline.png" height="150" title="Ansible" align="right" /> 
-<img src="https://gitlab.com/cumulus-consulting/goldenturtle/cldemo2/-/raw/master/documentation/images/cumulus-logo.svg" height="150" title="NVIDIA" align="right" />
+<img src="https://www.ansible.com/hubfs/2016_Images/Assets/Ansible-Mark-Large-RGB-BlackOutline.png" height="150" title="Ansible" style="float:right" /> 
+<img src="https://www.nvidia.com/content/dam/en-zz/Solutions/about-nvidia/logo-and-brand/01-nvidia-logo-vert-500x200-2c50-d@2x.png" height="150" title="NVIDIA" style="float:right" />
 
 This repository contains examples that will help you understand the [Ansible NVUE modules](https://galaxy.ansible.com/nvidia/nvue) and use it to configure various scenarios. 
 
