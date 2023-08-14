@@ -1,7 +1,7 @@
 ---
 
 - name: Test playbook for the config/revision module
-  hosts: cumulus
+  hosts: leaf01
   connection: ansible.netcommon.httpapi
   gather_facts: false
   vars:

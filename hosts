@@ -11,7 +11,7 @@ spines
 
 [switches:vars]
 ansible_user=cumulus
-ansible_password=CumulusLinux!
+ansible_password=cumulus
 
 [leaf01:vars]
 ansible_host=192.168.200.2

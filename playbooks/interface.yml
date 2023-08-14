@@ -1,7 +1,7 @@
 ---
 
 - name: Test playbook to update interface settings
-  hosts: cumulus
+  hosts: leaf01
   connection: ansible.netcommon.httpapi
   gather_facts: false
   vars:
@@ -28,7 +28,7 @@
           - id: eth0
             ip:
               address:
-                - id: '192.168.200.11/24'
+                - id: '192.168.200.2/24'
             type: 'eth'
           - id: lo
             ip:
