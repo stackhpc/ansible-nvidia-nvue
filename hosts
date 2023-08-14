@@ -23,4 +23,7 @@ ansible_host=192.168.200.3
 ansible_host=192.168.200.4
 
 [servers]
-server01 192.168.200.5
+server01
+
+[server01:vars]
+ansible_host=192.168.200.4
