@@ -1,0 +1,25 @@
+---
+- hosts: spine leaf border
+  become: true
+  gather_facts: false
+  roles:
+    - {role: nvue, tags: ["nvue"]}
+    - {role: ssh, tags: ["ssh"]}
+    - {role: backup, tags: ["backup"]}
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+- hosts: server fw
+  become: true
+  gather_facts: false
+  roles:
+    - {role: servers, tags: ["servers"]}
+    - {role: backup, tags: ["backup"]}
+    - {role: motd, tags: ["motd"]}
+    - {role: ssh, tags: ["ssh"]}
+
+- hosts: localhost
+  become: true
+  gather_facts: false
+  roles:
+    - {role: snmp, tags: ["snmp"]}

@@ -1,0 +1,90 @@
+---
+
+- name: Test playbook to setup MLAG on spine01
+  hosts: spine01
+  connection: ansible.netcommon.httpapi
+  gather_facts: false
+  vars:
+    ansible_network_os: nvidia.nvue.httpapi
+    ansible_httpapi_port: 8765
+    ansible_httpapi_use_ssl: true
+    ansible_httpapi_validate_certs: false
+
+  tasks:
+    - name: Create new revision
+      nvidia.nvue.config:
+        state: new
+      register: revision
+
+    - name: dump revision
+      debug:
+        msg: '{{ revision.revid }}'
+
+    - name: Set system settings
+      nvidia.nvue.system:
+        state: merged
+        revid: '{{ revision.revid }}'
+        data:
+          hostname: 'spine01'
+          timezone: 'Etc/UTC'
+          message:
+            post_login: |
+                      #####################################################################################
+                      #                     You are successfully logged in to: spine01                     #
+                      #####################################################################################
+            pre_login: |
+                      #####################################################################################
+                      #  Welcome to NVIDIA Cumulus VX (TM) 5.5                                            #
+                      #  NVIDIA Cumulus VX (TM) is a community supported virtual appliance designed       #
+                      #  for experiencing, testing and prototyping NVIDIA Cumulus'"'"' latest technology. #
+                      #  For any questions or technical support, visit our community site at:             #
+                      #  https://www.nvidia.com/en-us/support                                             #
+                      #####################################################################################
+
+    - name: Set interface
+      nvidia.nvue.interface:
+        state: merged
+        revid: '{{ revision.revid }}'
+        data:
+          - id: 'eth0'
+            ip:
+              address:
+                - id: '192.168.200.4/24'
+              vrf: 'mgmt'
+            type: 'eth'
+          - id: 'lo'
+            ip:
+              address:
+                - id: '10.10.10.101/32'
+            type: 'loopback'
+          - id: 'swp1'
+            link:
+              state:
+                - id: 'up'
+            type: 'swp'
+          - id: 'swp2'
+            link:
+              state:
+                - id: 'up'
+            type: 'swp'
+
+    - name: Apply new revision
+      nvidia.nvue.config:
+        state: apply
+        revid: '{{ revision.revid }}'
+        force: true
+        wait: 10
+      register: revision
+
+    - name: dump previous output
+      debug:
+        msg: '{{ revision }}'
+
+    - name: Get the current config
+      nvidia.nvue.api:
+        operation: get
+      register: output
+
+    - name: Print current config
+      ansible.builtin.debug:
+        msg: "{{ output }}"

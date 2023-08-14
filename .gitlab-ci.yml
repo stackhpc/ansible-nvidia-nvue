@@ -1,16 +1,44 @@
 ---
 stages:
-  - test
+  - setup
+  - auto ci
 
-sanity:
-  stage: test
-  image: python:3.9
+cache:
+  paths:
+    - .cache/pip/
+
+lint:
+  stage: setup
+  image:
+    name: cytopia/ansible-lint:latest
+    entrypoint: ["/bin/sh", "-c"]
   before_script:
-    - apt update && apt install rsync -y
-    - python3 -m pip install ansible
-    - mkdir ansible_collections
-    - ansible-galaxy collection install ansible.netcommon -p ansible_collections/
+    - python3 -m pip install yamllint
   script:
-    - make test
+    - yamllint ./ -c cicd/scripts/.yamllint-ansible
+    - ansible-lint -v
+
+generate-auto-ci-pipeline:
+  stage: setup
+  image: python:3.6
+  before_script:
+    - python3 -m pip install jinja2
+  script:
+    - python3 ./cicd/scripts/generate-auto-ci-pipeline.py
   artifacts:
     expire_in: 1 week
+    untracked: true
+  only:
+    refs:
+      - /^dev.*$/
+
+start auto ci:
+  stage: auto ci
+  trigger:
+    include:
+      - artifact: auto-ci-pipeline.yml
+        job: generate-auto-ci-pipeline
+    strategy: depend
+  only:
+    refs:
+      - /^dev.*$/
