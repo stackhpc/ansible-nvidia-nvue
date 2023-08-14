@@ -15,7 +15,7 @@ This repository contains examples that will help you understand the [Ansible NVU
 ## How to Use
 
 Install the Ansible NVUE module using:
-```
+```bash
 ubuntu@oob-management:~ $ ansible-galaxy install nvidia.nvue
 ```
 Clone this repository to access the examples, and run the playbooks in the `playbooks/` directory with the `ansible-playbook` command and specify the inventory `hosts` file using the `-i` flag:
@@ -29,8 +29,7 @@ ubuntu@server:~/cumulus_ansible_modules-nvue$ ansible-playbook playbooks/api.yml
 ## Requirements
 
 * NVIDIA Cumulus Linux Version
-
-  ```bash
+```bash
 cumulus@leaf01:mgmt:~$ nv show system
           operational          applied
 --------  -------------------  -------
@@ -38,9 +37,9 @@ hostname  leaf01               cumulus
 build     Cumulus Linux 5.5.0
 uptime    0:13:41
 timezone  Etc/UTC
-  ```
+```
   or
-  ```bash
+```bash
 cumulus@leaf01:mgmt:~$ net show version
 NCLU_VERSION=1.0-cl5.5.0u2
 DISTRIB_ID="Cumulus Linux"
@@ -49,7 +48,7 @@ DISTRIB_DESCRIPTION="Cumulus Linux 5.5.1"
   ```
 
 * Ansible Version
-  ```bash
+```bash
 ubuntu@oob-mgmt-server:~$ ansible --version
 ansible [core 2.15.2]
   config file = /etc/ansible/ansible.cfg
@@ -62,7 +61,7 @@ ansible [core 2.15.2]
   libyaml = True
   ```
 * Ubuntu Version
-  ```bash
+```bash
 ubuntu@oob-mgmt-server:~$ cat /etc/lsb-release
 DISTRIB_ID=Ubuntu
 DISTRIB_RELEASE=22.04
