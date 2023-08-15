@@ -126,7 +126,7 @@ When logging in from other environment devices, use `ssh cumulus@<ip-address>`.
 
 Default switch credentials are:  
  - Username: ***cumulus***
- - Password: ***CumulusLinux!*** 
+ - Password: ***cumulus*** 
 
 <!-- AIR:page -->
 
@@ -157,6 +157,31 @@ ubuntu@oob-mgmt-server:~/workshop$ ansible-galaxy collection install nvidia.nvue
 ```bash
 ubuntu@oob-mgmt-server:~/workshop$ ansible-galaxy collection list | grep nvidia.nvue
 nvidia.nvue                   1.0.1
+```
+6. Verify connectivity to the switches using the `ping` module:
+```bash
+ubuntu@oob-mgmt-server:~/workshop$ ansible switches -m ping -i hosts
+leaf01 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3.7"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+leaf02 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3.7"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+spine01 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3.7"
+    },
+    "changed": false,
+    "ping": "pong"
+}
 ```
 ### Setting up NVUE API Access
 
