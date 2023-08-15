@@ -79,7 +79,7 @@
             type: 'swp'
 
     - name: Set bridge
-      bridge:
+      nvidia.nvue.bridge:
         state: merged
         revid: '{{ revision.revid }}'
         data:
