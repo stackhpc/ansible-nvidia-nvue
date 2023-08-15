@@ -1,0 +1,22 @@
+- name: Test cleanup script
+  hosts: leaf01
+  gather_facts: true
+
+  tasks:
+    - name: Set config to startup
+      nvidia.nvue.command:
+        commands:
+          - config apply startup
+        atomic: true
+        assume_yes: true
+
+    - name: Show current config
+      nvidia.nvue.command:
+        commands:
+          - config show
+        apply: false
+      register: output
+
+    - name: Print current config
+      ansible.builtin.debug:
+        msg: "{{ output['message'] }}"
