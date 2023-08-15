@@ -1561,9 +1561,9 @@ ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/bridge.yml -i h
 <!-- AIR:page -->
 
 ### BGP and MLAG
-1. Clear the configuration `leaf01` to avoid any MLAG configuration inconsistencies:
+1. Clear the configuration on the switches to avoid any MLAG configuration inconsistencies:
 ```bash
-ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/clean-leaf01.yml -i hosts
+ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/clean-switches.yml -i hosts
 ```
 2. To setup MLAG between the 2 leaf switches, you can use the playbooks in the `playbooks/MLAG/` directory:
 ```bash
