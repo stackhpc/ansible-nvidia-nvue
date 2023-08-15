@@ -5,14 +5,14 @@
 ## NVUE API
 NVUE is an object-oriented, schema driven model of a complete Cumulus Linux system (hardware and software) providing a robust API that allows for multiple interfaces to both view (show) and configure (set and unset) any element within a system running the NVUE software.
 
-The NVUE object model definition uses the {{<exlink url="https://github.com/OAI/OpenAPI-Specification" text="OpenAPI specification (OAS)">}}. Like other systems that use OpenAPI, the NVUE OAS schema defines the endpoints (paths) exposed as RESTful APIs. With these REST APIs, you can perform various create, retrieve, update, delete, and eXecute (CRUDX) operations. The OAS schema also describes the API inputs and outputs (data models).
+The NVUE object model definition uses the [OpenAPI specification(OAS)]("https://github.com/OAI/OpenAPI-Specification"). Like other systems that use OpenAPI, the NVUE OAS schema defines the endpoints (paths) exposed as RESTful APIs. With these REST APIs, you can perform various create, retrieve, update, delete, and eXecute (CRUDX) operations. The OAS schema also describes the API inputs and outputs (data models).
 
 You can use the NVUE object model in the following ways:
 - With the NVUE CLI, where you configure, monitor, and manage the Cumulus Linux network elements. The CLI commands translate to their equivalent REST APIs, which Cumulus Linux then runs on the NVUE object model.
-- With the NVUE REST API, where you run the GET, PATCH, DELETE, and other REST APIs on the NVUE object model endpoints to configure, monitor, and manage the switch. Because of the large user community and maturity of OAS, you can work with several popular tools and libraries to create client-side bindings to use the NVUE REST API. You can view the NVUE REST API documentation using Swagger {{<exlink url="https://docs.nvidia.com/networking-ethernet-software/cumulus-linux-55/api/index.html" text="here">}}.
+- With the NVUE REST API, where you run the GET, PATCH, DELETE, and other REST APIs on the NVUE object model endpoints to configure, monitor, and manage the switch. Because of the large user community and maturity of OAS, you can work with several popular tools and libraries to create client-side bindings to use the NVUE REST API. You can view the NVUE REST API documentation using Swagger [here]("https://docs.nvidia.com/networking-ethernet-software/cumulus-linux-55/api/index.html").
 
 ## NVUE Ansible Modules
-{{<exlink url="https://galaxy.ansible.com/nvidia/nvue" text="The NVIDIA NVUE Collection">}} includes Ansible modules to help you interact with NVIDIA devices managed by NVUE. The modules are developed and validated using Ansible 2.11 and Python 3.6, and are supported on Cumulus Linux 5.x.
+[The NVIDIA NVUE Collection]("https://galaxy.ansible.com/nvidia/nvue") includes Ansible modules to help you interact with NVIDIA devices managed by NVUE. The modules are developed and validated using Ansible 2.11 and Python 3.6, and are supported on Cumulus Linux 5.x.
 The collection includes high-level wrapper modules and object specific modules as listed below:
 
 **High-level modules**
@@ -39,11 +39,9 @@ This workshop includes demos of the following features:
 
  * Working with NVUE API
  * Using the Ansible modules - both high level and low level to fetch information
- * Setting up system and interface configurations
- * Static VXLAN
+ * Setting up system, interface, and bridge configurations
  * Setting up MLAG L2 server redundancy
  * BGP underlay fabric
- * Sample EVPN symmetric configuration
 
 <!-- AIR:page -->
 

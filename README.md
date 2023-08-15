@@ -7,8 +7,8 @@ This branch contains NVUE and Ansible automation to configure different demo sce
 [![Slack Status](https://img.shields.io/badge/Slack-2800+-F1446F)](https://slack.cumulusnetworks.com)
 [![Code of Conduct](https://img.shields.io/badge/Contributing-Code%20of%20Conduct-1EB5BD)](https://docs.cumulusnetworks.com/contributor-guide/#contributor-covenant-code-of-conduct)
 
-<img src="https://www.ansible.com/hubfs/2016_Images/Assets/Ansible-Mark-Large-RGB-BlackOutline.png" height="150" title="Ansible" align="right" /> 
-<img src="https://gitlab.com/cumulus-consulting/goldenturtle/cldemo2/-/raw/master/documentation/images/cumulus-logo.svg" height="150" title="NVIDIA" align="right" />
+<img src="https://www.ansible.com/hubfs/2016_Images/Assets/Ansible-Mark-Large-RGB-BlackOutline.png" height="150" title="Ansible" /> 
+<img src="https://www.nvidia.com/content/dam/en-zz/Solutions/about-nvidia/logo-and-brand/01-nvidia-logo-vert-500x200-2c50-d@2x.png" height="150" title="NVIDIA" />
 
 This repository contains examples that will help you understand the [Ansible NVUE modules](https://galaxy.ansible.com/nvidia/nvue) and use it to configure various scenarios. 
 
@@ -30,7 +30,7 @@ ubuntu@server:~/cumulus_ansible_modules-nvue$ ansible-playbook playbooks/api.yml
 
 * NVIDIA Cumulus Linux Version
 
-  ```bash
+```bash
 cumulus@leaf01:mgmt:~$ nv show system
           operational          applied
 --------  -------------------  -------
@@ -40,7 +40,7 @@ uptime    0:13:41
 timezone  Etc/UTC
   ```
   or
-  ```bash
+```bash
 cumulus@leaf01:mgmt:~$ net show version
 NCLU_VERSION=1.0-cl5.5.0u2
 DISTRIB_ID="Cumulus Linux"
@@ -49,7 +49,7 @@ DISTRIB_DESCRIPTION="Cumulus Linux 5.5.1"
   ```
 
 * Ansible Version
-  ```bash
+```bash
 ubuntu@oob-mgmt-server:~$ ansible --version
 ansible [core 2.15.2]
   config file = /etc/ansible/ansible.cfg
@@ -62,7 +62,7 @@ ansible [core 2.15.2]
   libyaml = True
   ```
 * Ubuntu Version
-  ```bash
+```bash
 ubuntu@oob-mgmt-server:~$ cat /etc/lsb-release
 DISTRIB_ID=Ubuntu
 DISTRIB_RELEASE=22.04
