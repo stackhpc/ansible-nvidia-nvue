@@ -58,7 +58,6 @@
     - name: Fetch bridge config
       nvidia.nvue.bridge:
         state: gathered
-        provider: "{{ provider_spec }}"
       register: bridge
 
     - name: Display bridge config
