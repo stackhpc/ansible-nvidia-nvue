@@ -143,7 +143,7 @@ ubuntu@oob-mgmt-server:~/workshop$ git status | grep cumulus-linux-automation-wo
 On branch cumulus-linux-automation-workshop
 Your branch is up to date with 'origin/cumulus-linux-automation-workshop'.
 ```
-*In case you or on other branch, use the `git checkout` command to move the `cumulus-linux-automation-workshop` branch*
+*In case you are on other branch, use the `git checkout` command to move the `cumulus-linux-automation-workshop` branch*
 ```bash
 ubuntu@oob-mgmt-server:~/workshop$ git checkout cumulus-linux-automation-workshop
 ```
@@ -1015,7 +1015,7 @@ ubuntu@oob-mgmt-server:~/workshop$
 ## Sample playbooks
 1. The `gather-config.yml` uses the high-level `api` module to fetch the root configuration and the object-level `interface` module to fetch interface configuration.
 ```bash
-ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook gather-config.yml -i hosts
+ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook playbooks/gather-config.yml -i hosts
 PLAY [NVUE API] ****************************************************************
 
 TASK [Get the current config] **************************************************
@@ -1561,13 +1561,17 @@ ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/bridge.yml -i h
 <!-- AIR:page -->
 
 ### BGP and MLAG
-1. To setup MLAG between the 2 leaf switches, you can use the playbooks in the `playbooks/MLAG/` directory:
+1. Clear the configuration `leaf01` to avoid any MLAG configuration inconsistencies:
+```bash
+ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/clean-leaf01.yml -i hosts
+```
+2. To setup MLAG between the 2 leaf switches, you can use the playbooks in the `playbooks/MLAG/` directory:
 ```bash
 ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/mlag-leaf01.yml -i hosts
 ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/mlag-leaf02.yml -i hosts
 ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/mlag-spine01.yml -i hosts
 ```
-2. Verify MLAG operational state:
+3. Verify MLAG operational state:
 ```bash
 cumulus@leaf01:mgmt:~$ nv show mlag
                 operational                applied
@@ -1651,14 +1655,14 @@ bond1      bridge-learning  yes              yes               -
 ```
 On any MLAG configuration change, Cumulus Linux automatically validates the corresponding parameters on both MLAG peers and takes action based on the type of conflict it sees. For every conflict, the `/var/log/clagd.log` file records a log message. For more information about MLAG consistency-checker and other MLAG validations, check out the [MLAG Troubleshooting](https://docs.nvidia.com/networking-ethernet-software/cumulus-linux-55/Layer-2/Multi-Chassis-Link-Aggregation-MLAG/#troubleshooting) section in Cumulus Linux documentation.
 
-3. To setup BGP, you can use the playbooks in the `playbooks/BGP/` directory:
+4. To setup BGP, you can use the playbooks in the `playbooks/BGP/` directory:
 ```bash
 cumulus@leaf01:mgmt:~$ exit
 ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-leaf01.yml -i hosts
 ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-leaf02.yml -i hosts
 ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-spine01.yml -i hosts
 ```
-4. Verify BGP peerings:
+5. Verify BGP peerings:
 ```bash
 cumulus@leaf01:mgmt:~$ net show bgp summary
 cumulus@leaf01:mgmt:~$ net show bgp summary
@@ -1705,10 +1709,10 @@ swp52            idle                   300000     Waiting for Peer IPv6 LLA    
 ```
 <!-- AIR:page -->
 ## Additional Resources
-- {{<exlink url="https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks" text="NVUE modules on Gitlab">}}
-- {{<exlink url="https://galaxy.ansible.com/nvidia/nvue" text="NVUE modules on Galaxy">}}
-- {{<exlink url="https://console.redhat.com/ansible/automation-hub/repo/published/nvidia/nvue/" text="NVUE modules on Automation Hub">}}
-- {{<exlink url="https://docs.nvidia.com/networking-ethernet-software/guides/Data-Center-Network-Automation-Quick-Start-Guide/" text="Data Center Network Automation Quick Start Guide">}}
-- {{<exlink url="https://docs.nvidia.com/networking-ethernet-software/guides/production-ready-automation/" text="Production Ready Automation Guide">}}
-- {{<exlink url="https://developer.nvidia.com/blog/automating-data-center-networks-with-nvidia-cumulus-linux/" text="Automating Data Center Networks with NVIDIA Cumulus Linux">}}
+- [NVUE modules on Gtilab](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks)
+- [NVUE modules on Galaxy](https://galaxy.ansible.com/nvidia/nvue)
+- [NVUE modules on Automation Hub](https://console.redhat.com/ansible/automation-hub/repo/published/nvidia/nvue/)
+- [Data Center Network Automation Quick Start Guide](https://docs.nvidia.com/networking-ethernet-software/guides/Data-Center-Network-Automation-Quick-Start-Guide/)
+- [Production Ready Automation Guide](https://docs.nvidia.com/networking-ethernet-software/guides/production-ready-automation/)
+- [Automating Data Center Networks with NVIDIA Cumulus Linux](https://developer.nvidia.com/blog/automating-data-center-networks-with-nvidia-cumulus-linux/)
 <!-- AIR:tour -->
