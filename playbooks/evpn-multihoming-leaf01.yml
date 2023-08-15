@@ -112,7 +112,7 @@
         data:
           bgp:
             enable: 'on'
-            autonomous_system: 'leaf'
+            autonomous_system: 65101
             router_id: '10.10.10.1'
           vrr:
             enable: 'on'
@@ -140,7 +140,7 @@
                         enable: 'on'
                   l2vpn_evpn:
                     enable: 'on'
-                autonomous_system: 'leaf'
+                autonomous_system: 65101
                 enable: 'on'
                 router_id: '10.10.10.1'
           - id: 'RED'
@@ -161,7 +161,7 @@
                         enable: 'on'
                   l2vpn_evpn:
                     enable: 'on'
-                autonomous_system: 'leaf'
+                autonomous_system: 65101
                 enable: 'on'
                 router_id: '10.10.10.1'
           - id: 'default'
@@ -175,7 +175,7 @@
                         enable: 'on'
                   l2vpn_evpn:
                     enable: 'on'
-                autonomous_system: 'leaf'
+                autonomous_system: 65101
                 enable: 'on'
                 router_id: '10.10.10.1'
                 neighbor:
