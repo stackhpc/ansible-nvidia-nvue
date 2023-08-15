@@ -182,7 +182,7 @@
                         enable: 'on'
                   l2vpn_evpn:
                     enable: 'on'
-                autonomous_system: '65101'
+                autonomous_system: 65101
                 enable: 'on'
                 router_id: '10.10.10.1'
           - id: 'RED'
