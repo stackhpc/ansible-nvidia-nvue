@@ -9,6 +9,7 @@ The NVIDIA NVUE Collection includes Ansible modules to help you interact with NV
 | ------ | ----------  |
 | nvidia.nvue.command | A wrapper around `nv` command line tool with added templating and automated dialog prompting. | 
 | nvidia.nvue.api | Send and retrieve NVUE configuration via REST API. | 
+| nvidia.nvue.acl | ACL rules via REST API. | 
 | nvidia.nvue.bridge | Bridge configuration via REST API. | 
 | nvidia.nvue.config | Revisions via REST API. | 
 | nvidia.nvue.evpn | EVPN configuration via REST API. | 
@@ -81,15 +82,21 @@ You can call modules by their Fully Qualified Collection Name (FQCN), such as `n
 
 ## Examples
 
-For additional usage examples please refer to the `./examples` directory. You can find playbooks that shows some of the common ways of interacting with the collection modules:
+For additional usage examples please refer to the `./examples` directory. You can find playbooks that shows some of the common ways of interacting with the collection modules and roles:
 
 | Module | Playbook | 
 | ------ | ---------|
-| nvidia.nvue.command | [command.yml](./examples/playbooks/command.yml) | 
-| nvidia.nvue.api | [api.yml](./examples/playbooks/api.yml) | 
-| nvidia.nvue.bridge | [test-bridge.yaml](./examples/playbooks/test-bridge.yaml) | 
-| nvidia.nvue.interface | [test-interface.yaml](./examples/playbooks/test-interface.yaml) | 
-| nvidia.nvue.config | [test-revision.yaml](./examples/playbooks/test-revision.yaml) | 
+| nvidia.nvue.command | [command.yml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/command.yml) | 
+| nvidia.nvue.api | [api.yml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/api.yml) | 
+| nvidia.nvue.bridge | [bridge.yaml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/bridge.yaml) | 
+| nvidia.nvue.interface | [interface.yaml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/interface.yaml) | 
+| nvidia.nvue.config | [revision.yaml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/revision.yaml) | 
+
+| Role | Playbook | 
+| ------ | ---------|
+| nvidia.nvue.system | [system-role.yml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/roles/system-role.yml) | 
+| nvidia.nvue.mlag | [mlag-role.yml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/roles/mlag-role-leaf.yml) | 
+| nvidia.nvue.bgp | [bgp-role.yaml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/roles/bgp-role-leaf.yml) | 
 
 ## Licensing
 

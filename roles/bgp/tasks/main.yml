@@ -1,0 +1,32 @@
+---
+- name: Set router
+  nvidia.nvue.router:
+    state: merged
+    revid: '{{ revision.revid }}'
+    data:
+      bgp:
+        enable: 'on'
+        autonomous_system: '{{ bgp_asn }}'
+        router_id: '{{ bgp_routerid }}'
+
+- name: Set vrf
+  nvidia.nvue.vrf:
+    state: merged
+    revid: '{{ revision.revid }}'
+    data:
+      - id: 'default'
+        router:
+          bgp:
+            address_family:
+              ipv4_unicast:
+                enable: 'on'
+                redistribute:
+                  connected:
+                    enable: 'on'
+                network:
+                  - id: '{{ lo_ip }}'
+            neighbor:
+              - id: '{{ item }}'
+                remote_as: 'external'
+            enable: 'on'
+  with_items: "{{ bgp_neighbors }}"  
