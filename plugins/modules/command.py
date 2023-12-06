@@ -103,6 +103,10 @@ from ansible.module_utils.basic import AnsibleModule
 
 def run_nvue_cmd(module, command, errmsg=None):
     """Run a command, catch any nvue errors"""
+    prefix = "nv "
+    # Check if user passed on an "nv " while passing on the command to the module and strip it
+    if command.startswith(prefix):
+        command = command[len(prefix):]
     (_rc, output, _err) = module.run_command("/usr/bin/nv %s" % command)
     if _rc or "error" in _err.lower():
         msg = "\n".join((x for x in [errmsg, _err] if x))

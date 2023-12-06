@@ -3,7 +3,7 @@
     "results": [
         {
             "message": "The test `ansible-test sanity --test import --python 3.8` [[explain](https://docs.ansible.com/ansible-core/2.13/dev_guide/testing/sanity/import.html)] failed with 1 error:", 
-            "output": "plugins/httpapi/httpapi.py:19:0: traceback: ModuleNotFoundError: No module named 'ansible_collections.ansible.netcommon'"
+            "output": "plugins/httpapi/httpapi.py:19:0: traceback: ModuleNotFoundError: No module named 'ansible.netcommon'"
         }
     ], 
     "verified": false

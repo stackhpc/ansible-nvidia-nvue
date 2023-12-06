@@ -1,0 +1,42 @@
+---
+- name: Set VLAN interfaces
+  nvidia.nvue.interface:
+    state: merged
+    revid: '{{ revision.revid }}'
+    data:
+      - id: '{{ item.id }}'
+        ip:
+          address:
+            - id: '{{ item.ip }}'
+        vlan: '{{ item.vlan }}'
+        type: 'svi'
+      - id: 'bond1'
+        bond:
+          mlag:
+            enable: 'on'
+            id: 1
+          member:
+            - id: 'swp1'
+        bridge:
+          domain:
+            - id: 'br_default'
+        type: 'bond'
+  with_items: "{{ vlan_config }}"
+
+- name: Set Bond interfaces
+  nvidia.nvue.interface:
+    state: merged
+    revid: '{{ revision.revid }}'
+    data:
+      - id: '{{ item.id }}'
+        bond:
+          mlag:
+            enable: 'on'
+            id: '{{ item.mlagid }}'
+          member:
+            - id: '{{ item.member }}'
+        bridge:
+          domain:
+            - id: '{{ item.bridge }}'
+        type: 'bond'
+  with_items: "{{ bond_config }}"

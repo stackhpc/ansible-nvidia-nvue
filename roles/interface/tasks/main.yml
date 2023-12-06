@@ -1,0 +1,28 @@
+---
+- name: Set interface
+  nvidia.nvue.interface:
+    state: merged
+    revid: '{{ revision.revid }}'
+    data:
+      - id: '{{ item }}'
+        link:
+          state:
+            - id: 'up'
+        type: 'swp'
+  with_items: "{{ interfaces_up }}"
+
+- name: Set interface IP address
+  nvidia.nvue.interface:
+    state: merged
+    revid: '{{ revision.revid }}'
+    data:
+      - id: 'eth0'
+        ip:
+          address:
+            - id: '{{ eth0_ip }}'
+          vrf: 'mgmt'
+        type: 'eth'
+      - id: 'lo'
+        ip:
+          address:
+            - id: '{{ lo_ip }}'

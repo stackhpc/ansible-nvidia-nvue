@@ -39,6 +39,12 @@ options:
         required: false
         default: /
         type: str
+    filled:
+        description: If true, fill in attributes with default values, providing a complete set of attributes.
+                     If false, return only the attributes that differ from the defaults.
+        required: false
+        default: true
+        type: bool
     data:
         description: Structured data used with "set" operations.
         default: {}
@@ -106,6 +112,7 @@ def main():
         "force": {"type": "bool", "required": False, "default": False},
         "wait": {"type": "int", "required": False, "default": 0},
         "path": {"type": "str", "required": False, "default": "/"},
+        "filled": {"type": "bool", "required": False, "default": True},
         "data": {"type": "dict", "required": False, "default": {}},
         "revid": {"type": "str", "required": False}
     }
@@ -126,6 +133,7 @@ def main():
     force = module.params["force"]
     wait = module.params["wait"]
     revid = module.params["revid"]
+    filled = module.params["filled"]
 
     if isinstance(data, string_types):
         data = json.loads(data)
@@ -137,7 +145,7 @@ def main():
     commit = not module.check_mode
 
     connection = Connection(module._socket_path)
-    response = connection.send_request(data, path, operation, force=force, wait=wait, revid=revid)
+    response = connection.send_request(data, path, operation, force=force, wait=wait, revid=revid, filled=filled)
     if operation == "set" and response:
         result["changed"] = True
     result["message"] = response

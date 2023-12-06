@@ -1,0 +1,28 @@
+---
+- name: Set MLAG interfaces
+  nvidia.nvue.interface:
+    state: merged
+    revid: '{{ revision.revid }}'
+    data:
+      - id: 'peerlink'
+        bond:
+          member:
+            - id: 'swp49'
+            - id: 'swp50'
+        bridge:
+          domain:
+            - id: 'br_default'
+        type: 'peerlink'
+
+- name: Set mlag
+  nvidia.nvue.mlag:
+    state: merged
+    revid: '{{ revision.revid }}'
+    data:
+      enable: 'on'
+      init_delay: 100
+      mac_address: '{{ mlag_mac }}'
+      backup:
+        - id: '{{ mlag_backup }}'
+      peer_ip: 'linklocal'
+      priority: 1000
