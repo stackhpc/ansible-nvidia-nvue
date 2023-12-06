@@ -4,12 +4,12 @@ stages:
 
 sanity:
   stage: test
-  image: python:3.10
+  image: python:3.11
   before_script:
     - apt update && apt install rsync -y
     - python3 -m pip install ansible
     - mkdir ansible_collections
-    - ansible-galaxy collection install ansible.netcommon -p ansible_collections/
+    - ansible-galaxy collection install ansible.netcommon
   script:
     - make test
   artifacts:
