@@ -9,3 +9,6 @@ interfaces_up:
   - "swp2"
 bond_config:
   - { id: 'bond1', mlagid: 1, member: 'swp1', bridge: 'br_default'}
+bgp_neighbors: 
+  - "swp51"
+  - "swp52"

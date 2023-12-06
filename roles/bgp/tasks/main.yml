@@ -26,8 +26,16 @@
                 network:
                   - id: '{{ lo_ip }}'
             enable: 'on'
+
+- name: Set vrf BGP neighbors
+  nvidia.nvue.vrf:
+    state: merged
+    revid: '{{ revision.revid }}'
+    data:
+      - id: 'default'
+        router:
+          bgp:
             neighbor:
-              - id: 'swp51'
+              - id: '{{ items }}'
                 remote_as: 'external'
-              - id: 'swp52'
-                remote_as: 'external'
+  with_items: "{{ bgp_neighbors }}"
