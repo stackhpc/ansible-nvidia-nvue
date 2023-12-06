@@ -7,5 +7,5 @@ interfaces_up:
   - "swp53"
   - "swp1"
   - "swp2"
-bridge_config:
+bond_config:
   - { id: 'bond1', mlagid: 1, member: 'swp1', bridge: 'br_default'}

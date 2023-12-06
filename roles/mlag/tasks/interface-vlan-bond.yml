@@ -39,4 +39,4 @@
           domain:
             - id: '{{ item.bridge }}'
         type: 'bond'
-  with_items: "{{ vlan_config }}"
+  with_items: "{{ bond_config }}"
