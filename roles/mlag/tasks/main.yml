@@ -1,5 +1,4 @@
 ---
-- import_tasks: interface-up.yml
 - import_tasks: bridge-config.yml
 - import_tasks: mlag-config.yml
 - import_tasks: interface-vlan-bond.yml

@@ -1,7 +1,7 @@
 ---
 
-- name: Test playbook to setup mlag config on leaf switches using roles
-  hosts: leafs
+- name: Test playbook to setup bgp config on spine switches using roles
+  hosts: spines
   connection: ansible.netcommon.httpapi
   gather_facts: false
   vars:
@@ -24,9 +24,13 @@
       ansible.builtin.include_role: 
         name: nvidia.nvue.system
 
-    - name: Set mlag settings
+    - name: Set interface settings
       ansible.builtin.include_role: 
-        name: nvidia.nvue.mlag
+        name: nvidia.nvue.interface
+    
+    - name: Set bgp settings
+      ansible.builtin.include_role: 
+        name: nvidia.nvue.bgp
       
     - name: Apply new revision
       nvidia.nvue.config:
