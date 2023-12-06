@@ -86,17 +86,17 @@ For additional usage examples please refer to the `./examples` directory. You ca
 
 | Module | Playbook | 
 | ------ | ---------|
-| nvidia.nvue.command | [command.yml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/command.yml) | 
-| nvidia.nvue.api | [api.yml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/api.yml) | 
-| nvidia.nvue.bridge | [bridge.yaml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/bridge.yaml) | 
-| nvidia.nvue.interface | [interface.yaml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/interface.yaml) | 
-| nvidia.nvue.config | [revision.yaml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/revision.yaml) | 
+| nvidia.nvue.command | [command.yml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/command.yml) | 
+| nvidia.nvue.api | [api.yml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/api.yml) | 
+| nvidia.nvue.bridge | [bridge.yaml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/bridge.yaml) | 
+| nvidia.nvue.interface | [interface.yaml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/interface.yaml) | 
+| nvidia.nvue.config | [revision.yaml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/revision.yaml) | 
 
 | Role | Playbook | 
 | ------ | ---------|
-| nvidia.nvue.system | [system-role.yml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/roles/system-role.yml) | 
-| nvidia.nvue.mlag | [mlag-role.yml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/roles/mlag-role-leaf.yml) | 
-| nvidia.nvue.bgp | [bgp-role.yaml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/examples/playbooks/roles/bgp-role-leaf.yml) | 
+| nvidia.nvue.system | [system-role.yml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/roles/system-role.yml) | 
+| nvidia.nvue.mlag | [mlag-role.yml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/roles/mlag-role-leaf.yml) | 
+| nvidia.nvue.bgp | [bgp-role.yaml](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks/roles/bgp-role-leaf.yml) | 
 
 ## Licensing
 
