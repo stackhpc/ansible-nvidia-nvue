@@ -16,7 +16,7 @@ description:
 """
 
 from ansible.module_utils.six.moves.urllib.error import HTTPError
-from ansible_collections.ansible.netcommon.plugins.plugin_utils.httpapi_base \
+from ansible.netcommon.plugins.plugin_utils.httpapi_base \
     import HttpApiBase
 import urllib
 import json
