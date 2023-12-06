@@ -1,0 +1,11 @@
+---
+interfaces_up: 
+  - "swp49"
+  - "swp50"
+  - "swp51"
+  - "swp52"
+  - "swp53"
+  - "swp1"
+  - "swp2"
+bridge_config:
+  - { id: 'bond1', mlagid: 1, member: 'swp1', bridge: 'br_default'}
