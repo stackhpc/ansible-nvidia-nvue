@@ -41,7 +41,7 @@
         msg: '{{ revision }}'
 
     - name: Get the current config
-      nvidia.nvue.system:
+      nvidia.nvue.api:
         operation: get
       register: output
 
