@@ -25,17 +25,8 @@
                     enable: 'on'
                 network:
                   - id: '{{ lo_ip }}'
-            enable: 'on'
-
-- name: Set vrf BGP neighbors
-  nvidia.nvue.vrf:
-    state: merged
-    revid: '{{ revision.revid }}'
-    data:
-      - id: 'default'
-        router:
-          bgp:
             neighbor:
-              - id: '{{ items }}'
+              - id: '{{ item }}'
                 remote_as: 'external'
-  with_items: "{{ bgp_neighbors }}"
+            enable: 'on'
+  with_items: "{{ bgp_neighbors }}"  
