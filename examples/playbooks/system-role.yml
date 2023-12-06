@@ -23,3 +23,24 @@
     - name: Set system settings
       ansible.builtin.include_role: 
         name: system
+      
+    - name: Apply new revision
+      nvidia.nvue.config:
+        state: apply
+        revid: '{{ revision.revid }}'
+        force: true
+        wait: 10
+      register: revision
+
+    - name: dump previous output
+      debug:
+        msg: '{{ revision }}'
+
+    - name: Get the current config
+      nvidia.nvue.system:
+        operation: get
+      register: output
+
+    - name: Print current config
+      ansible.builtin.debug:
+        msg: "{{ output }}"

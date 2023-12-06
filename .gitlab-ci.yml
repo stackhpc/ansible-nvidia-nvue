@@ -4,7 +4,7 @@ stages:
 
 sanity:
   stage: test
-  image: python:3.9
+  image: python:3.10
   before_script:
     - apt update && apt install rsync -y
     - python3 -m pip install ansible

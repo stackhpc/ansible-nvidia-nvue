@@ -22,6 +22,7 @@ import urllib
 import json
 import time
 
+
 class HttpApi(HttpApiBase):
 
     def __init__(self, connection):
@@ -42,7 +43,6 @@ class HttpApi(HttpApiBase):
             params = {"rev": "applied"}
             if path == "/":
                 path = ""
-                q(kwargs)
                 if not kwargs.get("filled"):
                     params['filled'] = 'false'
             path = f"{self.prefix}/{path}?{urllib.parse.urlencode(params)}"
