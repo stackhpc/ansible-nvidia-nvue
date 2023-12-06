@@ -15,7 +15,8 @@ Initial release.
 Major Changes
 -------------
 
-- nvidia.nvue.acl
+- New Module: nvidia.nvue.acl
+- New roles: nvidia.nvue.system, nvidia.nvue.bgp, nvidia.nvue.mlag
 
 Minor Changes
 -------------

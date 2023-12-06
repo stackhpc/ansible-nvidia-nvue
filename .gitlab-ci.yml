@@ -9,7 +9,7 @@ sanity:
     - apt update && apt install rsync -y
     - python3 -m pip install ansible
     - mkdir ansible_collections
-    - ansible-galaxy collection install ansible.netcommon
+    - ansible-galaxy collection install ansible.netcommon -p ansible_collections/ --force
   script:
     - make test
   artifacts:

@@ -4,7 +4,7 @@
     state: merged
     revid: '{{ revision.revid }}'
     data:
-      hostname: {{ hostname }}
+      hostname: '{{ hostname }}'
       timezone: 'Etc/UTC'
       message:
         post_login: |
