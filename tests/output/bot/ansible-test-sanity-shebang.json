@@ -3,7 +3,7 @@
     "results": [
         {
             "message": "The test `ansible-test sanity --test shebang` [[explain](https://docs.ansible.com/ansible-core/2.13/dev_guide/testing/sanity/shebang.html)] failed with 1 error:", 
-            "output": "examples/workshop-hosts:0:0: file without shebang should not be executable"
+            "output": "plugins/modules/acl.py:0:0: module should not be executable"
         }
     ], 
     "verified": false

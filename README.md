@@ -9,6 +9,7 @@ The NVIDIA NVUE Collection includes Ansible modules to help you interact with NV
 | ------ | ----------  |
 | nvidia.nvue.command | A wrapper around `nv` command line tool with added templating and automated dialog prompting. | 
 | nvidia.nvue.api | Send and retrieve NVUE configuration via REST API. | 
+| nvidia.nvue.acl | ACL rules via REST API. | 
 | nvidia.nvue.bridge | Bridge configuration via REST API. | 
 | nvidia.nvue.config | Revisions via REST API. | 
 | nvidia.nvue.evpn | EVPN configuration via REST API. | 

@@ -92,9 +92,9 @@ options:
                                     - 'on'
                                     - 'off'
                             autonomous_system:
-                                description: ASN for this VRF. If "auto", inherit from the global config. This is the default.
+                                description: ASN for this VRF.
                                 required: false
-                                type: str
+                                type: int
                             router_id:
                                 description: BGP router-id for this VRF. If "auto", inherit from the global config. This is the default.
                                 required: false
@@ -219,6 +219,10 @@ options:
                                         choices:
                                             - numbered
                                             - unnumbered
+                                    update_source:
+                                        description: Source of routing updates.
+                                        required: false
+                                        type: str
                                     remote_as:
                                         description: ASN for the BGP neighbor(s) using this configuration. If specified as 'external', it means an EBGP
                                                      configuration but the actual ASN is immaterial. If specified as 'internal', it means an IBGP configuration.
@@ -524,7 +528,7 @@ def main():
         router=dict(type='dict', required=False, options=dict(
             bgp=dict(type='dict', required=False, options=dict(
                 enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
-                autonomous_system=dict(type='str', required=False),
+                autonomous_system=dict(type='int', required=False),
                 router_id=dict(type='str', required=False),
                 address_family=dict(type='dict', required=False, options=dict(
                     ipv4_unicast=dict(type='dict', required=False, options=dict(
@@ -554,6 +558,7 @@ def main():
                     id=dict(type='str', required=False),
                     enable=dict(type='str', required=False, default='on', choices=['on', 'off']),
                     peer_group=dict(type='str', required=False),
+                    update_source=dict(type='str', required=False),
                     type=dict(type='str', required=False, choices=['numbered', 'unnumbered']),
                     remote_as=dict(type='str', required=False),
                     address_family=dict(type='dict', required=False, options=dict(

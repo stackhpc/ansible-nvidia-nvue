@@ -22,7 +22,6 @@ import urllib
 import json
 import time
 
-
 class HttpApi(HttpApiBase):
 
     def __init__(self, connection):
@@ -43,6 +42,9 @@ class HttpApi(HttpApiBase):
             params = {"rev": "applied"}
             if path == "/":
                 path = ""
+                q(kwargs)
+                if not kwargs.get("filled"):
+                    params['filled'] = 'false'
             path = f"{self.prefix}/{path}?{urllib.parse.urlencode(params)}"
             return self.get_operation(path)
 
@@ -99,14 +101,14 @@ class HttpApi(HttpApiBase):
         For example, in bridges, we take id as an input:
         config:
             - id: br_default
-            untagged: 1
-            type: vlan-aware
-            vlan:
+              untagged: 1
+              type: vlan-aware
+              vlan:
                 - id: 10
-                vni:
+                  vni:
                     - id: 10
                 - id: 20
-                vni:
+                  vni:
                     - id: 20
         This needs to be converted for the API as below:
         {

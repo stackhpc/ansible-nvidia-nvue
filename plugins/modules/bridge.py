@@ -19,7 +19,7 @@ description: This is a Cumulus Linux module to interact with the bridges object 
 
 options:
     filters:
-        description: Filters used while fetching information about router
+        description: Filters used while fetching information about bridge.
         type: dict
         suboptions:
             rev:
