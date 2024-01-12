@@ -168,7 +168,7 @@ ubuntu@oob-mgmt-server:~/workshop$ ansible-galaxy collection install nvidia.nvue
 5. Verify the installation:
 ```bash
 ubuntu@oob-mgmt-server:~/workshop$ ansible-galaxy collection list | grep nvidia.nvue
-nvidia.nvue                   1.0.1
+nvidia.nvue                   1.1.0
 ```
 6. Verify connectivity to the switches using the `ping` module:
 ```bash
@@ -1244,6 +1244,7 @@ ubuntu@oob-mgmt-server:~/workshop$
 1. The `gather-config.yml` uses the high-level `api` module to fetch the root configuration and the object-level `interface` module to fetch interface configuration.
 ```bash
 ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook playbooks/gather-config.yml -i hosts
+
 PLAY [NVUE API] ****************************************************************
 
 TASK [Get the current config] **************************************************
@@ -1264,13 +1265,14 @@ ok: [leaf01] =>
             mac-address: auto
             multicast:
               snooping:
-                enable: 'on'
-                querier:
-                  enable: 'off'
+                enable: 'off'
             stp:
+              force-protocol-version: rstp
+              mode: rstp
               priority: 32768
               state:
                 up: {}
+              vlan: {}
             type: vlan-aware
             untagged: 1
             vlan:
@@ -1285,11 +1287,6 @@ ok: [leaf01] =>
             vlan-vni-offset: 0
       evpn:
         enable: 'off'
-      header:
-        model: VX
-        nvue-api-version: nvue_v1
-        rev-id: 1.0
-        version: Cumulus Linux 5.5.1
       interface:
         eth0:
           acl: {}
@@ -1307,10 +1304,15 @@ ok: [leaf01] =>
             auto-negotiate: 'on'
             duplex: full
             fec: auto
+            flap-protection:
+              enable: 'on'
             mtu: 9216
             speed: auto
             state:
               up: {}
+          neighbor:
+            ipv4: {}
+            ipv6: {}
           type: eth
         lo:
           ip:
@@ -1323,6 +1325,9 @@ ok: [leaf01] =>
               enable: 'on'
               forward: 'on'
             vrf: default
+          neighbor:
+            ipv4: {}
+            ipv6: {}
           router:
             adaptive-routing:
               enable: 'off'
@@ -1338,6 +1343,23 @@ ok: [leaf01] =>
       nve:
         vxlan:
           enable: 'off'
+      platform:
+        pulse-per-second:
+          in:
+            channel-index: 0
+            logging-level: info
+            pin-index: 0
+            signal-polarity: rising-edge
+            signal-width: 500000000
+            state: disabled
+            timestamp-correction: 0
+          out:
+            channel-index: 0
+            frequency-adjustment: 1000000000
+            phase-adjustment: 0
+            pin-index: 1
+            signal-width: 500000000
+            state: disabled
       qos:
         advance-buffer-config:
           default-global:
@@ -1476,6 +1498,9 @@ ok: [leaf01] =>
             port-default-sp: 0
             trust: l2
         pfc: {}
+        pfc-watchdog:
+          polling-interval: 100
+          robustness: 3
         remark:
           default-global: {}
         roce:
@@ -1505,6 +1530,7 @@ ok: [leaf01] =>
           enable: 'off'
         ospf6:
           enable: 'off'
+        password-obfuscation: disabled
         pbr:
           enable: 'off'
         pim:
@@ -1564,6 +1590,7 @@ ok: [leaf01] =>
                 profile-type: ieee-1588
                 sync-interval: 0
                 transport: ipv4
+                two-step: 'on'
               default-itu-8275-1:
                 announce-interval: -3
                 announce-timeout: 3
@@ -1576,6 +1603,7 @@ ok: [leaf01] =>
                 profile-type: itu-g-8275-1
                 sync-interval: -4
                 transport: '802.3'
+                two-step: 'on'
               default-itu-8275-2:
                 announce-interval: 0
                 announce-timeout: 3
@@ -1588,20 +1616,57 @@ ok: [leaf01] =>
                 profile-type: itu-g-8275-2
                 sync-interval: -6
                 transport: ipv4
+                two-step: 'on'
+            servo: auto
+            two-step: 'on'
             unicast-master: {}
         snmp-server:
           enable: 'off'
-        synce:
-          enable: 'off'
         syslog: {}
+        telemetry:
+          enable: 'off'
       system:
         aaa:
           authentication-order: {}
+          class:
+            nvapply:
+              action: allow
+              command-path:
+                /:
+                  permission: all
+            nvshow:
+              action: allow
+              command-path:
+                /:
+                  permission: ro
+            sudo:
+              action: allow
+              command-path:
+                /:
+                  permission: all
+          radius:
+            enable: 'off'
+          role:
+            nvue-admin:
+              class:
+                nvapply: {}
+            nvue-monitor:
+              class:
+                nvshow: {}
+            system-admin:
+              class:
+                nvapply: {}
+                sudo: {}
           tacacs:
             enable: 'off'
           user: {}
         acl:
           mode: atomic
+        api:
+          certificate: self-signed
+          listening-address: {}
+          port: 8765
+          state: enabled
         config:
           apply:
             ignore: {}
@@ -1611,12 +1676,110 @@ ok: [leaf01] =>
           snippet: {}
         control-plane:
           acl: {}
-          policer: {}
+          policer:
+            acl-log:
+              burst: 100
+              rate: 100
+              state: 'on'
+            arp:
+              burst: 800
+              rate: 800
+              state: 'on'
+            bfd:
+              burst: 2000
+              rate: 2000
+              state: 'on'
+            bgp:
+              burst: 2000
+              rate: 2000
+              state: 'on'
+            catch-all:
+              burst: 100
+              rate: 100
+              state: 'on'
+            clag:
+              burst: 2000
+              rate: 2000
+              state: 'on'
+            dhcp:
+              burst: 2000
+              rate: 2000
+              state: 'on'
+            eapol:
+              burst: 2000
+              rate: 2000
+              state: 'on'
+            icmp-def:
+              burst: 40
+              rate: 100
+              state: 'on'
+            icmp6-def-mld:
+              burst: 100
+              rate: 300
+              state: 'on'
+            icmp6-neigh:
+              burst: 500
+              rate: 500
+              state: 'on'
+            igmp:
+              burst: 1000
+              rate: 1000
+              state: 'on'
+            ip2me:
+              burst: 1000
+              rate: 1000
+              state: 'on'
+            l3-local:
+              burst: 100
+              rate: 400
+              state: 'on'
+            lacp:
+              burst: 2000
+              rate: 2000
+              state: 'on'
+            lldp-ptp:
+              burst: 2500
+              rate: 2500
+              state: 'on'
+            nat:
+              burst: 200
+              rate: 200
+              state: 'on'
+            pim-ospf-rip:
+              burst: 2000
+              rate: 2000
+              state: 'on'
+            rpvst:
+              burst: 2000
+              rate: 2000
+              state: 'on'
+            span-cpu:
+              burst: 100
+              rate: 100
+              state: 'on'
+            ssh:
+              burst: 1000
+              rate: 1000
+              state: 'on'
+            stp:
+              burst: 2000
+              rate: 2000
+              state: 'on'
+            unknown-ipmc:
+              burst: 1000
+              rate: 1000
+              state: 'on'
           trap: {}
         counter:
           polling-interval:
             logical-interface: 5
             physical-interface: 2
+        dot1x:
+          dynamic-vlan: disabled
+          max-stations: 6
+          radius:
+            server: {}
+          reauthentication-interval: 0
         forwarding:
           ecmp-hash:
             destination-ip: 'on'
@@ -1633,6 +1796,9 @@ ok: [leaf01] =>
             ipv6-label: 'on'
             source-ip: 'on'
             source-port: 'on'
+          ecmp-weight-normalisation:
+            max-hw-weight: 32
+            mode: enabled
           host-route-preference: route
           lag-hash:
             destination-ip: 'on'
@@ -1650,10 +1816,12 @@ ok: [leaf01] =>
         global:
           anycast-id: none
           anycast-mac: none
+          arp:
+            base-reachable-time: auto
           fabric-id: 1
           fabric-mac: none
-          l3svd:
-            enable: 'off'
+          nd:
+            base-reachable-time: auto
           reserved:
             routing-table:
               pbr:
@@ -1667,10 +1835,43 @@ ok: [leaf01] =>
                 end: 4064
           system-mac: auto
         hostname: cumulus
+        link:
+          flap-protection:
+            interval: 10
+            threshold: 5
         port-mirror:
           session: {}
         reboot:
           mode: cold
+        security:
+          password-hardening:
+            digits-class: enabled
+            expiration: 180
+            expiration-warning: 15
+            history-cnt: 10
+            len-min: 8
+            lower-class: enabled
+            reject-user-passw-match: enabled
+            special-class: enabled
+            state: enabled
+            upper-class: enabled
+        ssh-server:
+          allow-users: {}
+          authentication-retries: 6
+          deny-users: {}
+          inactive-timeout: 0
+          login-timeout: 120
+          max-sessions-per-connection: 10
+          max-unauthenticated:
+            session-count: 100
+            throttle-percent: 30
+            throttle-start: 10
+          permit-root-login: prohibit-password
+          port: {}
+          state: enabled
+          vrf: {}
+        synce:
+          enable: 'off'
         wjh:
           enable: 'off'
       vrf:
@@ -1744,10 +1945,15 @@ ok: [leaf01] =>
           auto-negotiate: 'on'
           duplex: full
           fec: auto
+          flap-protection:
+            enable: 'on'
           mtu: 9216
           speed: auto
           state:
             up: {}
+        neighbor:
+          ipv4: {}
+          ipv6: {}
         type: eth
       lo:
         ip:
@@ -1760,6 +1966,9 @@ ok: [leaf01] =>
             enable: 'on'
             forward: 'on'
           vrf: default
+        neighbor:
+          ipv4: {}
+          ipv6: {}
         router:
           adaptive-routing:
             enable: 'off'

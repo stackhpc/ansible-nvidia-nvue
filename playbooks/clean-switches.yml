@@ -9,6 +9,7 @@
           - config apply startup -y
         atomic: true
         assume_yes: true
+        apply: false
 
     - name: Show current config
       nvidia.nvue.command:
