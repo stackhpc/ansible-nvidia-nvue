@@ -2004,8 +2004,8 @@ ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/clean-switches.
 ```
 2. To setup MLAG between the 2 leaf switches, you can use the playbooks in the `playbooks/MLAG/` directory:
 ```bash
-ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/mlag-role-leaf.yml -i hosts
-ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/mlag-role-spine.yml -i hosts
+ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/mlag-role-leaf.yml -i inventories/mlag-bgp/hosts
+ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/mlag-role-spine.yml -i inventories/mlag-bgp/hosts
 ```
 3. Verify MLAG operational state on switch `leaf01`:
 ```bash
@@ -2095,8 +2095,8 @@ On any MLAG configuration change, Cumulus Linux automatically validates the corr
 4. To setup BGP, you can use the playbooks in the `playbooks/BGP/` directory:
 ```bash
 cumulus@leaf01:mgmt:~$ exit
-ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-role-leaf.yml -i hosts
-ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-role-spine.yml -i hosts
+ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-role-leaf.yml -i inventories/mlag-bgp/hosts
+ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-role-spine.yml -i inventories/mlag-bgp/hosts
 ```
 5. Verify BGP peerings on switch `leaf01`:
 ```bash
