@@ -2014,83 +2014,74 @@ cumulus@leaf01:mgmt:~$ nv show mlag
                 operational                applied
 --------------  -------------------------  -----------------
 enable          on                         on
-debug           off                        off
-init-delay      100                        100
 mac-address     44:38:39:be:ef:aa          44:38:39:BE:EF:AA
-peer-ip         fe80::4ab0:2dff:fe3a:abc3  linklocal
+peer-ip         fe80::4ab0:2dff:feaf:a238  linklocal
 priority        1000                       1000
+init-delay      100                        100
+debug           off                        off
 [backup]        10.10.10.2                 10.10.10.2
-backup-active   False
-backup-reason
-local-id        48:b0:2d:b1:bd:bd
-local-role      secondary
-peer-alive      True
-peer-id         48:b0:2d:3a:ab:c3
-peer-interface  peerlink.4094
 peer-priority   1000
-peer-role       primary
+backup-active   False
+local-id        48:b0:2d:5b:7d:85
+peer-id         48:b0:2d:af:a2:38
+local-role      primary
+peer-role       secondary
+peer-interface  peerlink.4094
+peer-alive      True
+backup-reason
 ```
 
 Verify MLAG interfaces state:
 ```bash
 cumulus@leaf01:mgmt:~$ net show clag
 The peer is alive
-     Our Priority, ID, and Role: 1000 48:b0:2d:b1:bd:bd secondary
-    Peer Priority, ID, and Role: 1000 48:b0:2d:3a:ab:c3 primary
-          Peer Interface and IP: peerlink.4094 fe80::4ab0:2dff:fe3a:abc3 (linklocal)
+     Our Priority, ID, and Role: 1000 48:b0:2d:5b:7d:85 primary
+    Peer Priority, ID, and Role: 1000 48:b0:2d:af:a2:38 secondary
+          Peer Interface and IP: peerlink.4094 fe80::4ab0:2dff:feaf:a238 (linklocal)
                       Backup IP: 10.10.10.2 (inactive)
                      System MAC: 44:38:39:be:ef:aa
-
-Global Inconsistencies
-Consistency Params            Conflicts
-----------------------        ------------------
-        peerlink-vlans        allowed vlans on peerlink mismatch between clag peers
 
 CLAG Interfaces
 Our Interface      Peer Interface     CLAG Id   Conflicts              Proto-Down Reason
 ----------------   ----------------   -------   --------------------   -----------------
-           bond1   -                  1         vlan mismatch on       -
-                                                clag interface
-                                                between clag
-                                                peers,some allowed
-                                                vlans on clag
-                                                interface are not
-                                                allowed on the
-                                                peerlink
+           bond1   -                  1         -                      -
 ```
 Verify that no configuration conflicts exist between the two MLAG peers:
 ```bash
 cumulus@leaf01:mgmt:~$ nv show mlag consistency-checker global
-Parameter         LocalValue        PeerValue          Conflict          Summary
----------------…  ---------------…  ----------------…  ---------------…  -------
-anycast-ip        -                 -                  -
-bridge-priority   32768             32768              -
-bridge-stp        on                on                 -
-bridge-type       vlan-aware        vlan-aware         -
-clag-pkg-version  1.6.0-cl5.5.0u4   1.6.0-cl5.5.0u4    -
-clag-protocol-v…  1.6.0             1.6.0              -
-peer-ip           fe80::4ab0:2dff…  fe80::4ab0:2dff:…  -
-peerlink-master   br_default        NOT-SYNCED         -
-peerlink-mtu      9216              9216               -
-peerlink-native…  1                 1                  -
-peerlink-vlans    1, 10             1, 10              -
-redirect2-enable  yes               yes                -
-system-mac        44:38:39:be:ef:…  44:38:39:be:ef:aa  -
+Parameter               LocalValue                 PeerValue                  Conflict  Summary
+----------------------  -------------------------  -------------------------  --------  -------
+anycast-ip              -                          -                          -
+bridge-priority         32768                      32768                      -
+bridge-stp-mode         rstp                       rstp                       -
+bridge-stp-state        on                         on                         -
+bridge-type             vlan-aware                 vlan-aware                 -
+clag-pkg-version        1.6.0-cl5.7.0u8            1.6.0-cl5.7.0u8            -
+clag-protocol-version   1.7.0                      1.7.0                      -
+peer-ip                 fe80::4ab0:2dff:feaf:a238  fe80::4ab0:2dff:feaf:a238  -
+peerlink-bridge-member  Yes                        Yes                        -
+peerlink-mtu            9216                       9216                       -
+peerlink-native-vlan    1                          1                          -
+peerlink-vlans          1, 10                      1, 10                      -
+redirect2-enable        yes                        yes                        -
+system-mac              44:38:39:be:ef:aa          44:38:39:be:ef:aa          -
 ```
 ```bash
-cumulus@leaf01:mgmt:~$ nv show interface --view=mlag-cc
-Interface  Parameter        LocalValue       PeerValue         Conflict
----------  --------------…  --------------…  ---------------…  ----------------…
-bond1      bridge-learning  yes              yes               -
-           clag-id          1                1                 -
-           lacp-actor-mac   44:38:39:be:ef…  44:38:39:be:ef:…  -
-           lacp-partner-m…  00:00:00:00:00…  00:00:00:00:00:…  -
-           master           br_default       NOT-SYNCED        -
-           mtu              9216             9216              -
-           native-vlan      1                1                 -
-           vlan-id          1, 10            1, 10             -
+cumulus@leaf01:mgmt:~$  nv show interface --view=mlag-cc
+Interface  Parameter         LocalValue         PeerValue          Conflict
+---------  ----------------  -----------------  -----------------  -------------------------
+bond1      clag-id           1                  1                  -
+           lacp-partner-mac  00:00:00:00:00:00  00:00:00:00:00:00  -
+           lacp-actor-mac    44:38:39:be:ef:aa  44:38:39:be:ef:aa  -
+           vlan-id           None               None               Consistency-Check Ignored
+           native-vlan       -                  -                  Consistency-Check Ignored
+           master            -                  NOT-SYNCED         -
+           mtu               9216               9216               -
+           bridge-learning   no                 no                 -
+           bpdu-guard        off                off                -
+           restricted-role   no                 no                 -
 ```
-On any MLAG configuration change, Cumulus Linux automatically validates the corresponding parameters on both MLAG peers and takes action based on the type of conflict it sees. For every conflict, the `/var/log/clagd.log` file records a log message. For more information about MLAG consistency-checker and other MLAG validations, check out the [MLAG Troubleshooting](https://docs.nvidia.com/networking-ethernet-software/cumulus-linux-55/Layer-2/Multi-Chassis-Link-Aggregation-MLAG/#troubleshooting) section in Cumulus Linux documentation.
+On any MLAG configuration change, Cumulus Linux automatically validates the corresponding parameters on both MLAG peers and takes action based on the type of conflict it sees. For every conflict, the `/var/log/clagd.log` file records a log message. For more information about MLAG consistency-checker and other MLAG validations, check out the [MLAG Troubleshooting](https://docs.nvidia.com/networking-ethernet-software/cumulus-linux-57/Layer-2/Multi-Chassis-Link-Aggregation-MLAG/#troubleshooting) section in Cumulus Linux documentation.
 
 4. To setup BGP, you can use the playbooks in the `playbooks/BGP/` directory:
 ```bash
@@ -2102,46 +2093,38 @@ ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-role-sp
 ```bash
 ubuntu@oob-mgmt-server:~/workshop$ ssh cumulus@leaf01
 cumulus@leaf01:mgmt:~$ net show bgp summary
-cumulus@leaf01:mgmt:~$ net show bgp summary
 show bgp ipv4 unicast summary
 =============================
 BGP router identifier 10.10.10.1, local AS number 65101 vrf-id 0
 BGP table version 4
-RIB entries 7, using 1400 bytes of memory
-Peers 2, using 46 KiB of memory
+RIB entries 7, using 1344 bytes of memory
+Peers 2, using 40 KiB of memory
 
-Neighbor        V         AS   MsgRcvd   MsgSent   TblVer  InQ OutQ  Up/Down State/PfxRcd   PfxSnt
-spine01(swp51)  4      65199        12        13        0    0    0 00:00:17            2        4
-swp52           4          0         0         0        0    0    0    never         Idle        0
+Neighbor        V         AS   MsgRcvd   MsgSent   TblVer  InQ OutQ  Up/Down State/PfxRcd   PfxSnt Desc
+spine01(swp51)  4      65199        12        13        0    0    0 00:00:18            2        4 N/A
+swp52           4          0         0         0        0    0    0    never         Idle        0 N/A
 
 Total number of neighbors 2
 
 
 show bgp ipv6 unicast summary
 =============================
-% No BGP neighbors found
+% No BGP neighbors found in VRF default
 
 
 show bgp l2vpn evpn summary
 ===========================
-% No BGP neighbors found
+% No BGP neighbors found in VRF default
+
 cumulus@leaf01:mgmt:~$ nv show vrf default router bgp neighbor
 
-AS - Remote Autonomous System, Afi-Safi - Address family, GracefulRestart -
-Graceful restart end of rib notification, PfxSent - Transmitted prefix counter,
-PfxRcvd - Recieved prefix counter
+AS - Remote Autonomous System, Afi-Safi - Address family, PfxSent - Transmitted
+prefix counter, PfxRcvd - Recieved prefix counter
 
-Neighbor  AS     State        Uptime    ResetTime  ResetReason                   MsgRcvd  MsgSent  Afi-Safi      GracefulRestart  PfxSent  PfxRcvd
---------  -----  -----------  --------  ---------  ---------------------------…  -------  -------  ------------  ---------------  -------  -------
-swp51     65199  established  00:04:06  300000     No AFI/SAFI activated for     89       90       ipv4-unicast  rx-eof-rib: on   4        2
-                                                   peer
-                                                                                                                 tx-eof-rib: on
-                                                                                                   ipv6-unicast
-                                                                                                   l2vpn-evpn
-swp52            idle                   300000     Waiting for Peer IPv6 LLA     0        0        ipv4-unicast  rx-eof-rib: off
-                                                                                                                 tx-eof-rib: off
-                                                                                                   ipv6-unicast
-                                                                                                   l2vpn-evpn
+Neighbor  AS     State        Uptime    ResetTime  MsgRcvd  MsgSent  Afi-Safi      PfxSent  PfxRcvd
+--------  -----  -----------  --------  ---------  -------  -------  ------------  -------  -------
+swp51     65199  established  00:01:35  149000     38       39       ipv4-unicast  4        2
+swp52            idle                   149000     0        0        ipv4-unicast
 
 ```
 <!-- AIR:page -->
@@ -2152,4 +2135,5 @@ swp52            idle                   300000     Waiting for Peer IPv6 LLA    
 - [Data Center Network Automation Quick Start Guide](https://docs.nvidia.com/networking-ethernet-software/guides/Data-Center-Network-Automation-Quick-Start-Guide/)
 - [Production Ready Automation Guide](https://docs.nvidia.com/networking-ethernet-software/guides/production-ready-automation/)
 - [Automating Data Center Networks with NVIDIA Cumulus Linux](https://developer.nvidia.com/blog/automating-data-center-networks-with-nvidia-cumulus-linux/)
+- [Automating Data Center Networks with NVIDIA NVUE and Ansible](https://developer.nvidia.com/blog/automating-data-center-networks-with-nvidia-nvue-and-ansible/)
 <!-- AIR:tour -->
