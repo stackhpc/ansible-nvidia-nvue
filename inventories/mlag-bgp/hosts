@@ -10,4 +10,4 @@ spines
 
 [switches:vars]
 ansible_user=cumulus
-ansible_password=CumulusLinux!
+ansible_password=cumulus
