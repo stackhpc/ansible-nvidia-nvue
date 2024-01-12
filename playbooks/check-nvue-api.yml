@@ -1,6 +1,6 @@
 ---
 
-- name: Enable REST API on all the switches
+- name: Verify REST API connectivity on all the switches
   hosts: switches
   remote_user: cumulus
 

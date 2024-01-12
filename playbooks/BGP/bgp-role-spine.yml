@@ -1,0 +1,54 @@
+---
+
+- name: Test playbook to setup bgp config on spine switches using roles
+  hosts: spines
+  connection: ansible.netcommon.httpapi
+  gather_facts: false
+  vars:
+    ansible_network_os: nvidia.nvue.httpapi
+    ansible_httpapi_port: 8765
+    ansible_httpapi_use_ssl: true
+    ansible_httpapi_validate_certs: false
+
+  tasks:
+    - name: Create new revision
+      nvidia.nvue.config:
+        state: new
+      register: revision
+
+    - name: dump revision
+      debug:
+        msg: '{{ revision.revid }}'
+
+    - name: Set system settings
+      ansible.builtin.include_role: 
+        name: nvidia.nvue.system
+
+    - name: Set interface settings
+      ansible.builtin.include_role: 
+        name: nvidia.nvue.interface
+    
+    - name: Set bgp settings
+      ansible.builtin.include_role: 
+        name: nvidia.nvue.bgp
+      
+    - name: Apply new revision
+      nvidia.nvue.config:
+        state: apply
+        revid: '{{ revision.revid }}'
+        force: true
+        wait: 10
+      register: revision
+
+    - name: dump previous output
+      debug:
+        msg: '{{ revision }}'
+
+    - name: Get the current config
+      nvidia.nvue.api:
+        operation: get
+      register: output
+
+    - name: Print current config
+      ansible.builtin.debug:
+        msg: "{{ output }}"

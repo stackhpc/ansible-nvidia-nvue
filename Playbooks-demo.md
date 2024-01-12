@@ -9,10 +9,10 @@ The NVUE object model definition uses the [OpenAPI specification(OAS)]("https://
 
 You can use the NVUE object model in the following ways:
 - With the NVUE CLI, where you configure, monitor, and manage the Cumulus Linux network elements. The CLI commands translate to their equivalent REST APIs, which Cumulus Linux then runs on the NVUE object model.
-- With the NVUE REST API, where you run the GET, PATCH, DELETE, and other REST APIs on the NVUE object model endpoints to configure, monitor, and manage the switch. Because of the large user community and maturity of OAS, you can work with several popular tools and libraries to create client-side bindings to use the NVUE REST API. You can view the NVUE REST API documentation using Swagger [here]("https://docs.nvidia.com/networking-ethernet-software/cumulus-linux-55/api/index.html").
+- With the NVUE REST API, where you run the GET, PATCH, DELETE, and other REST APIs on the NVUE object model endpoints to configure, monitor, and manage the switch. Because of the large user community and maturity of OAS, you can work with several popular tools and libraries to create client-side bindings to use the NVUE REST API. You can view the NVUE REST API documentation using Swagger [here]("https://docs.nvidia.com/networking-ethernet-software/cumulus-linux-57/api/index.html").
 
-## NVUE Ansible Modules
-[The NVIDIA NVUE Collection]("https://galaxy.ansible.com/nvidia/nvue") includes Ansible modules to help you interact with NVIDIA devices managed by NVUE. The modules are developed and validated using Ansible 2.11 and Python 3.6, and are supported on Cumulus Linux 5.x.
+## NVUE Ansible Modules and Roles
+[The NVIDIA NVUE Collection]("https://galaxy.ansible.com/nvidia/nvue") includes Ansible modules and roles to help you interact with NVIDIA devices managed by NVUE. The modules and roles are developed and validated using Ansible 2.11 and Python 3.6, and are supported on Cumulus Linux 5.x.
 The collection includes high-level wrapper modules and object specific modules as listed below:
 
 **High-level modules**
@@ -20,6 +20,7 @@ The collection includes high-level wrapper modules and object specific modules a
  - nvidia.nvue.api – A wrapper around the NVUE REST API to send and retrieve NVUE configuration.
 
 **Object specific modules**
+ - nvidia.nvue.acl - ACL rules with the REST API.
  - nvidia.nvue.bridge - Bridge configuration with the REST API.
  - nvidia.nvue.config – Revisions with the REST API
  - nvidia.nvue.evpn - EVPN configuration with the REST API.
@@ -33,12 +34,21 @@ The collection includes high-level wrapper modules and object specific modules a
 
 For REST API endpoints that are not covered by the object-specific modules or for sub-paths within the object specific modules (for example, `/interface/<id>/qos/roce/counters`), you can leverage the `nvidia.nvue.api` module and specify the endpoint in the `path` parameter.
 
+Additionally, the roles leverge the modules in the collection and are as listed below:
+
+**Roles**
+- nvidia.nvue.bgp - Role to setup BGP settings across the NVIDIA switches.
+- nvidia.nvue.interface - Role to setup interface settings across the NVIDIA switches.
+- nvidia.nvue.mlag - Role to setup MLAG settings across the NVIDIA switches.
+- nvidia.nvue.system - Role to setup system settings across the NVIDIA switches.
+
 ## Features and Services
 
 This workshop includes demos of the following features:
 
  * Working with NVUE API
  * Using the Ansible modules - both high level and low level to fetch information
+ * Using Ansible roles
  * Setting up system, interface, and bridge configurations
  * Setting up MLAG L2 server redundancy
  * BGP underlay fabric
@@ -137,15 +147,19 @@ Default switch credentials are:
 ```bash
 ubuntu@oob-mgmt-server:~$ cd workshop
 ```
-3. Make sure you are on the `cumulus-linux-automation-workshop` branch:
+3. Make sure you are on the `cumulus-linux-57-automation-workshop` branch:
 ```bash
-ubuntu@oob-mgmt-server:~/workshop$ git status | grep cumulus-linux-automation-workshop
-On branch cumulus-linux-automation-workshop
-Your branch is up to date with 'origin/cumulus-linux-automation-workshop'.
+ubuntu@oob-mgmt-server:~/workshop$ git status | grep cumulus-linux-57-automation-workshop
+On branch cumulus-linux-57-automation-workshop
+Your branch is up to date with 'origin/cumulus-linux-57-automation-workshop'.
 ```
-*In case you are on other branch, use the `git checkout` command to move the `cumulus-linux-automation-workshop` branch*
+*To make sure all the latest updates from the `cumulus-linux-57-automation-workshop` branch is available on the system, use the `git pull` command*
 ```bash
-ubuntu@oob-mgmt-server:~/workshop$ git checkout cumulus-linux-automation-workshop
+ubuntu@oob-mgmt-server:~/workshop$ git pull
+```
+*In case you are on other branch, use the `git checkout` command to move the `cumulus-linux-57-automation-workshop` branch*
+```bash
+ubuntu@oob-mgmt-server:~/workshop$ git checkout cumulus-linux-57-automation-workshop
 ```
 4. Install the NVIDIA NVUE collection with the Ansible Galaxy CLI:
 ```bash
@@ -183,41 +197,19 @@ spine01 | SUCCESS => {
 ```
 ### Setting up NVUE API Access
 
-As of the time of this workshop, NVUE REST API is disabled by default. If you want to use any of the object specific modules or the `api` module, you need to enable the NVUE REST API with the following commands on the switch:
+In Cumulus Linux 5.7, the NVUE REST API is enabled by default. 
 
-```bash
-cumulus@switch:~$ sudo ln -s /etc/nginx/sites-{available,enabled}/nvue.conf 
-cumulus@switch:~$ sudo sed -i 's/listen localhost:8765 ssl;/listen \[::\]:8765 ipv6only=off ssl;/g' /etc/nginx/sites-available/nvue.conf 
-cumulus@switch:~$ sudo systemctl restart nginx
-```
-
-You can find a sample playbook that enables the NVUE REST API across all of the switches under `playbooks`.
+There is a sample playbook that verifies the NVUE REST API connectivity across all of the switches under `playbooks`.
  
 ```bash
-ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook playbooks/enable-nvue-api.yml -i hosts
+ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook playbooks/check-nvue-api.yml -i hosts
 
-PLAY [Enable REST API on all the switches] *************************************
+PLAY [Verify REST API connectivity on all the switches] *************************************
 
 TASK [Gathering Facts] *********************************************************
-ok: [leaf01]
 ok: [spine01]
-ok: [leaf02]
-
-TASK [Create a link to the NVUE Config file] ***********************************
 ok: [leaf01]
 ok: [leaf02]
-ok: [spine01]
-
-TASK [Add the listening port] **************************************************
-ok: [spine01]
-ok: [leaf02]
-ok: [leaf01]
-
-TASK [Flush handlers] **********************************************************
-
-TASK [Flush handlers] **********************************************************
-
-TASK [Flush handlers] **********************************************************
 
 TASK [Test API Connectivity] ***************************************************
 ok: [leaf02]
@@ -229,25 +221,14 @@ ok: [leaf01] =>
   apioutput:
     changed: false
     connection: close
-    content_length: '521'
+    content_length: '223'
     content_type: application/json
     cookies: {}
     cookies_string: ''
-    date: Mon, 14 Aug 2023 23:56:40 GMT
+    date: Fri, 12 Jan 2024 10:58:15 GMT
     elapsed: 0
     failed: false
     json:
-      '1':
-        message: Automatic config translation while upgrading to Cumulus Linux 5.5.1
-        state: applied
-        transition:
-          issue: {}
-          progress: ''
-      applied:
-        state: saved
-        transition:
-          issue: {}
-          progress: ''
       empty:
         state: inactive
         transition:
@@ -258,7 +239,7 @@ ok: [leaf01] =>
         transition:
           issue: {}
           progress: ''
-    msg: OK (521 bytes)
+    msg: OK (223 bytes)
     redirected: false
     server: nginx
     status: 200
@@ -268,20 +249,14 @@ ok: [leaf02] =>
   apioutput:
     changed: false
     connection: close
-    content_length: '413'
+    content_length: '223'
     content_type: application/json
     cookies: {}
     cookies_string: ''
-    date: Mon, 14 Aug 2023 23:56:40 GMT
+    date: Fri, 12 Jan 2024 10:58:15 GMT
     elapsed: 0
     failed: false
     json:
-      '1':
-        message: Automatic config translation while upgrading to Cumulus Linux 5.5.1
-        state: applied
-        transition:
-          issue: {}
-          progress: ''
       empty:
         state: inactive
         transition:
@@ -292,7 +267,7 @@ ok: [leaf02] =>
         transition:
           issue: {}
           progress: ''
-    msg: OK (413 bytes)
+    msg: OK (223 bytes)
     redirected: false
     server: nginx
     status: 200
@@ -302,20 +277,14 @@ ok: [spine01] =>
   apioutput:
     changed: false
     connection: close
-    content_length: '413'
+    content_length: '223'
     content_type: application/json
     cookies: {}
     cookies_string: ''
-    date: Mon, 14 Aug 2023 23:56:40 GMT
+    date: Fri, 12 Jan 2024 10:58:15 GMT
     elapsed: 0
     failed: false
     json:
-      '1':
-        message: Automatic config translation while upgrading to Cumulus Linux 5.5.1
-        state: applied
-        transition:
-          issue: {}
-          progress: ''
       empty:
         state: inactive
         transition:
@@ -326,7 +295,7 @@ ok: [spine01] =>
         transition:
           issue: {}
           progress: ''
-    msg: OK (413 bytes)
+    msg: OK (223 bytes)
     redirected: false
     server: nginx
     status: 200
@@ -334,9 +303,9 @@ ok: [spine01] =>
     url: https://127.0.0.1:8765/nvue_v1/revision
 
 PLAY RECAP *********************************************************************
-leaf01                     : ok=5    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-leaf02                     : ok=5    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
-spine01                    : ok=5    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+leaf01                     : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+leaf02                     : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+spine01                    : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
 <!-- AIR:page -->
@@ -346,7 +315,7 @@ spine01                    : ok=5    changed=0    unreachable=0    failed=0    s
 You can use any tool that can run API calls. In this workshop, the sample implementation uses curl. First, SSH into leaf01 followed by running the curl call:
 ```bash
 ubuntu@oob-mgmt-server:~/workshop$ ssh cumulus@leaf01
-Linux leaf01 5.10.0-cl-1-amd64 #1 SMP Debian 5.10.162-1+cl5.5.1u6 (2023-05-19) x86_64
+Linux leaf01 5.10.0-cl-1-amd64 #1 SMP Debian 5.10.189-1+cl5.7.0u10 (2023-11-15) x86_64
 
 Welcome to NVIDIA Cumulus VX (TM)
 
@@ -358,7 +327,6 @@ https://www.nvidia.com/en-us/support
 The registered trademark Linux (R) is used pursuant to a sublicense from LMI,
 the exclusive licensee of Linus Torvalds, owner of the mark on a world-wide
 basis.
-Last login: Mon Aug 14 23:56:40 2023 from 192.168.200.1
 cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v1/?rev=applied'
 {
   "acl": {},
@@ -370,17 +338,17 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
         "mac-address": "auto",
         "multicast": {
           "snooping": {
-            "enable": "on",
-            "querier": {
-              "enable": "off"
-            }
+            "enable": "off"
           }
         },
         "stp": {
+          "force-protocol-version": "rstp",
+          "mode": "rstp",
           "priority": 32768,
           "state": {
             "up": {}
-          }
+          },
+          "vlan": {}
         },
         "type": "vlan-aware",
         "untagged": 1,
@@ -406,12 +374,6 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
   "evpn": {
     "enable": "off"
   },
-  "header": {
-    "model": "VX",
-    "nvue-api-version": "nvue_v1",
-    "rev-id": 1.0,
-    "version": "Cumulus Linux 5.5.1"
-  },
   "interface": {
     "eth0": {
       "acl": {},
@@ -433,11 +395,18 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
         "auto-negotiate": "on",
         "duplex": "full",
         "fec": "auto",
+        "flap-protection": {
+          "enable": "on"
+        },
         "mtu": 9216,
         "speed": "auto",
         "state": {
           "up": {}
         }
+      },
+      "neighbor": {
+        "ipv4": {},
+        "ipv6": {}
       },
       "type": "eth"
     },
@@ -455,6 +424,10 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
           "forward": "on"
         },
         "vrf": "default"
+      },
+      "neighbor": {
+        "ipv4": {},
+        "ipv6": {}
       },
       "router": {
         "adaptive-routing": {
@@ -479,6 +452,27 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
   "nve": {
     "vxlan": {
       "enable": "off"
+    }
+  },
+  "platform": {
+    "pulse-per-second": {
+      "in": {
+        "channel-index": 0,
+        "logging-level": "info",
+        "pin-index": 0,
+        "signal-polarity": "rising-edge",
+        "signal-width": 500000000,
+        "state": "disabled",
+        "timestamp-correction": 0
+      },
+      "out": {
+        "channel-index": 0,
+        "frequency-adjustment": 1000000000,
+        "phase-adjustment": 0,
+        "pin-index": 1,
+        "signal-width": 500000000,
+        "state": "disabled"
+      }
     }
   },
   "qos": {
@@ -685,6 +679,10 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
       }
     },
     "pfc": {},
+    "pfc-watchdog": {
+      "polling-interval": 100,
+      "robustness": 3
+    },
     "remark": {
       "default-global": {}
     },
@@ -726,6 +724,7 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
     "ospf6": {
       "enable": "off"
     },
+    "password-obfuscation": "disabled",
     "pbr": {
       "enable": "off"
     },
@@ -793,7 +792,8 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
             "priority2": 128,
             "profile-type": "ieee-1588",
             "sync-interval": 0,
-            "transport": "ipv4"
+            "transport": "ipv4",
+            "two-step": "on"
           },
           "default-itu-8275-1": {
             "announce-interval": -3,
@@ -806,7 +806,8 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
             "priority2": 128,
             "profile-type": "itu-g-8275-1",
             "sync-interval": -4,
-            "transport": "802.3"
+            "transport": "802.3",
+            "two-step": "on"
           },
           "default-itu-8275-2": {
             "announce-interval": 0,
@@ -819,23 +820,73 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
             "priority2": 128,
             "profile-type": "itu-g-8275-2",
             "sync-interval": -6,
-            "transport": "ipv4"
+            "transport": "ipv4",
+            "two-step": "on"
           }
         },
+        "servo": "auto",
+        "two-step": "on",
         "unicast-master": {}
       }
     },
     "snmp-server": {
       "enable": "off"
     },
-    "synce": {
+    "syslog": {},
+    "telemetry": {
       "enable": "off"
-    },
-    "syslog": {}
+    }
   },
   "system": {
     "aaa": {
       "authentication-order": {},
+      "class": {
+        "nvapply": {
+          "action": "allow",
+          "command-path": {
+            "/": {
+              "permission": "all"
+            }
+          }
+        },
+        "nvshow": {
+          "action": "allow",
+          "command-path": {
+            "/": {
+              "permission": "ro"
+            }
+          }
+        },
+        "sudo": {
+          "action": "allow",
+          "command-path": {
+            "/": {
+              "permission": "all"
+            }
+          }
+        }
+      },
+      "radius": {
+        "enable": "off"
+      },
+      "role": {
+        "nvue-admin": {
+          "class": {
+            "nvapply": {}
+          }
+        },
+        "nvue-monitor": {
+          "class": {
+            "nvshow": {}
+          }
+        },
+        "system-admin": {
+          "class": {
+            "nvapply": {},
+            "sudo": {}
+          }
+        }
+      },
       "tacacs": {
         "enable": "off"
       },
@@ -843,6 +894,12 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
     },
     "acl": {
       "mode": "atomic"
+    },
+    "api": {
+      "certificate": "self-signed",
+      "listening-address": {},
+      "port": 8765,
+      "state": "enabled"
     },
     "config": {
       "apply": {
@@ -856,7 +913,123 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
     },
     "control-plane": {
       "acl": {},
-      "policer": {},
+      "policer": {
+        "acl-log": {
+          "burst": 100,
+          "rate": 100,
+          "state": "on"
+        },
+        "arp": {
+          "burst": 800,
+          "rate": 800,
+          "state": "on"
+        },
+        "bfd": {
+          "burst": 2000,
+          "rate": 2000,
+          "state": "on"
+        },
+        "bgp": {
+          "burst": 2000,
+          "rate": 2000,
+          "state": "on"
+        },
+        "catch-all": {
+          "burst": 100,
+          "rate": 100,
+          "state": "on"
+        },
+        "clag": {
+          "burst": 2000,
+          "rate": 2000,
+          "state": "on"
+        },
+        "dhcp": {
+          "burst": 2000,
+          "rate": 2000,
+          "state": "on"
+        },
+        "eapol": {
+          "burst": 2000,
+          "rate": 2000,
+          "state": "on"
+        },
+        "icmp-def": {
+          "burst": 40,
+          "rate": 100,
+          "state": "on"
+        },
+        "icmp6-def-mld": {
+          "burst": 100,
+          "rate": 300,
+          "state": "on"
+        },
+        "icmp6-neigh": {
+          "burst": 500,
+          "rate": 500,
+          "state": "on"
+        },
+        "igmp": {
+          "burst": 1000,
+          "rate": 1000,
+          "state": "on"
+        },
+        "ip2me": {
+          "burst": 1000,
+          "rate": 1000,
+          "state": "on"
+        },
+        "l3-local": {
+          "burst": 100,
+          "rate": 400,
+          "state": "on"
+        },
+        "lacp": {
+          "burst": 2000,
+          "rate": 2000,
+          "state": "on"
+        },
+        "lldp-ptp": {
+          "burst": 2500,
+          "rate": 2500,
+          "state": "on"
+        },
+        "nat": {
+          "burst": 200,
+          "rate": 200,
+          "state": "on"
+        },
+        "pim-ospf-rip": {
+          "burst": 2000,
+          "rate": 2000,
+          "state": "on"
+        },
+        "rpvst": {
+          "burst": 2000,
+          "rate": 2000,
+          "state": "on"
+        },
+        "span-cpu": {
+          "burst": 100,
+          "rate": 100,
+          "state": "on"
+        },
+        "ssh": {
+          "burst": 1000,
+          "rate": 1000,
+          "state": "on"
+        },
+        "stp": {
+          "burst": 2000,
+          "rate": 2000,
+          "state": "on"
+        },
+        "unknown-ipmc": {
+          "burst": 1000,
+          "rate": 1000,
+          "state": "on"
+        }
+      },
       "trap": {}
     },
     "counter": {
@@ -864,6 +1037,14 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
         "logical-interface": 5,
         "physical-interface": 2
       }
+    },
+    "dot1x": {
+      "dynamic-vlan": "disabled",
+      "max-stations": 6,
+      "radius": {
+        "server": {}
+      },
+      "reauthentication-interval": 0
     },
     "forwarding": {
       "ecmp-hash": {
@@ -881,6 +1062,10 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
         "ipv6-label": "on",
         "source-ip": "on",
         "source-port": "on"
+      },
+      "ecmp-weight-normalisation": {
+        "max-hw-weight": 32,
+        "mode": "enabled"
       },
       "host-route-preference": "route",
       "lag-hash": {
@@ -902,10 +1087,13 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
     "global": {
       "anycast-id": "none",
       "anycast-mac": "none",
+      "arp": {
+        "base-reachable-time": "auto"
+      },
       "fabric-id": 1,
       "fabric-mac": "none",
-      "l3svd": {
-        "enable": "off"
+      "nd": {
+        "base-reachable-time": "auto"
       },
       "reserved": {
         "routing-table": {
@@ -927,11 +1115,51 @@ cumulus@leaf01:mgmt:~$ curl -k -u cumulus:cumulus 'https://127.0.0.1:8765/nvue_v
       "system-mac": "auto"
     },
     "hostname": "cumulus",
+    "link": {
+      "flap-protection": {
+        "interval": 10,
+        "threshold": 5
+      }
+    },
     "port-mirror": {
       "session": {}
     },
     "reboot": {
       "mode": "cold"
+    },
+    "security": {
+      "password-hardening": {
+        "digits-class": "enabled",
+        "expiration": 180,
+        "expiration-warning": 15,
+        "history-cnt": 10,
+        "len-min": 8,
+        "lower-class": "enabled",
+        "reject-user-passw-match": "enabled",
+        "special-class": "enabled",
+        "state": "enabled",
+        "upper-class": "enabled"
+      }
+    },
+    "ssh-server": {
+      "allow-users": {},
+      "authentication-retries": 6,
+      "deny-users": {},
+      "inactive-timeout": 0,
+      "login-timeout": 120,
+      "max-sessions-per-connection": 10,
+      "max-unauthenticated": {
+        "session-count": 100,
+        "throttle-percent": 30,
+        "throttle-start": 10
+      },
+      "permit-root-login": "prohibit-password",
+      "port": {},
+      "state": "enabled",
+      "vrf": {}
+    },
+    "synce": {
+      "enable": "off"
     },
     "wjh": {
       "enable": "off"
@@ -1567,9 +1795,8 @@ ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/clean-switches.
 ```
 2. To setup MLAG between the 2 leaf switches, you can use the playbooks in the `playbooks/MLAG/` directory:
 ```bash
-ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/mlag-leaf01.yml -i hosts
-ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/mlag-leaf02.yml -i hosts
-ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/mlag-spine01.yml -i hosts
+ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/mlag-role-leaf.yml -i hosts
+ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/mlag-role-spine.yml -i hosts
 ```
 3. Verify MLAG operational state on switch `leaf01`:
 ```bash
@@ -1659,9 +1886,8 @@ On any MLAG configuration change, Cumulus Linux automatically validates the corr
 4. To setup BGP, you can use the playbooks in the `playbooks/BGP/` directory:
 ```bash
 cumulus@leaf01:mgmt:~$ exit
-ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-leaf01.yml -i hosts
-ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-leaf02.yml -i hosts
-ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-spine01.yml -i hosts
+ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-role-leaf.yml -i hosts
+ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-role-spine.yml -i hosts
 ```
 5. Verify BGP peerings on switch `leaf01`:
 ```bash
