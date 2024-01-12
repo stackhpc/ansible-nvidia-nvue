@@ -7,15 +7,12 @@
       nvidia.nvue.command:
         commands:
           - config apply startup -y
-        atomic: true
         assume_yes: true
-        apply: false
 
     - name: Show current config
       nvidia.nvue.command:
         commands:
           - config show
-        apply: false
       register: output
 
     - name: Print current config
