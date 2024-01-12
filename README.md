@@ -32,32 +32,27 @@ ubuntu@server:~/cumulus_ansible_modules-nvue$ ansible-playbook playbooks/api.yml
 
 ```bash
 cumulus@leaf01:mgmt:~$ nv show system
-          operational          applied
---------  -------------------  -------
-hostname  leaf01               cumulus
-build     Cumulus Linux 5.5.0
-uptime    0:13:41
-timezone  Etc/UTC
-  ```
-  or
-```bash
-cumulus@leaf01:mgmt:~$ net show version
-NCLU_VERSION=1.0-cl5.5.0u2
-DISTRIB_ID="Cumulus Linux"
-DISTRIB_RELEASE=5.5.1
-DISTRIB_DESCRIPTION="Cumulus Linux 5.5.1"
+             operational          applied
+-----------  -------------------  -------
+hostname     leaf01               cumulus
+build        Cumulus Linux 5.7.0
+uptime       14:53:42
+timezone     Etc/UTC
+maintenance
+  mode       disabled
+  ports      enabled
   ```
 
 * Ansible Version
 ```bash
 ubuntu@oob-mgmt-server:~$ ansible --version
-ansible [core 2.15.2]
+ansible [core 2.15.8]
   config file = /etc/ansible/ansible.cfg
   configured module search path = ['/home/ubuntu/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
   ansible python module location = /usr/lib/python3/dist-packages/ansible
   ansible collection location = /home/ubuntu/.ansible/collections:/usr/share/ansible/collections
   executable location = /usr/bin/ansible
-  python version = 3.10.12 (main, Jun 11 2023, 05:26:28) [GCC 11.4.0] (/usr/bin/python3)
+  python version = 3.10.12 (main, Nov 20 2023, 15:14:05) [GCC 11.4.0] (/usr/bin/python3)
   jinja version = 3.0.3
   libyaml = True
   ```

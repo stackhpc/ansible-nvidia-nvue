@@ -1,0 +1,20 @@
+---
+
+- name: Enable REST API on all the switches
+  hosts: switches
+  remote_user: cumulus
+
+  tasks:
+    - name: Test API Connectivity
+      register: apioutput
+      uri:
+        url: "https://127.0.0.1:8765/nvue_v1/revision"
+        validate_certs: false
+        user: "cumulus" 
+        password: "cumulus"
+        method: "GET"
+        status_code: 
+          - 200
+
+    - debug: 
+        var: apioutput

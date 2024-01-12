@@ -1571,8 +1571,9 @@ ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/mlag-leaf0
 ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/mlag-leaf02.yml -i hosts
 ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/MLAG/mlag-spine01.yml -i hosts
 ```
-3. Verify MLAG operational state:
+3. Verify MLAG operational state on switch `leaf01`:
 ```bash
+ubuntu@oob-mgmt-server:~/workshop$ ssh cumulus@leaf01
 cumulus@leaf01:mgmt:~$ nv show mlag
                 operational                applied
 --------------  -------------------------  -----------------
@@ -1662,8 +1663,9 @@ ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-leaf01.
 ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-leaf02.yml -i hosts
 ubuntu@oob-mgmt-server:~/workshop$ ansible-playbook -v playbooks/BGP/bgp-spine01.yml -i hosts
 ```
-5. Verify BGP peerings:
+5. Verify BGP peerings on switch `leaf01`:
 ```bash
+ubuntu@oob-mgmt-server:~/workshop$ ssh cumulus@leaf01
 cumulus@leaf01:mgmt:~$ net show bgp summary
 cumulus@leaf01:mgmt:~$ net show bgp summary
 show bgp ipv4 unicast summary
@@ -1709,7 +1711,7 @@ swp52            idle                   300000     Waiting for Peer IPv6 LLA    
 ```
 <!-- AIR:page -->
 ## Additional Resources
-- [NVUE modules on Gtilab](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks)
+- [NVUE modules on Gitlab](https://gitlab.com/nvidia-networking/systems-engineering/nvue/-/tree/main/examples/playbooks)
 - [NVUE modules on Galaxy](https://galaxy.ansible.com/nvidia/nvue)
 - [NVUE modules on Automation Hub](https://console.redhat.com/ansible/automation-hub/repo/published/nvidia/nvue/)
 - [Data Center Network Automation Quick Start Guide](https://docs.nvidia.com/networking-ethernet-software/guides/Data-Center-Network-Automation-Quick-Start-Guide/)
