@@ -2,10 +2,6 @@
 interfaces_up: 
   - "swp1"
   - "swp2"
-  - "swp3"
-  - "swp4"
 bgp_neighbors: 
   - "swp1"
   - "swp2"
-  - "swp3"
-  - "swp4"
