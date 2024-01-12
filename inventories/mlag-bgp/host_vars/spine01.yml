@@ -1,0 +1,7 @@
+---
+ansible_host: "192.168.200.21"
+hostname: "spine01"
+eth0_ip: "192.168.200.21/24"
+lo_ip: "10.10.10.101/32"
+bgp_asn: '65199'
+bgp_routerid: '10.10.10.101'

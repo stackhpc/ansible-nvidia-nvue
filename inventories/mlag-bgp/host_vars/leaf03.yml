@@ -1,0 +1,11 @@
+---
+ansible_host: "192.168.200.13"
+hostname: "leaf03"
+eth0_ip: "192.168.200.13/24"
+lo_ip: "10.10.10.3/32"
+mlag_mac: "44:38:39:BE:EF:BB"
+mlag_backup: "10.10.10.4"
+vlan_config: 
+  - { id: 'vlan10', ip: '10.1.10.4/24', vlan: '10'}
+bgp_asn: '65103'
+bgp_routerid: '10.10.10.3'
