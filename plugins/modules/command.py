@@ -154,6 +154,13 @@ def run_nvue(module):
         output += result
         changed = True
 
+    save_cmd = "config save"
+    save = module.params.get("save")
+    if save:
+        result = run_nvue_cmd(module, save_cmd)
+        output += result
+        changed = True
+
     return changed, output, diff
 
 
