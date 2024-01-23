@@ -191,7 +191,7 @@ def run_module():
         argument_spec=module_args,
         mutually_exclusive=[
             ("commands", "template"),
-            ("save", "atomic"),
+            ("apply", "atomic"),
             ("detach", "atomic"),
         ],
         supports_check_mode=True,
