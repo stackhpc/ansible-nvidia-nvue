@@ -134,10 +134,13 @@ def run_nvue(module):
     output_lines = []
 
     for line in commands:
-        if line.strip():
-            output_lines += [
-                run_nvue_cmd(module, line.strip(), 'Failed on line "%s"' % line)
-            ]
+        stripped_line = line.strip()
+        # Skip command which start with comment
+        if stripped_line.startswith("#"):
+            continue
+        output_lines += [
+            run_nvue_cmd(module, stripped_line, 'Failed on line "%s"' % line)
+        ]
 
     output = "\n".join(output_lines)
 
