@@ -51,6 +51,11 @@ options:
         required: false
         default: false
         type: bool
+    msg:
+        description: Add message to apply
+        required: false
+        default: None
+        type: str
 """
 
 EXAMPLES = r"""
@@ -149,6 +154,10 @@ def run_nvue(module):
     if module.params.get("assume_yes"):
         apply_cmd += " --assume-yes"
 
+    msg = module.params.get("msg")
+    if msg:
+        apply_cmd += " --message " + msg
+
     if apply or atomic:
         result = run_nvue_cmd(module, apply_cmd)
         output += result
@@ -174,6 +183,7 @@ def run_module():
         detach=dict(type="bool", required=False, default=False),
         atomic=dict(type="bool", required=False, default=False),
         save=dict(type="bool", required=False, default=False),
+        msg=dict(type="str", required=False, default=False),
     )
 
     # seed the result dict in the object
