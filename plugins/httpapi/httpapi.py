@@ -149,7 +149,10 @@ class HttpApi(HttpApiBase):
             for item in data:
                 if "id" in item:
                     id = item.pop('id')
-                    new_config[id] = item
+                    if item:
+                        new_config[id] = item
+                    else:
+                        new_config[id] = {}
                     for key, value in item.items():
                         new_config[id][key] = self.normalize_spec(value)
         else:
