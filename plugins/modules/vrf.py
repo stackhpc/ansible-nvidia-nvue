@@ -178,15 +178,15 @@ options:
                                                                     - 'on'
                                                                     - 'off'
                                     ipv6_unicast:
-                                        description: IPv4 unicast address family.
+                                        description: IPv6 unicast address family.
                                         required: false
                                         type: dict
                                         suboptions:
                                             enable:
-                                                description: Turn the feature 'on' or 'off'.
+                                                description: Turn the feature 'on' or 'off'. This feature is disabled by default.
                                                 required: false
                                                 type: str
-                                                default: 'on'
+                                                default: 'off'
                                                 choices:
                                                     - 'on'
                                                     - 'off'
@@ -197,7 +197,7 @@ options:
                                                 elements: dict
                                                 suboptions:
                                                     id:
-                                                        description: An IPv4 static network.
+                                                        description: An IPv6 static network.
                                                         required: false
                                                         type: str
                                             route_export:
@@ -637,7 +637,7 @@ def main():
                         ))
                     )),
                     ipv6_unicast=dict(type='dict', required=False, options=dict(
-                        enable=dict(type='str', required=False, choices=['on', 'off'], default='on'),
+                        enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
                         network=dict(type='list', required=False, elements='dict', options=dict(
                             id=dict(type='str', required=False)
                         )),
