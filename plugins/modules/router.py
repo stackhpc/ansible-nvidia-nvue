@@ -71,6 +71,7 @@ options:
                                              off, GR is disabled for the router
                                 type: str
                                 required: false
+                                default: 'helper-only'
                                 choices:
                                     - 'full'
                                     - 'off'
@@ -211,7 +212,7 @@ def main():
             enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
             autonomous_system=dict(type='int', required=False),
             graceful_restart=dict(type='dict', required=False, options=dict(
-                mode=dict(type='str', required=False, choices=['full', 'off', 'helper-only'])
+                mode=dict(type='str', required=False, default='helper-only', choices=['full', 'off', 'helper-only'])
             )),
             router_id=dict(type='str', required=False)
         )),
