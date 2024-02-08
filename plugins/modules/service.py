@@ -42,6 +42,58 @@ options:
         description: Provided configuration
         type: dict
         suboptions:
+            dhcp_relay:
+                description: Config of DHCP relay service.
+                required: false
+                type: list
+                elements: dict
+                suboptions:
+                    id:
+                        description: DHCP-relay.
+                        required: false
+                        type: str
+                    interface:
+                        description: Set of interfaces on which to handle DHCP relay traffic.
+                        required: false
+                        type: list
+                        elements: dict
+                        suboptions:
+                            id:
+                                description: An interface on which DHCP relay is configured.
+                                required: false
+                                type: str
+                    server:
+                        description: DHCP servers.
+                        required: false
+                        type: list
+                        elements: dict
+                        suboptions:
+                            id:
+                                description: A dhcp server.
+                                required: false
+                                type: str
+                    source_ip:
+                        description: Source IP to use on the relayed packet. If "giaddr", it will be taken from giaddress. 
+                        Otherwise, if "auto", it will be taken from an L3 interface on this switch using normal routing methods. 
+                        This is the default.
+                        required: false
+                        type: str
+                        default: auto
+                    gateway_interface:
+                        description: Configures DHCP relay gateway on the interfaes.
+                        required: false
+                        type: list
+                        elements: dict
+                        suboptions:
+                            id:
+                                description: An interface on which DHCP relay gateway is configured.
+                                required: false
+                                type: str
+                            address:
+                                description: ipv4 address on gateway interface.
+                                required: false
+                                type: str
+                                default: auto
             dns:
                 description: Collection of DNS.
                 required: false
@@ -182,6 +234,20 @@ def main():
 
     # define the service spec - used for creation/modification
     service_spec = dict(
+        dhcp_relay=dict(type='list', required=False, elements='dict', options=dict(
+            id=dict(type='str', required=False),
+            interface=dict(type='list', required=False, elements='dict', options=dict(
+                id=dict(type='str', required=False)
+            )),
+            server=dict(type='list', required=False, elements='dict', options=dict(
+                id=dict(type='str', required=False)
+            )),
+            source_ip=dict(type='str', required=False, default='auto'),
+            gateway_interface=dict(type='list', required=False, elements='dict', options=dict(
+                id=dict(type='str', required=False),
+                address=dict(type='str', required=False, default='auto')
+            )))
+        ),
         dns=dict(type='list', required=False, elements='dict', options=dict(
             id=dict(type='str', required=False),
             server=dict(type='list', required=False, elements='dict', options=dict(
