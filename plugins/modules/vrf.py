@@ -177,6 +177,79 @@ options:
                                                                 choices:
                                                                     - 'on'
                                                                     - 'off'
+                                    ipv6_unicast:
+                                        description: IPv6 unicast address family.
+                                        required: false
+                                        type: dict
+                                        suboptions:
+                                            enable:
+                                                description: Turn the feature 'on' or 'off'. This feature is disabled by default.
+                                                required: false
+                                                type: str
+                                                default: 'off'
+                                                choices:
+                                                    - 'on'
+                                                    - 'off'
+                                            network:
+                                                description: IPv6 static networks.
+                                                required: false
+                                                type: list
+                                                elements: dict
+                                                suboptions:
+                                                    id:
+                                                        description: An IPv6 static network.
+                                                        required: false
+                                                        type: str
+                                            route_export:
+                                                description: Route export.
+                                                required: false
+                                                type: dict
+                                                suboptions:
+                                                    to_evpn:
+                                                        description: Controls for exporting routes from this VRF for this address-family
+                                                                     into EVPN (as type-5 routes).
+                                                        required: false
+                                                        type: dict
+                                                        suboptions:
+                                                            enable:
+                                                                description: Turn the feature 'on' or 'off'.
+                                                                required: false
+                                                                type: str
+                                                                default: 'off'
+                                                                choices:
+                                                                    - 'on'
+                                                                    - 'off'
+                                            redistribute:
+                                                description: Route redistribute.
+                                                required: false
+                                                type: dict
+                                                suboptions:
+                                                    connected:
+                                                        description: Route redistribution of IPv6 connected routes.
+                                                        required: false
+                                                        type: dict
+                                                        suboptions:
+                                                            enable:
+                                                                description: Turn the feature 'on' or 'off'.
+                                                                required: false
+                                                                type: str
+                                                                default: 'off'
+                                                                choices:
+                                                                    - 'on'
+                                                                    - 'off'
+                                                    static:
+                                                        description: Route redistribution of IPv6 static routes.
+                                                        required: false
+                                                        type: dict
+                                                        suboptions:
+                                                            enable:
+                                                                description: Turn the feature 'on' or 'off'.
+                                                                required: false
+                                                                type: str
+                                                                default: 'off'
+                                                                choices:
+                                                                    - 'on'
+                                                                    - 'off'
                                     l2vpn_evpn:
                                         description: L2VPN EVPN address family.
                                         required: false
@@ -268,6 +341,19 @@ options:
                                         suboptions:
                                             ipv4_unicast:
                                                 description: Peer IPv4 unicast address family. Always on, unless disabled globaly.
+                                                required: false
+                                                type: dict
+                                                suboptions:
+                                                    enable:
+                                                        description: Turn the feature 'on' or 'off'.
+                                                        required: false
+                                                        type: str
+                                                        default: 'on'
+                                                        choices:
+                                                            - 'on'
+                                                            - 'off'
+                                            ipv6_unicast:
+                                                description: Peer IPv6 unicast address family. Always on, unless disabled globaly.
                                                 required: false
                                                 type: dict
                                                 suboptions:
@@ -550,6 +636,25 @@ def main():
                             ))
                         ))
                     )),
+                    ipv6_unicast=dict(type='dict', required=False, options=dict(
+                        enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
+                        network=dict(type='list', required=False, elements='dict', options=dict(
+                            id=dict(type='str', required=False)
+                        )),
+                        route_export=dict(type='dict', required=False, options=dict(
+                            to_evpn=dict(type='dict', required=False, options=dict(
+                                enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
+                            ))
+                        )),
+                        redistribute=dict(type='dict', required=False, options=dict(
+                            connected=dict(type='dict', required=False, options=dict(
+                                enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
+                            )),
+                            static=dict(type='dict', required=False, options=dict(
+                                enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
+                            ))
+                        ))
+                    )),
                     l2vpn_evpn=dict(type='dict', required=False, options=dict(
                         enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
                     ))
@@ -572,6 +677,9 @@ def main():
                     remote_as=dict(type='str', required=False),
                     address_family=dict(type='dict', required=False, options=dict(
                         ipv4_unicast=dict(type='dict', required=False, options=dict(
+                            enable=dict(type='str', required=False, choices=['on', 'off'], default='on')
+                        )),
+                        ipv6_unicast=dict(type='dict', required=False, options=dict(
                             enable=dict(type='str', required=False, choices=['on', 'off'], default='on')
                         )),
                         l2vpn_evpn=dict(type='dict', required=False, options=dict(
