@@ -73,8 +73,8 @@ options:
                                 required: false
                                 type: str
                     source_ip:
-                        description: Source IP to use on the relayed packet. If "giaddr", it will be taken from giaddress. 
-                                     Otherwise, if "auto", it will be taken from an L3 interface on this switch using normal routing methods. 
+                        description: Source IP to use on the relayed packet. If "giaddr", it will be taken from giaddress.
+                                     Otherwise, if "auto", it will be taken from an L3 interface on this switch using normal routing methods.
                                      This is the default.
                         required: false
                         type: str
