@@ -59,6 +59,23 @@ options:
                         description: ASN for all VRFs, if a single AS is in use. If "none", then ASN must be set for every VRF. This is the default.
                         required: false
                         type: int
+                    graceful_restart:
+                        description: BGP Graceful restart global configuration.
+                        type: dict
+                        required: false
+                        suboptions:
+                            mode:
+                                description: Role of router during graceful restart.
+                                             helper-only, router is in helper role.
+                                             full, router is in both helper and restarter role.
+                                             off, GR is disabled for the router
+                                type: str
+                                required: false
+                                default: 'helper-only'
+                                choices:
+                                    - 'full'
+                                    - 'off'
+                                    - 'helper-only'
                     router_id:
                         description: BGP router-id for all VRFs, if a common one is used. If "none", then router-id must be set for every VRF.
                                      This is the default.
@@ -194,6 +211,9 @@ def main():
         bgp=dict(type='dict', required=False, options=dict(
             enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
             autonomous_system=dict(type='int', required=False),
+            graceful_restart=dict(type='dict', required=False, options=dict(
+                mode=dict(type='str', required=False, default='helper-only', choices=['full', 'off', 'helper-only'])
+            )),
             router_id=dict(type='str', required=False)
         )),
         ospf=dict(type='dict', required=False, options=dict(
