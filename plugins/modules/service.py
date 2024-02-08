@@ -175,8 +175,70 @@ options:
                                 choices:
                                     - udp
                                     - tcp
-
-
+            snmp_server:
+                description: SNMP configuration
+                required: false
+                type: list
+                elements: dict
+                suboptions:
+                    enable:
+                        description: Turn the feature on or off. The feature is disabled by default.
+                        required: false
+                        type: str
+                        choices:
+                            - 'on'
+                            - 'off'
+                        default: 'off'
+                    listening_address:
+                        description: Collection of listening addresses.
+                        required: false
+                        type: list
+                        elements: dict
+                        suboptions:
+                            id:
+                                description: A listening address.
+                                required: false
+                                type: str
+                            vrf:
+                                description: The listening address VRF.
+                                required: false
+                                type: str
+                    readonly_community:
+                        description: Collection of readonly community string passwords for version 1 or 2c access for IPv4.
+                        required: false
+                        type: list
+                        elements: dict
+                        suboptions:
+                            id:
+                                description: A readonly community string password for version 1 or 2c access for IPv4.
+                                required: false
+                                type: str
+                            access:
+                                description: Assign addresses to readonly community string password.
+                                required: false
+                                type: list
+                                elements: dict
+                                suboptions:
+                                    id:
+                                        description: An address for readonly community string password.
+                                        required: false
+                                        type: str
+                                    oid:
+                                        description: An object identifier (OID) that represents a managed object in the MIB hierarchy.
+                                        required: false
+                                        type: str
+                                    view:
+                                        description: A name of a view that restricts MIB tree exposure.
+                                        required: false
+                                        type: str
+                    system_contact:
+                        description: SNMP server system contact info.
+                        type: str
+                        required: false
+                    system_location:
+                        description: SNMP server system location info.
+                        type: str
+                        required: false
     revid:
         description: Revision ID to query/to apply config to.
         required: false
@@ -203,6 +265,7 @@ options:
 author:
     - Nvidia NBU Team (@nvidia-nbu)
     - Krishna Vasudevan (@krisvasudevan)
+    - Alexander Dibbo (UKRI - STFC) (@apdibbo)
 '''
 
 EXAMPLES = r'''
@@ -268,6 +331,24 @@ def main():
                 port=dict(type='int', required=False, default='514'),
                 protocol=dict(type='str', required=False, default='udp', choices=['udp', 'tcp'])
             ))
+        )),
+        snmp_server=dict(type='list', required=False, elements='dict', options=dict(
+            enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
+            listening_address=dict(type='list', required=False, elements='dict', options=dict(
+                id=dict(type='str', required=False),
+                vrf=dict(type='str', required=False)
+            )),
+            readonly_community=dict(type='list', required=False, elements='dict', options=dict(
+                id=dict(type='str', required=False),
+                access=dict(type='list', required=False, elements='dict', options=dict(
+                    id=dict(type='str', required=False),
+                    oid=dict(type='str', required=False),
+                    view=dict(type='str', required=False)
+                ))
+            )
+            ),
+            system_contact=dict(type='str', required=False),
+            system_location=dict(type='str', required=False)
         ))
     )
 
@@ -324,7 +405,6 @@ def main():
     if operation == "set" and response:
         result["changed"] = True
     result["message"] = response
-
     module.exit_json(**result)
 
 
