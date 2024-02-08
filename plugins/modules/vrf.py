@@ -334,6 +334,25 @@ options:
                                                      configuration but the actual ASN is immaterial. If specified as 'internal', it means an IBGP configuration.
                                         required: false
                                         type: str
+                                    capabilities:
+                                        description: Capabilities
+                                        type: dict
+                                        required: false
+                                        suboptions:
+                                            extended_nexthop:
+                                                description: If on, the extended-nexthop capability defined in RFC 5549 is advertised to peer(s)
+                                                             with this config. If 'auto', it will be 'on' for unnumbered peers and 'off' otherwise. This is the default.
+                                                type: str
+                                                required: false
+                                                default: 'auto'
+                                                choices:
+                                                    - 'on'
+                                                    - 'off'
+                                                    - 'auto'
+                                            source_address:
+                                                description: source IP address of the TCP connection, which is often used as the BGP next hop for Updates.
+                                                type: str
+                                                required: false
                                     address_family:
                                         description: Address family specific configuration.
                                         required: false
@@ -675,6 +694,10 @@ def main():
                 peer_group=dict(type='list', required=False, elements='dict', options=dict(
                     id=dict(type='str', required=False),
                     remote_as=dict(type='str', required=False),
+                    capabilities=dict(type='dict', required=False, options=dict(
+                        extended_nexthop=dict(type='str', required=False, default='auto', choices=['on', 'off', 'auto']),
+                        source_address=dict(type='str', required=False))
+                    ),
                     address_family=dict(type='dict', required=False, options=dict(
                         ipv4_unicast=dict(type='dict', required=False, options=dict(
                             enable=dict(type='str', required=False, choices=['on', 'off'], default='on')
