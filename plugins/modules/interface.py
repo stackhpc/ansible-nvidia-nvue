@@ -265,6 +265,23 @@ options:
                 required: false
                 type: dict
                 suboptions:
+                    breakout:
+                        description: sub-divide or disable ports (only valid on plug interfaces)
+                        type: list
+                        required: false
+                        elements: dict
+                        suboptions:
+                            id:
+                                description: Breakout mode identifier
+                                type: str
+                                required: false
+                                choices:
+                                    - '1x'
+                                    - '2x'
+                                    - '4x'
+                                    - '8x'
+                                    - 'disabled'
+                                    - 'loopback'
                     mtu:
                         description: MTU size.
                         required: false
@@ -586,6 +603,9 @@ def main():
             ))
         )),
         link=dict(type='dict', required=False, options=dict(
+            breakout=dict(type='list', required=False, elements='dict', options=dict(
+                id=dict(type='str', required=False, choices=['1x', '2x', '4x', '8x', 'disabled', 'loopback'])
+            )),
             mtu=dict(type='int', required=False),
             state=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False)
