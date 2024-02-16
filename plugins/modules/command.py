@@ -54,7 +54,6 @@ options:
     msg:
         description: Add message to apply
         required: false
-        default: None
         type: str
 """
 
@@ -186,7 +185,7 @@ def run_module():
         detach=dict(type="bool", required=False, default=False),
         atomic=dict(type="bool", required=False, default=False),
         save=dict(type="bool", required=False, default=False),
-        msg=dict(type="str", required=False, default=False),
+        msg=dict(type="str", required=False),
     )
 
     # seed the result dict in the object

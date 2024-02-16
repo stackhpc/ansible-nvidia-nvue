@@ -341,7 +341,8 @@ options:
                                         suboptions:
                                             extended_nexthop:
                                                 description: If on, the extended-nexthop capability defined in RFC 5549 is advertised to peer(s)
-                                                             with this config. If 'auto', it will be 'on' for unnumbered peers and 'off' otherwise. This is the default.
+                                                             with this config. If 'auto', it will be 'on' for unnumbered peers and 'off' otherwise. 
+                                                             This is the default.
                                                 type: str
                                                 required: false
                                                 default: 'auto'
