@@ -6,18 +6,18 @@
     - name: Set system pre-login message
       nvidia.nvue.command:
         commands:
-          - set system message pre-login "{{ MSG }}""
+          - set system message pre-login "{{ message }}""
         atomic: true
         assume_yes: true
       vars:
-        MSG: WARNING
+        message: WARNING
 
     - name: Failing task
       nvidia.nvue.command:
         commands:
           - set system message post-login "WELCOME"
           - set system m123ssage pre-login "WARNING"
-      ignore_errors: true
+      failed_when: false
 
     - name: Set system DNS
       nvidia.nvue.command:

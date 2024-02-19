@@ -27,7 +27,7 @@
     - name: Set interface settings
       ansible.builtin.include_role:
         name: nvidia.nvue.interface
-      
+
     - name: Apply new revision
       nvidia.nvue.config:
         state: apply

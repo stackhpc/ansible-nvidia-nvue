@@ -31,11 +31,11 @@
     - name: Set mlag settings
       ansible.builtin.include_role:
         name: nvidia.nvue.mlag
-    
+
     - name: Set bgp settings
       ansible.builtin.include_role:
         name: nvidia.nvue.bgp
-      
+
     - name: Apply new revision
       nvidia.nvue.config:
         state: apply

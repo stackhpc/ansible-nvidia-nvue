@@ -17,7 +17,7 @@
       register: revision
 
     - name: Dump revision
-      debug:
+      ansible.builtin.debug:
         msg: '{{ revision.revid }}'
 
     - name: Set interface

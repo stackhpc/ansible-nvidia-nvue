@@ -1,5 +1,7 @@
 ---
-- hosts: localhost
+
+- name: Test interface role
+  hosts: localhost
   remote_user: root
   roles:
-    - mlag
+    - interface

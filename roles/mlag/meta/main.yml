@@ -27,9 +27,9 @@ galaxy_info:
   # https://galaxy.ansible.com/api/v1/platforms/
   #
   platforms:
-  - name: Cumulus
-    versions:
-    - all
+    - name: Cumulus
+      versions:
+        - all
   # platforms:
   # - name: Fedora
   #   versions:

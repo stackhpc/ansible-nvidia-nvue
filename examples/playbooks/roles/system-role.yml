@@ -23,7 +23,7 @@
     - name: Set system settings
       ansible.builtin.include_role:
         name: system
-      
+
     - name: Apply new revision
       nvidia.nvue.config:
         state: apply
