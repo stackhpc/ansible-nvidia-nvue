@@ -16,8 +16,8 @@
         state: gathered
       register: revisions
 
-    - name: dump revisions
-      debug:
+    - name: Dump revisions
+      ansible.builtin.debug:
         msg: '{{ revisions }}'
 
     - name: Create new revision
@@ -25,8 +25,8 @@
         state: new
       register: revision
 
-    - name: dump revision
-      debug:
+    - name: Dump revision
+      ansible.builtin.debug:
         msg: '{{ revision.revid }}'
 
     - name: List newly created revision
@@ -35,6 +35,6 @@
         revid: "{{ revision.revid }}"
       register: revision
 
-    - name: dump revision
-      debug:
+    - name: Dump revision
+      ansible.builtin.debug:
         msg: '{{ revision }}'

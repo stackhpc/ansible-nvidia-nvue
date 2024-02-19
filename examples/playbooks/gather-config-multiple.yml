@@ -1,3 +1,5 @@
+---
+
 - name: NVUE API
   hosts: cumulus
   connection: ansible.netcommon.httpapi

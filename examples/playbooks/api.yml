@@ -1,3 +1,5 @@
+---
+
 - name: NVUE API
   hosts: cumulus
   connection: ansible.netcommon.httpapi
@@ -33,9 +35,9 @@
         data:
           system:
             message:
-              "pre-login": "{{ MSG }}"
+              "pre-login": "{{ message }}"
       vars:
-        MSG: WARNING
+        message: WARNING
 
     - name: Get the current config
       nvidia.nvue.api:

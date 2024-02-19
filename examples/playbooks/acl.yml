@@ -16,7 +16,7 @@
         state: new
       register: revision
 
-    - name: dump revision
+    - name: Dump revision
       debug:
         msg: '{{ revision.revid }}'
 
@@ -26,24 +26,24 @@
         revid: '{{ revision.revid }}'
         data:
           - id: 'acl1'
-            rule: 
-            - id: '475'
-              action:
-                permit:
-              match:
-                ip:
-                  dest_ip: '10.115.28.0/32'
-                  dest_port:
-                    - id: 'ANY'
-                  source_ip: '10.110.0.11/32'
-                  source_port:
-                    - id: 'smtp'
-                  protocol: 'tcp'
+            rule:
+              - id: '475'
+                action:
+                  permit:
+                match:
+                  ip:
+                    dest_ip: '10.115.28.0/32'
+                    dest_port:
+                      - id: 'ANY'
+                    source_ip: '10.110.0.11/32'
+                    source_port:
+                      - id: 'smtp'
+                    protocol: 'tcp'
             type: 'ipv4'
       register: acl
 
-    - name: dump previous output
-      debug:
+    - name: Dump previous output
+      ansible.builtin.debug:
         msg: '{{ acl }}'
 
     - name: Apply new revision
@@ -54,8 +54,8 @@
         wait: 10
       register: revision
 
-    - name: dump previous output
-      debug:
+    - name: Dump previous output
+      ansible.builtin.debug:
         msg: '{{ revision }}'
 
     - name: Fetch acl config
@@ -64,5 +64,5 @@
       register: acl
 
     - name: Display interface config
-      debug:
+      ansible.builtin.debug:
         msg: '{{ acl }}'

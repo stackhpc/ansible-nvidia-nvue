@@ -29,4 +29,4 @@
               - id: '{{ item }}'
                 remote_as: 'external'
             enable: 'on'
-  with_items: "{{ bgp_neighbors }}"  
+  with_items: "{{ bgp_neighbors }}"

@@ -10,7 +10,7 @@ v1.1.0
 Release Summary
 ---------------
 
-Initial release.
+Release with new modules and roles.
 
 Major Changes
 -------------

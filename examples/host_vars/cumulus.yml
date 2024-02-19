@@ -1,5 +1,5 @@
 ---
 host_variables:
-  system: 
-    message: 
+  system:
+    message:
       "pre-login": "HOST-VARIABLE"

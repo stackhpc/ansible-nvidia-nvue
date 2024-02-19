@@ -1,5 +1,7 @@
 ---
-- hosts: localhost
+
+- name: Test BGP roles
+  hosts: localhost
   remote_user: root
   roles:
     - bgp

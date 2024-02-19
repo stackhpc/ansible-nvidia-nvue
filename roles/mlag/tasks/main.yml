@@ -1,4 +1,9 @@
 ---
-- import_tasks: bridge-config.yml
-- import_tasks: mlag-config.yml
-- import_tasks: interface-vlan-bond.yml
+- name: Setup the Bridge Configuration
+  ansible.builtin.import_tasks: bridge-config.yml
+
+- name: Setup the MLAG Configuration
+  ansible.builtin.import_tasks: mlag-config.yml
+
+- name: Setup the interfaces, VLANS, and bonds
+  ansible.builtin.import_tasks: interface-vlan-bond.yml

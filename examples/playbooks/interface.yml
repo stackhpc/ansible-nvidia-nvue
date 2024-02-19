@@ -16,8 +16,8 @@
         state: new
       register: revision
 
-    - name: dump revision
-      debug:
+    - name: Dump revision
+      ansible.builtin.debug:
         msg: '{{ revision.revid }}'
 
     - name: Set interface
@@ -57,8 +57,8 @@
             type: 'swp'
       register: interface
 
-    - name: dump previous output
-      debug:
+    - name: Dump previous output
+      ansible.builtin.debug:
         msg: '{{ interface }}'
 
     - name: Apply new revision
@@ -69,8 +69,8 @@
         wait: 10
       register: revision
 
-    - name: dump previous output
-      debug:
+    - name: Dump previous output
+      ansible.builtin.debug:
         msg: '{{ revision }}'
 
     - name: Fetch interface config
@@ -79,5 +79,5 @@
       register: interface
 
     - name: Display interface config
-      debug:
+      ansible.builtin.debug:
         msg: '{{ interface }}'
