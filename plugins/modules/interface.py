@@ -139,6 +139,11 @@ options:
                                 description: Access.
                                 required: false
                                 type: int
+                            untagged:
+                                description: Untagged packets ingressing on the interface will be put in this vlan. Egress packets are always
+                                             tagged. If none, then untagged packets will be dropped. If auto, inherit from bridge domain.
+                                required: false
+                                type: int
                             vlan:
                                 description: Set of allowed vlans for this bridge domain on this interface. If "all", inherit all vlans from the
                                              bridge domain, if appropriate. This is the default.
@@ -579,6 +584,7 @@ def main():
             domain=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False),
                 access=dict(type='int', required=False),
+                untagged=dict(type='int', required=False),
                 stp=dict(type='dict', required=False, options=dict(
                     admin_edge=dict(type='str', required=False, choices=['on', 'off']),
                     auto_edge=dict(type='str', required=False, choices=['on', 'off']),
