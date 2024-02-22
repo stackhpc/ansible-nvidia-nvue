@@ -1,13 +1,19 @@
 ---
-- name: Set bridge
-  bridge:
+- name: Set bridge as vlan aware
+  nvidia.nvue.bridge:
     state: merged
     revid: '{{ revision.revid }}'
     data:
       - id: 'br_default'
         untagged: 1
         type: 'vlan-aware'
+
+- name: Set bridge VLANs
+  nvidia.nvue.bridge:
+    state: merged
+    revid: '{{ revision.revid }}'
+    data:
+      - id: 'br_default'
         vlan:
-          - id: '10'
-            vni:
-              - id: '10'
+          - id : '{{ item.vlan }}'
+  with_items: "{{ vlan_config }}"

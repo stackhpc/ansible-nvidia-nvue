@@ -64,6 +64,23 @@ options:
                         description: Configure post-login message of the day.
                         required: false
                         type: str
+            system_global:
+                description: Global system configuration.
+                required: false
+                type: dict
+                suboptions:
+                    system_mac:
+                        description: Full MAC Address.
+                        required: false
+                        type: str
+                    anycast_mac:
+                        description: MAC Address shared by the rack.
+                        required: false
+                        type: str
+                    anycast_id:
+                        description: An integer (1-65535) to select rack MAC address in range 44:38:39:ff:00:00 to 44:38:39:ff:ff:ff.
+                        required: false
+                        type: int
     revid:
         description: Revision ID to query/to apply config to.
         required: false
@@ -126,6 +143,11 @@ def main():
         message=dict(type='dict', required=False, options=dict(
             pre_login=dict(type='str', required=False),
             post_login=dict(type='str', required=False)
+        )),
+        system_global=dict(type='dict', required=False, options=dict(
+            system_mac=dict(type='str', required=False),
+            anycast_mac=dict(type='str', required=False),
+            anycast_id=dict(type='int', required=False)
         ))
     )
 
@@ -158,6 +180,10 @@ def main():
     else:
         operation = "set"
     data = module.params["data"]
+    # convert parameter name from system_global to global
+    if "system_global" in data:
+        data["global"] = data["system_global"]
+        del data["system_global"]
     force = module.params["force"]
     wait = module.params["wait"]
     revid = module.params["revid"]
