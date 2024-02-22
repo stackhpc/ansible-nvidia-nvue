@@ -15,5 +15,5 @@
     data:
       - id: 'br_default'
         vlan:
-          - id : '{{ item.vlan }}'
+          - id: '{{ item.vlan }}'
   with_items: "{{ vlan_config }}"
