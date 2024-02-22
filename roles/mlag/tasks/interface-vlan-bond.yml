@@ -10,17 +10,6 @@
             - id: '{{ item.ip }}'
         vlan: '{{ item.vlan }}'
         type: 'svi'
-      - id: 'bond1'
-        bond:
-          mlag:
-            enable: 'on'
-            id: 1
-          member:
-            - id: 'swp1'
-        bridge:
-          domain:
-            - id: 'br_default'
-        type: 'bond'
   with_items: "{{ vlan_config }}"
 
 - name: Set Bond interfaces
