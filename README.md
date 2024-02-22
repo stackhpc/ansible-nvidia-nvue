@@ -1,6 +1,6 @@
 # NVIDIA Cumulus Linux Automation Workshop using NVUE and Ansible
 
-This branch contains NVUE and Ansible automation to configure different demo scenarios using [NVUE](https://docs.nvidia.com/networking-ethernet-software/cumulus-linux/System-Configuration/NVIDIA-User-Experience-NVUE/) on Cumulus Linux 5.5.
+This branch contains NVUE and Ansible automation to configure different demo scenarios using [NVUE](https://docs.nvidia.com/networking-ethernet-software/cumulus-linux/System-Configuration/NVIDIA-User-Experience-NVUE/) on Cumulus Linux 5.7.
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-83389B.svg)](https://opensource.org/licenses/Apache-2.0)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
