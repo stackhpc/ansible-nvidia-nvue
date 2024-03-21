@@ -149,14 +149,16 @@ class HttpApi(HttpApiBase):
             for item in data:
                 if "id" in item:
                     id = item.pop('id')
-                    if item:
+                    if any(item.values()):
                         new_config[id] = item
                     else:
                         new_config[id] = {}
                     for key, value in item.items():
-                        new_config[id][key] = self.normalize_spec(value)
+                        if value:
+                            new_config[id][key] = self.normalize_spec(value)
         else:
             return data
+
         return new_config
 
     def create_revision(self):
