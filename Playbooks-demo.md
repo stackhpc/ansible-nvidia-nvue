@@ -147,19 +147,19 @@ Default switch credentials are:
 ```bash
 ubuntu@oob-mgmt-server:~$ cd workshop
 ```
-3. Make sure you are on the `cumulus-linux-57-automation-workshop` branch:
+3. Make sure you are on the `cumulus-linux-58-automation-workshop` branch:
 ```bash
-ubuntu@oob-mgmt-server:~/workshop$ git status | grep cumulus-linux-57-automation-workshop
-On branch cumulus-linux-57-automation-workshop
-Your branch is up to date with 'origin/cumulus-linux-57-automation-workshop'.
+ubuntu@oob-mgmt-server:~/workshop$ git status | grep cumulus-linux-58-automation-workshop
+On branch cumulus-linux-58-automation-workshop
+Your branch is up to date with 'origin/cumulus-linux-58-automation-workshop'.
 ```
-*To make sure all the latest updates from the `cumulus-linux-57-automation-workshop` branch is available on the system, use the `git pull` command*
+*To make sure all the latest updates from the `cumulus-linux-58-automation-workshop` branch is available on the system, use the `git pull` command*
 ```bash
 ubuntu@oob-mgmt-server:~/workshop$ git pull
 ```
-*In case you are on other branch, use the `git checkout` command to move the `cumulus-linux-57-automation-workshop` branch*
+*In case you are on other branch, use the `git checkout` command to move the `cumulus-linux-58-automation-workshop` branch*
 ```bash
-ubuntu@oob-mgmt-server:~/workshop$ git checkout cumulus-linux-57-automation-workshop
+ubuntu@oob-mgmt-server:~/workshop$ git checkout cumulus-linux-58-automation-workshop
 ```
 4. Install the NVIDIA NVUE collection with the Ansible Galaxy CLI:
 ```bash
@@ -168,7 +168,7 @@ ubuntu@oob-mgmt-server:~/workshop$ ansible-galaxy collection install nvidia.nvue
 5. Verify the installation:
 ```bash
 ubuntu@oob-mgmt-server:~/workshop$ ansible-galaxy collection list | grep nvidia.nvue
-nvidia.nvue                   1.1.0
+nvidia.nvue                   1.1.7
 ```
 6. Verify connectivity to the switches using the `ping` module:
 ```bash

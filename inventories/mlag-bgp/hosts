@@ -11,3 +11,4 @@ spines
 [switches:vars]
 ansible_user=cumulus
 ansible_password=cumulus
+timezone=Etc/UTC

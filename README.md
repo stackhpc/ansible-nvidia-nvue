@@ -22,7 +22,7 @@ Clone this repository to access the examples, and run the playbooks in the `play
 ```bash
 ubuntu@server:~$ git clone https://gitlab.com/nvidia-networking/systems-engineering/nvue.git
 ubuntu@server:~$ cd nvue/
-ubuntu@server:~/cumulus_ansible_modules$ git checkout automation-workshop
+ubuntu@server:~/cumulus_ansible_modules$ git checkout cumulus-linux-58-automation-workshop
 ubuntu@server:~/cumulus_ansible_modules-nvue$ ansible-playbook playbooks/api.yml -i hosts
 ```
 
@@ -35,7 +35,7 @@ cumulus@leaf01:mgmt:~$ nv show system
              operational          applied
 -----------  -------------------  -------
 hostname     leaf01               cumulus
-build        Cumulus Linux 5.7.0
+build        Cumulus Linux 5.8.0
 uptime       14:53:42
 timezone     Etc/UTC
 maintenance
@@ -46,7 +46,7 @@ maintenance
 * Ansible Version
 ```bash
 ubuntu@oob-mgmt-server:~$ ansible --version
-ansible [core 2.15.8]
+ansible [core 2.16.4]
   config file = /etc/ansible/ansible.cfg
   configured module search path = ['/home/ubuntu/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
   ansible python module location = /usr/lib/python3/dist-packages/ansible
