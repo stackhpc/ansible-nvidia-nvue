@@ -16,3 +16,4 @@ borders
 [switches:vars]
 ansible_user=cumulus
 ansible_password=CumulusLinux!
+timezone=Etc/UTC

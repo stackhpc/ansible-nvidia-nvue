@@ -33,7 +33,7 @@ v1.0.1
 Release Summary
 ---------------
 
-Initial release.
+Additional of object-specific modules.
 
 Major Changes
 -------------

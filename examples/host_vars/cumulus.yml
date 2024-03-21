@@ -2,4 +2,4 @@
 host_variables:
   system:
     message:
-      "pre-login": "HOST-VARIABLE"
+      "pre-login": "Test pre-login message"

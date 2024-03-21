@@ -21,6 +21,9 @@ borders
 [switches:vars]
 ansible_user=cumulus
 ansible_password=CumulusLinux!
+timezone=Etc/UTC
+post_login_message="## You are successfully logged in to the switch ##" 
+pre_login_message="## Welcome to NVIDIA Cumulus Linux VX (TM) 5.8 ##"
 
 [leaf01:vars]
 ansible_host=192.168.200.2

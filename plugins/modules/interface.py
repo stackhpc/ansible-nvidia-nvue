@@ -316,13 +316,23 @@ options:
                 type: dict
                 suboptions:
                     address:
-                        description: IP address on the interface.
+                        description: IPv4 and IPv6 address.
                         required: false
                         type: list
                         elements: dict
                         suboptions:
                             id:
-                                description: IP address.
+                                description: An IP address with prefix.
+                                required: false
+                                type: str
+                    gateway:
+                        description: Default IPv4 and IPv6 gateways.
+                        required: false
+                        type: list
+                        elements: dict
+                        suboptions:
+                            id:
+                                description: An IP address.
                                 required: false
                                 type: str
                     vrf:
@@ -629,6 +639,9 @@ def main():
         )),
         ip=dict(type='dict', required=False, options=dict(
             address=dict(type='list', required=False, elements='dict', options=dict(
+                id=dict(type='str', required=False)
+            )),
+            gateway=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False)
             )),
             vrf=dict(type='str', required=False, default='default'),
