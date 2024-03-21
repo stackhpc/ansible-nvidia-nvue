@@ -59,7 +59,7 @@ This workshop includes demos of the following features:
 
 ### Devices
 
-The workshop uses a simple topology consisting of 3 switches running Cumulus Linux 5.5.1, and 1 Ubuntu server. This can be extended to more complex scenarios.
+The workshop uses a simple topology consisting of 3 switches running Cumulus Linux 5.8.0, and 1 Ubuntu server. This can be extended to more complex scenarios.
 
 | __Leaf__ | __Spine__ | __Server__ | 
 | -------- | --------- | ---------- | 
@@ -197,7 +197,7 @@ spine01 | SUCCESS => {
 ```
 ### Setting up NVUE API Access
 
-In Cumulus Linux 5.7, the NVUE REST API is enabled by default. 
+In Cumulus Linux 5.8, the NVUE REST API is enabled by default. 
 
 There is a sample playbook that verifies the NVUE REST API connectivity across all of the switches under `playbooks`.
  
