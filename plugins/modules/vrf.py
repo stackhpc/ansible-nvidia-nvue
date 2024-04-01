@@ -372,6 +372,37 @@ options:
                                                         choices:
                                                             - 'on'
                                                             - 'off'
+                                                    policy:
+                                                        description: Policies for filtering routes advertised or received
+                                                        required: false
+                                                        type: dict
+                                                        suboptions:
+                                                            inbound:
+                                                                description: filtering of received routes
+                                                                type: dict
+                                                                required: false
+                                                                suboptions:
+                                                                    route_map:
+                                                                        description: route map to use
+                                                                        type: str
+                                                                        required: false
+                                                                    prefix_list:
+                                                                        description: prefix list to use
+                                                                        type: str
+                                                                        required: false
+                                                            outbound:
+                                                                description: filtering of advertised routes
+                                                                type: dict
+                                                                required: false
+                                                                suboptions:
+                                                                    route_map:
+                                                                        description: route map to use
+                                                                        type: str
+                                                                        required: false
+                                                                    prefix_list:
+                                                                        description: prefix list to use
+                                                                        type: str
+                                                                        required: false
                                             ipv6_unicast:
                                                 description: Peer IPv6 unicast address family. Always on, unless disabled globaly.
                                                 required: false
@@ -385,6 +416,37 @@ options:
                                                         choices:
                                                             - 'on'
                                                             - 'off'
+                                                    policy:
+                                                        description: Policies for filtering routes advertised or received
+                                                        required: false
+                                                        type: dict
+                                                        suboptions:
+                                                            inbound:
+                                                                description: filtering of received routes
+                                                                type: dict
+                                                                required: false
+                                                                suboptions:
+                                                                    route_map:
+                                                                        description: route map to use
+                                                                        type: str
+                                                                        required: false
+                                                                    prefix_list:
+                                                                        description: prefix list to use
+                                                                        type: str
+                                                                        required: false
+                                                            outbound:
+                                                                description: filtering of advertised routes
+                                                                type: dict
+                                                                required: false
+                                                                suboptions:
+                                                                    route_map:
+                                                                        description: route map to use
+                                                                        type: str
+                                                                        required: false
+                                                                    prefix_list:
+                                                                        description: prefix list to use
+                                                                        type: str
+                                                                        required: false
                                             l2vpn_evpn:
                                                 description: Peer L2VPN EVPN address family.
                                                 required: false
@@ -701,10 +763,30 @@ def main():
                     ),
                     address_family=dict(type='dict', required=False, options=dict(
                         ipv4_unicast=dict(type='dict', required=False, options=dict(
-                            enable=dict(type='str', required=False, choices=['on', 'off'], default='on')
+                            enable=dict(type='str', required=False, choices=['on', 'off'], default='on'),
+                            policy=dict(type='dict', required=False, options=dict(
+                                inbound=dict(type='dict', required=False, options=dict(
+                                    route_map=dict(type='str', required=False),
+                                    prefix_list=dict(type='str', required=False)
+                                )),
+                                outbound=dict(type='dict', required=False, options=dict(
+                                    route_map=dict(type='str', required=False),
+                                    prefix_list=dict(type='str', required=False)
+                                ))
+                            ))
                         )),
                         ipv6_unicast=dict(type='dict', required=False, options=dict(
-                            enable=dict(type='str', required=False, choices=['on', 'off'], default='on')
+                            enable=dict(type='str', required=False, choices=['on', 'off'], default='on'),
+                            policy=dict(type='dict', required=False, options=dict(
+                                inbound=dict(type='dict', required=False, options=dict(
+                                    route_map=dict(type='str', required=False),
+                                    prefix_list=dict(type='str', required=False)
+                                )),
+                                outbound=dict(type='dict', required=False, options=dict(
+                                    route_map=dict(type='str', required=False),
+                                    prefix_list=dict(type='str', required=False)
+                                ))
+                            ))
                         )),
                         l2vpn_evpn=dict(type='dict', required=False, options=dict(
                             enable=dict(type='str', required=False, choices=['on', 'off'], default='off')

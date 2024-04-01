@@ -116,6 +116,108 @@ options:
                                         description: Maximum hold time (msec) between consecutive SPF calculations.
                                         required: false
                                         type: int
+            policy:
+                description: A router policy
+                type: dict
+                required: false
+                suboptions:
+                    prefix_list:
+                        description: prefix lists to be used in routing policies
+                        type: list
+                        required: false
+                        elements: dict
+                        suboptions:
+                            id:
+                                description: id of the prefix list
+                                type: str
+                                required: false
+                            type:
+                                description: type of prefixes
+                                type: str
+                                choices:
+                                    - ipv4
+                                    - ipv6
+                                required: false
+                            rule:
+                                description: rules for the prefix list
+                                type: list
+                                required: false
+                                elements: dict
+                                suboptions:
+                                    id:
+                                        description: numerical id for the rule (rules are applied in order)
+                                        type: int
+                                        required: false
+                                    match:
+                                        description: prefix for the rule
+                                        type: list
+                                        required: false
+                                        elements: dict
+                                        suboptions:
+                                            id:
+                                                description: ipv4 or ipv6 prefix
+                                                type: str
+                                                required: false
+                                            max_prefix_len:
+                                                description: prefix length to be used for encapsulating smaller prefixes in rules
+                                                type: int
+                                                required: false
+                                    action:
+                                        description: action to take on the rule
+                                        type: str
+                                        choices:
+                                            - permit
+                                            - deny
+                                        required: false
+                    route_map:
+                        description: route map to be used for filtering routes
+                        type: list
+                        required: false
+                        elements: dict
+                        suboptions:
+                            id:
+                                description: route-map id
+                                type: str
+                                required: false
+                            rule:
+                                description: rules to apply
+                                type: list
+                                required: false
+                                elements: dict
+                                suboptions:
+                                    id:
+                                        description: number of the rule (rules are applied in order)
+                                        type: int
+                                        required: false
+                                    action:
+                                        description: action to take
+                                        type: list
+                                        required: false
+                                        elements: dict
+                                        suboptions:
+                                            id:
+                                                description: Route Map set
+                                                type: str
+                                                required: false
+                                                choices:
+                                                    - deny
+                                                    - permit
+                                    match:
+                                        description: what to match
+                                        type: dict
+                                        required: false
+                                        suboptions:
+                                            type:
+                                                description: match type
+                                                type: str
+                                                required: false
+                                                choices:
+                                                    - ipv4
+                                                    - ipv6
+                                            ip_prefix_list:
+                                                description: ip prefix list to use
+                                                type: str
+                                                required: false
             vrr:
                 description: VRR global configuration.
                 required: false
@@ -232,6 +334,33 @@ def main():
             enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
             timers=dict(type='dict', required=False, options=dict(
                 keep_alive=dict(type='int', required=False)
+            ))
+        )),
+        policy=dict(type='dict', required=False, options=dict(
+            prefix_list=dict(type='list', required=False, elements='dict', options=dict(
+                id=dict(type='str', required=False),
+                type=dict(type='str', required=False, choices=['ipv4', 'ipv6']),
+                rule=dict(type='list', required=False, elements='dict', options=dict(
+                    id=dict(type='int', required=False),
+                    match=dict(type='list', required=False, elements='dict', options=dict(
+                        id=dict(type='str', required=False),
+                        max_prefix_len=dict(type='int', required=False)
+                    )),
+                    action=dict(type='str', required=False, choices=['permit', 'deny'])
+                ))
+            )),
+            route_map=dict(type='list', required=False, elements='dict', options=dict(
+                id=dict(type='str', required=False),
+                rule=dict(type='list', required=False, elements='dict', options=dict(
+                    id=dict(type='int', required=False),
+                    action=dict(type='list', required=False, elements='dict', options=dict(
+                        id=dict(type='str', required=False, choices=['permit', 'deny'])
+                    )),
+                    match=dict(type='dict', required=False, options=dict(
+                        type=dict(type='str', required=False, choices=['ipv4', 'ipv6']),
+                        ip_prefix_list=dict(type='str', required=False))
+                    )
+                ))
             ))
         ))
     )
