@@ -78,7 +78,6 @@ options:
                                      This is the default.
                         required: false
                         type: str
-                        default: auto
                     gateway_interface:
                         description: Configures DHCP relay gateway on the interfaes.
                         required: false
@@ -93,7 +92,6 @@ options:
                                 description: ipv4 address on gateway interface.
                                 required: false
                                 type: str
-                                default: auto
             dns:
                 description: Collection of DNS.
                 required: false
@@ -138,7 +136,6 @@ options:
                                 description: When the server is unreachable, send a burst of eight packets instead of the usual one.
                                 required: false
                                 type: str
-                                default: 'on'
                                 choices:
                                     - 'on'
                                     - 'off'
@@ -166,12 +163,10 @@ options:
                                 description: Port number of the remote syslog server.
                                 required: false
                                 type: int
-                                default: 514
                             protocol:
                                 description: Protocol, udp or tcp, of the remote syslog server.
                                 required: false
                                 type: str
-                                default: udp
                                 choices:
                                     - udp
                                     - tcp
@@ -188,7 +183,6 @@ options:
                         choices:
                             - 'on'
                             - 'off'
-                        default: 'off'
                     listening_address:
                         description: Collection of listening addresses.
                         required: false
@@ -305,10 +299,10 @@ def main():
             server=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False)
             )),
-            source_ip=dict(type='str', required=False, default='auto'),
+            source_ip=dict(type='str', required=False),
             gateway_interface=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False),
-                address=dict(type='str', required=False, default='auto')
+                address=dict(type='str', required=False)
             )))
         ),
         dns=dict(type='list', required=False, elements='dict', options=dict(
@@ -321,19 +315,19 @@ def main():
             id=dict(type='str', required=False),
             server=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False),
-                iburst=dict(type='str', required=False, default='on', choices=['on', 'off'])
+                iburst=dict(type='str', required=False, choices=['on', 'off'])
             ))
         )),
         syslog=dict(type='list', required=False, elements='dict', options=dict(
             id=dict(type='str', required=False),
             server=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False),
-                port=dict(type='int', required=False, default='514'),
-                protocol=dict(type='str', required=False, default='udp', choices=['udp', 'tcp'])
+                port=dict(type='int', required=False),
+                protocol=dict(type='str', required=False, choices=['udp', 'tcp'])
             ))
         )),
         snmp_server=dict(type='list', required=False, elements='dict', options=dict(
-            enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
+            enable=dict(type='str', required=False, choices=['on', 'off']),
             listening_address=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False),
                 vrf=dict(type='str', required=False)

@@ -56,7 +56,6 @@ options:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: 'off'
                         choices:
                             - 'on'
                             - 'off'
@@ -87,7 +86,6 @@ options:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: 'off'
                                 choices:
                                     - 'on'
                                     - 'off'
@@ -113,7 +111,6 @@ options:
                                                 description: Turn the feature 'on' or 'off'.
                                                 required: false
                                                 type: str
-                                                default: 'on'
                                                 choices:
                                                     - 'on'
                                                     - 'off'
@@ -142,7 +139,6 @@ options:
                                                                 description: Turn the feature 'on' or 'off'.
                                                                 required: false
                                                                 type: str
-                                                                default: 'off'
                                                                 choices:
                                                                     - 'on'
                                                                     - 'off'
@@ -160,7 +156,6 @@ options:
                                                                 description: Turn the feature 'on' or 'off'.
                                                                 required: false
                                                                 type: str
-                                                                default: 'off'
                                                                 choices:
                                                                     - 'on'
                                                                     - 'off'
@@ -173,7 +168,6 @@ options:
                                                                 description: Turn the feature 'on' or 'off'.
                                                                 required: false
                                                                 type: str
-                                                                default: 'off'
                                                                 choices:
                                                                     - 'on'
                                                                     - 'off'
@@ -186,7 +180,6 @@ options:
                                                 description: Turn the feature 'on' or 'off'. This feature is disabled by default.
                                                 required: false
                                                 type: str
-                                                default: 'off'
                                                 choices:
                                                     - 'on'
                                                     - 'off'
@@ -215,7 +208,6 @@ options:
                                                                 description: Turn the feature 'on' or 'off'.
                                                                 required: false
                                                                 type: str
-                                                                default: 'off'
                                                                 choices:
                                                                     - 'on'
                                                                     - 'off'
@@ -233,7 +225,6 @@ options:
                                                                 description: Turn the feature 'on' or 'off'.
                                                                 required: false
                                                                 type: str
-                                                                default: 'off'
                                                                 choices:
                                                                     - 'on'
                                                                     - 'off'
@@ -246,7 +237,6 @@ options:
                                                                 description: Turn the feature 'on' or 'off'.
                                                                 required: false
                                                                 type: str
-                                                                default: 'off'
                                                                 choices:
                                                                     - 'on'
                                                                     - 'off'
@@ -259,7 +249,6 @@ options:
                                                 description: Turn the feature 'on' or 'off'.
                                                 required: false
                                                 type: str
-                                                default: 'off'
                                                 choices:
                                                     - 'on'
                                                     - 'off'
@@ -277,7 +266,6 @@ options:
                                         description: Turn the feature 'on' or 'off'.
                                         required: false
                                         type: str
-                                        default: 'on'
                                         choices:
                                             - 'on'
                                             - 'off'
@@ -315,7 +303,6 @@ options:
                                                         description: Turn the feature 'on' or 'off'.
                                                         required: false
                                                         type: str
-                                                        default: 'off'
                                                         choices:
                                                             - 'on'
                                                             - 'off'
@@ -345,7 +332,6 @@ options:
                                                              This is the default.
                                                 type: str
                                                 required: false
-                                                default: 'auto'
                                                 choices:
                                                     - 'on'
                                                     - 'off'
@@ -368,7 +354,6 @@ options:
                                                         description: Turn the feature 'on' or 'off'.
                                                         required: false
                                                         type: str
-                                                        default: 'on'
                                                         choices:
                                                             - 'on'
                                                             - 'off'
@@ -412,7 +397,6 @@ options:
                                                         description: Turn the feature 'on' or 'off'.
                                                         required: false
                                                         type: str
-                                                        default: 'on'
                                                         choices:
                                                             - 'on'
                                                             - 'off'
@@ -456,7 +440,6 @@ options:
                                                         description: Turn the feature 'on' or 'off'.
                                                         required: false
                                                         type: str
-                                                        default: 'off'
                                                         choices:
                                                             - 'on'
                                                             - 'off'
@@ -490,7 +473,6 @@ options:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: 'off'
                                 choices:
                                     - 'on'
                                     - 'off'
@@ -507,7 +489,6 @@ options:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: 'off'
                                 choices:
                                     - 'on'
                                     - 'off'
@@ -521,7 +502,6 @@ options:
                                         description: Turn the feature 'on' or 'off'.
                                         required: false
                                         type: str
-                                        default: 'off'
                                         choices:
                                             - 'on'
                                             - 'off'
@@ -530,7 +510,6 @@ options:
                                                      If 'off', only the impacted streams by path going down recalculated. This is the default.
                                         required: false
                                         type: str
-                                        default: 'off'
                                         choices:
                                             - 'on'
                                             - 'off'
@@ -606,7 +585,6 @@ options:
                                 description: Route address family.
                                 required: false
                                 type: str
-                                default: ipv4-unicast
                             via:
                                 description: Nexthops.
                                 required: false
@@ -687,7 +665,7 @@ def main():
     vrf_spec = dict(
         id=dict(type='str', required=True),
         evpn=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
+            enable=dict(type='str', required=False, choices=['on', 'off']),
             vlan=dict(type='int', required=False),
             vni=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False))
@@ -695,62 +673,62 @@ def main():
         )),
         router=dict(type='dict', required=False, options=dict(
             bgp=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
+                enable=dict(type='str', required=False, choices=['on', 'off']),
                 autonomous_system=dict(type='int', required=False),
                 router_id=dict(type='str', required=False),
                 address_family=dict(type='dict', required=False, options=dict(
                     ipv4_unicast=dict(type='dict', required=False, options=dict(
-                        enable=dict(type='str', required=False, choices=['on', 'off'], default='on'),
+                        enable=dict(type='str', required=False, choices=['on', 'off']),
                         network=dict(type='list', required=False, elements='dict', options=dict(
                             id=dict(type='str', required=False)
                         )),
                         route_export=dict(type='dict', required=False, options=dict(
                             to_evpn=dict(type='dict', required=False, options=dict(
-                                enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
+                                enable=dict(type='str', required=False, choices=['on', 'off'])
                             ))
                         )),
                         redistribute=dict(type='dict', required=False, options=dict(
                             connected=dict(type='dict', required=False, options=dict(
-                                enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
+                                enable=dict(type='str', required=False, choices=['on', 'off'])
                             )),
                             static=dict(type='dict', required=False, options=dict(
-                                enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
+                                enable=dict(type='str', required=False, choices=['on', 'off'])
                             ))
                         ))
                     )),
                     ipv6_unicast=dict(type='dict', required=False, options=dict(
-                        enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
+                        enable=dict(type='str', required=False, choices=['on', 'off']),
                         network=dict(type='list', required=False, elements='dict', options=dict(
                             id=dict(type='str', required=False)
                         )),
                         route_export=dict(type='dict', required=False, options=dict(
                             to_evpn=dict(type='dict', required=False, options=dict(
-                                enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
+                                enable=dict(type='str', required=False, choices=['on', 'off'])
                             ))
                         )),
                         redistribute=dict(type='dict', required=False, options=dict(
                             connected=dict(type='dict', required=False, options=dict(
-                                enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
+                                enable=dict(type='str', required=False, choices=['on', 'off'])
                             )),
                             static=dict(type='dict', required=False, options=dict(
-                                enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
+                                enable=dict(type='str', required=False, choices=['on', 'off'])
                             ))
                         ))
                     )),
                     l2vpn_evpn=dict(type='dict', required=False, options=dict(
-                        enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
+                        enable=dict(type='str', required=False, choices=['on', 'off'])
                     ))
                 )),
                 neighbor=dict(type='list', required=False, elements='dict', options=dict(
                     id=dict(type='str', required=False),
-                    enable=dict(type='str', required=False, default='on', choices=['on', 'off']),
+                    enable=dict(type='str', required=False, choices=['on', 'off']),
                     peer_group=dict(type='str', required=False),
                     update_source=dict(type='str', required=False),
                     type=dict(type='str', required=False, choices=['numbered', 'unnumbered']),
                     remote_as=dict(type='str', required=False),
                     address_family=dict(type='dict', required=False, options=dict(
                         l2vpn_evpn=dict(type='dict', required=False, options=dict(
-                            enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
+                            enable=dict(type='str', required=False, choices=['on', 'off'])
                         ))
                     ))
                 )),
@@ -758,12 +736,12 @@ def main():
                     id=dict(type='str', required=False),
                     remote_as=dict(type='str', required=False),
                     capabilities=dict(type='dict', required=False, options=dict(
-                        extended_nexthop=dict(type='str', required=False, default='auto', choices=['on', 'off', 'auto']),
+                        extended_nexthop=dict(type='str', required=False, choices=['on', 'off', 'auto']),
                         source_address=dict(type='str', required=False))
                     ),
                     address_family=dict(type='dict', required=False, options=dict(
                         ipv4_unicast=dict(type='dict', required=False, options=dict(
-                            enable=dict(type='str', required=False, choices=['on', 'off'], default='on'),
+                            enable=dict(type='str', required=False, choices=['on', 'off']),
                             policy=dict(type='dict', required=False, options=dict(
                                 inbound=dict(type='dict', required=False, options=dict(
                                     route_map=dict(type='str', required=False),
@@ -776,7 +754,7 @@ def main():
                             ))
                         )),
                         ipv6_unicast=dict(type='dict', required=False, options=dict(
-                            enable=dict(type='str', required=False, choices=['on', 'off'], default='on'),
+                            enable=dict(type='str', required=False, choices=['on', 'off']),
                             policy=dict(type='dict', required=False, options=dict(
                                 inbound=dict(type='dict', required=False, options=dict(
                                     route_map=dict(type='str', required=False),
@@ -789,7 +767,7 @@ def main():
                             ))
                         )),
                         l2vpn_evpn=dict(type='dict', required=False, options=dict(
-                            enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
+                            enable=dict(type='str', required=False, choices=['on', 'off'])
                         ))
                     ))
                 )),
@@ -802,14 +780,14 @@ def main():
                 ))
             )),
             ospf=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
+                enable=dict(type='str', required=False, choices=['on', 'off']),
                 router_id=dict(type='str', required=False)
             )),
             pim=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
+                enable=dict(type='str', required=False, choices=['on', 'off']),
                 ecmp=dict(type='dict', required=False, options=dict(
-                    enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
-                    rebalance=dict(type='str', required=False, choices=['on', 'off'], default='off')
+                    enable=dict(type='str', required=False, choices=['on', 'off']),
+                    rebalance=dict(type='str', required=False, choices=['on', 'off'])
                 )),
                 address_family=dict(type='dict', required=False, options=dict(
                     ipv4_unicast=dict(type='dict', required=False, options=dict(
@@ -832,7 +810,7 @@ def main():
             )),
             static=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False),
-                address_family=dict(type='str', required=False, default='ipv4-unicast'),
+                address_family=dict(type='str', required=False),
                 via=dict(type='list', required=False, elements='dict', options=dict(
                     id=dict(type='str', required=False),
                     type=dict(type='str', required=False, choices=['interface', 'ipv4-address', 'ipv6-address', 'blackhole', 'reject'])

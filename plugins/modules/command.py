@@ -148,8 +148,9 @@ def run_nvue(module):
 
     output = "\n".join(output_lines)
 
-    diff = {}
-    # TODO: add diff implementation
+    # diff = {}
+    diff_cmd = "config diff"
+    diff = run_nvue_cmd(module, diff_cmd)
 
     apply_cmd = "config apply"
     apply = module.params.get("apply")

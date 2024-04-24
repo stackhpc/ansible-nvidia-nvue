@@ -142,7 +142,8 @@ class HttpApi(HttpApiBase):
             if not bool(data):
                 return new_config
             for key, value in data.items():
-                new_config[key] = self.normalize_spec(value)
+                if value is not None:
+                    new_config[key] = self.normalize_spec(value)
         elif isinstance(data, list):
             if not len(data):
                 return new_config

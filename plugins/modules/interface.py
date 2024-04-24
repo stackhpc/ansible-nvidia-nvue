@@ -81,7 +81,6 @@ options:
                         description: Bond mode.
                         required: false
                         type: str
-                        default: lacp
                         choices:
                             - lacp
                             - static
@@ -89,7 +88,6 @@ options:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: 'off'
                         choices:
                             - 'on'
                             - 'off'
@@ -112,7 +110,6 @@ options:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: 'off'
                                 choices:
                                     - 'on'
                                     - 'off'
@@ -195,7 +192,6 @@ options:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: 'off'
                                 choices:
                                     - 'on'
                                     - 'off'
@@ -207,7 +203,6 @@ options:
                                 description: Network type.
                                 required: false
                                 type: str
-                                default: broadcast
                                 choices:
                                     - broadcast
                                     - non-broadcast
@@ -247,7 +242,6 @@ options:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: 'off'
                                 choices:
                                     - 'on'
                                     - 'off'
@@ -339,7 +333,6 @@ options:
                         description: Virtual routing and forwarding.
                         required: false
                         type: str
-                        default: default
                     vrr:
                         description: VRR
                         required: false
@@ -349,7 +342,6 @@ options:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: 'off'
                                 choices:
                                     - 'on'
                                     - 'off'
@@ -386,7 +378,6 @@ options:
                                 description: Turn the feature 'on' or 'off'.
                                 required: false
                                 type: str
-                                default: 'off'
                                 choices:
                                     - 'on'
                                     - 'off'
@@ -405,7 +396,6 @@ options:
                                              uplink's operational state is tracked when enabled.
                                 required: false
                                 type: str
-                                default: 'off'
                                 choices:
                                     - 'on'
                                     - 'off'
@@ -418,7 +408,6 @@ options:
                                         description: Turn the feature 'on' or 'off'.
                                         required: false
                                         type: str
-                                        default: 'off'
                                         choices:
                                             - 'on'
                                             - 'off'
@@ -437,7 +426,6 @@ options:
                                                      This is the default.
                                         required: false
                                         type: str
-                                        default: auto
                                     df_preference:
                                         description: Designated forwarder preference value for this ethernet segment. If 'auto', the global evpn multihoming
                                                      preference will be used. This is the default.
@@ -460,16 +448,242 @@ options:
                         description: Time to live.
                         required: false
                         type: int
-                        default: 64
                     mode:
                         description: Tunnel mode.
                         required: false
                         type: str
-                        default: gre
                     interface:
                         description: Physical underlay interface to used for Tunnel packets.
                         required: false
                         type: str
+            qos:
+                description: QoS.
+                required: false
+                type: dict
+                suboptions:
+                    egress_queue_mapping:
+                        description: Properties associated with SP->TC mapping configured on the interface.
+                        type: dict
+                        suboptions:
+                            switch_priority:
+                                description: SP->TC mapping configurations.
+                                required: false
+                                type: list
+                                elements: dict
+                                suboptions:
+                                    id:
+                                        description: traffic-class mapped to internal switch-priority.
+                                        required: false
+                                        type: str
+                                    traffic_class:
+                                        description: Traffic Class.
+                                        required: false
+                                        type: int
+                    mapping:
+                        description: Properties associated with PCP/DSCP->SP mapping configured on the interface.
+                        type: dict
+                        suboptions:
+                            profile:
+                                description: PCP/DSCP->SP mapping Profile attached to the interface.
+                                required: false
+                                type: str
+                            port_default_sp:
+                                description: Port Default Switch Priority.
+                                required: false
+                                type: int
+                            trust:
+                                description: Port Trust configuration.
+                                required: false
+                                type: str
+                                choices:
+                                    - 'l2'
+                                    - 'l3'
+                                    - 'port'
+                                    - 'both'
+                            pcp:
+                                description: PCP->SP mapping configurations.
+                                required: false
+                                type: list
+                                elements: dict
+                                suboptions:
+                                    id:
+                                        description: PCP->SP mapping configuration.
+                                        required: false
+                                        type: str
+                                    switch_priority:
+                                        description: Internal Switch Priority.
+                                        required: false
+                                        type: int
+                            dscp:
+                                description: DSCP->SP mapping configurations.
+                                required: false
+                                type: list
+                                elements: dict
+                                suboptions:
+                                    id:
+                                        description: DSCP->SP mapping configuration.
+                                        required: false
+                                        type: str
+                                    switch_priority:
+                                        description: Internal Switch Priority.
+                                        required: false
+                                        type: int
+                    congestion_control:
+                        description: Properties associated with congestion control configured on the interface.
+                        required: false
+                        type: dict
+                        suboptions:
+                            traffic_class:
+                                description: TC->ECN configurations mapping.
+                                type: list
+                                elements: dict
+                                suboptions:
+                                    id:
+                                        description: ECN configuration per traffic class.
+                                        required: false
+                                        type: str
+                                    min_threshold:
+                                        description: Minimum threshold (in bytes).
+                                        required: false
+                                        type: int
+                                    max_threshold:
+                                        description: Maximum threshold (in bytes).
+                                        required: false
+                                        type: int
+                                    probability:
+                                        description: Probability.
+                                        required: false
+                                        type: int
+                                    red:
+                                        description: Random Early Detection State.
+                                        required: false
+                                        type: str
+                                        choices:
+                                            - 'enable'
+                                            - 'disable'
+                                    ecn:
+                                        description: Early Congestion Notification State.
+                                        required: false
+                                        type: str
+                                        choices:
+                                            - 'enable'
+                                            - 'disable'
+                            profile:
+                                description: Congestion control Profile attached to the interface.
+                                required: false
+                                type: str
+                    pfc:
+                        description: Properties associated with PFC configured on the interface.
+                        required: false
+                        type: dict
+                        suboptions:
+                            xoff_threshold:
+                                description: XOff threshold (in bytes).
+                                required: false
+                                type: int
+                            xon_threshold:
+                                description: XOn threshold (in bytes).
+                                required: false
+                                type: int
+                            port_buffer:
+                                description: Port Buffer (in bytes).
+                                required: false
+                                type: int
+                            cable_length:
+                                description: Cable Length (in meters).
+                                required: false
+                                type: int
+                            tx:
+                                description: Link pause Tx State.
+                                required: false
+                                type: str
+                                choices:
+                                    - 'enable'
+                                    - 'disable'
+                            rx:
+                                description: Link pause Rx State.
+                                required: false
+                                type: str
+                                choices:
+                                    - 'enable'
+                                    - 'disable'
+                            switch_priority:
+                                description: switch-priorities configured on interface.
+                                required: false
+                                type: str
+                            profile:
+                                description: PFC Profile attached to the interface.
+                                required: false
+                                type: str
+                    link_pause:
+                        description: Properties associated with link-pause configured on the interface.
+                        required: false
+                        type: dict
+                        suboptions:
+                            xoff_threshold:
+                                description: XOff threshold (in bytes).
+                                required: false
+                                type: int
+                            xon_threshold:
+                                description: XOn threshold (in bytes).
+                                required: false
+                                type: int
+                            port_buffer:
+                                description: Port Buffer (in bytes).
+                                required: false
+                                type: int
+                            cable_length:
+                                description: Cable Length (in meters).
+                                required: false
+                                type: int
+                            tx:
+                                description: Link pause Tx State.
+                                required: false
+                                type: str
+                                choices:
+                                    - 'enable'
+                                    - 'disable'
+                            rx:
+                                description: Link pause Rx State.
+                                required: false
+                                type: str
+                                choices:
+                                    - 'enable'
+                                    - 'disable'
+                            profile:
+                                description: Link-pause Profile attached to the interface.
+                                required: false
+                                type: str
+                    pfc_watchdog:
+                        description: PFC Watchdog configurations on the interface.
+                        required: false
+                        type: dict
+                        suboptions:
+                            state:
+                                description: Enable/Disable PFC Watchdog on an interface.
+                                required: false
+                                type: str
+                                choices:
+                                    - 'enable'
+                                    - 'disable'
+                            status:
+                                description: PFC Watchdog Status on collection of traffic-class.
+                                required: false
+                                type: list
+                                elements: dict
+                                suboptions:
+                                    id:
+                                        description: PFC Watchdog status on a given traffic-class
+                                        required: false
+                                        type: str
+                                    status:
+                                        description: deadlock status for pfc watchdog on the interface.
+                                        required: false
+                                        type: str
+                                    deadlock_count:
+                                        description: number of times pause-storm deadlock detected on the interface.
+                                        required: false
+                                        type: int
     revid:
         description: Revision ID to query/to apply config to.
         required: false
@@ -580,13 +794,13 @@ def main():
         description=dict(type='str', required=False),
         type=dict(type='str', required=False, choices=['swp', 'eth', 'bond', 'loopback', 'svi', 'sub', 'peerlink', 'tunnel']),
         bond=dict(type='dict', required=False, options=dict(
-            mode=dict(type='str', required=False, choices=['lacp', 'static'], default='lacp'),
-            lacp_bypass=dict(type='str', required=False, choices=['on', 'off'], default='off'),
+            mode=dict(type='str', required=False, choices=['lacp', 'static']),
+            lacp_bypass=dict(type='str', required=False, choices=['on', 'off']),
             member=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False)
             )),
             mlag=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
+                enable=dict(type='str', required=False, choices=['on', 'off']),
                 id=dict(type='int', required=False)
             ))
         )),
@@ -607,10 +821,9 @@ def main():
         )),
         router=dict(type='dict', required=False, options=dict(
             ospf=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
+                enable=dict(type='str', required=False, choices=['on', 'off']),
                 area=dict(type='str', required=False),
-                network_type=dict(type='str', required=False, choices=['broadcast', 'non-broadcast', 'point-to-point', 'point-to-multipoint'],
-                                  default='broadcast'),
+                network_type=dict(type='str', required=False, choices=['broadcast', 'non-broadcast', 'point-to-point', 'point-to-multipoint']),
                 passive=dict(type='str', required=False, choices=['on', 'off']),
                 timers=dict(type='dict', required=False, options=dict(
                     dead_interval=dict(type='str', required=False),
@@ -619,7 +832,7 @@ def main():
                 ))
             )),
             pim=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
+                enable=dict(type='str', required=False, choices=['on', 'off']),
                 address_family=dict(type='dict', required=False, options=dict(
                     ipv4_unicast=dict(type='dict', required=False, options=dict(
                         use_source=dict(type='str', required=False)
@@ -644,9 +857,9 @@ def main():
             gateway=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False)
             )),
-            vrf=dict(type='str', required=False, default='default'),
+            vrf=dict(type='str', required=False),
             vrr=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
+                enable=dict(type='str', required=False, choices=['on', 'off']),
                 address=dict(type='list', required=False, elements='dict', options=dict(
                     id=dict(type='str', required=False)
                 )),
@@ -656,17 +869,17 @@ def main():
                 ))
             )),
             igmp=dict(type='dict', required=False, options=dict(
-                enable=dict(type='str', required=False, choices=['on', 'off'], default='off')
+                enable=dict(type='str', required=False, choices=['on', 'off'])
             ))
         )),
         evpn=dict(type='dict', required=False, options=dict(
             multihoming=dict(type='dict', required=False, options=dict(
-                uplink=dict(type='str', required=False, choices=['on', 'off'], default='off'),
+                uplink=dict(type='str', required=False, choices=['on', 'off']),
                 segment=dict(type='dict', required=False, options=dict(
-                    enable=dict(type='str', required=False, choices=['on', 'off'], default='off'),
+                    enable=dict(type='str', required=False, choices=['on', 'off']),
                     local_id=dict(type='int', required=False),
                     identifier=dict(type='str', required=False),
-                    mac_address=dict(type='str', required=False, default='auto'),
+                    mac_address=dict(type='str', required=False),
                     df_preference=dict(type='int', required=False)
                 ))
             ))
@@ -674,9 +887,68 @@ def main():
         tunnel=dict(type='dict', required=False, options=dict(
             source_ip=dict(type='str', required=False),
             dest_ip=dict(type='str', required=False),
-            ttl=dict(type='int', required=False, default=64),
-            mode=dict(type='str', required=False, default='gre'),
+            ttl=dict(type='int', required=False),
+            mode=dict(type='str', required=False),
             interface=dict(type='str', required=False)
+        )),
+        qos=dict(type='dict', required=False, options=dict(
+            egress_queue_mapping=dict(type='dict', required=False, options=dict(
+                switch_priority=dict(type='list', required=False, elements='dict', options=dict(
+                    id=dict(type='str', required=False),
+                    traffic_class=dict(type='int', required=False),
+                ))
+            )),
+            mapping=dict(type='dict', required=False, options=dict(
+                profile=dict(type='str', required=False),
+                port_default_sp=dict(type='int', required=False),
+                trust=dict(type='str', required=False, choices=['l2', 'l3', 'port', 'both']),
+                pcp=dict(type='list', required=False, elements='dict', options=dict(
+                    id=dict(type='str', required=False),
+                    switch_priority=dict(type='int', required=False)
+                )),
+                dscp=dict(type='list', required=False, elements='dict', options=dict(
+                    id=dict(type='str', required=False),
+                    switch_priority=dict(type='int', required=False)
+                ))
+            )),
+            congestion_control=dict(type='dict', required=False, options=dict(
+                traffic_class=dict(type='list', required=False, elements='dict', options=dict(
+                    id=dict(type='str', required=False),
+                    min_threshold=dict(type='int', required=False),
+                    max_threshold=dict(type='int', required=False),
+                    probability=dict(type='int', required=False),
+                    red=dict(type='str', required=False, choices=['enable', 'disable']),
+                    ecn=dict(type='str', required=False, choices=['enable', 'disable'])
+                )),
+                profile=dict(type='str', required=False)
+            )),
+            pfc=dict(type='dict', required=False, options=dict(
+                xoff_threshold=dict(type='int', required=False),
+                xon_threshold=dict(type='int', required=False),
+                port_buffer=dict(type='int', required=False),
+                cable_length=dict(type='int', required=False),
+                tx=dict(type='str', required=False, choices=['enable', 'disable']),
+                rx=dict(type='str', required=False, choices=['enable', 'disable']),
+                switch_priority=dict(type='str', required=False),
+                profile=dict(type='str', required=False)
+            )),
+            link_pause=dict(type='dict', required=False, options=dict(
+                xoff_threshold=dict(type='int', required=False),
+                xon_threshold=dict(type='int', required=False),
+                port_buffer=dict(type='int', required=False),
+                cable_length=dict(type='int', required=False),
+                tx=dict(type='str', required=False, choices=['enable', 'disable']),
+                rx=dict(type='str', required=False, choices=['enable', 'disable']),
+                profile=dict(type='str', required=False)
+            )),
+            pfc_watchdog=dict(type='dict', required=False, options=dict(
+                state=dict(type='str', required=False, choices=['enable', 'disable']),
+                status=dict(type='list', required=False, elements='dict', options=dict(
+                    id=dict(type='str', required=False),
+                    status=dict(type='str', required=False),
+                    deadlock_count=dict(type='int', required=False)
+                ))
+            ))
         )),
         base_interface=dict(type='str', required=False),
         vlan=dict(type='int', required=False)

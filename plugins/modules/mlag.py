@@ -46,7 +46,6 @@ options:
                 description: Turn the feature 'on' or 'off'.
                 required: false
                 type: str
-                default: 'off'
                 choices:
                     - 'on'
                     - 'off'
@@ -138,7 +137,7 @@ def main():
 
     # define the bridge spec - used for creation/modification
     mlag_spec = dict(
-        enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
+        enable=dict(type='str', required=False, choices=['on', 'off']),
         backup=dict(type='list', required=False, elements='dict', options=dict(
             id=dict(type='str', required=False),
             vrf=dict(type="str", required=False)

@@ -51,7 +51,6 @@ options:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: 'off'
                         choices:
                             - 'on'
                             - 'off'
@@ -71,7 +70,6 @@ options:
                                              off, GR is disabled for the router
                                 type: str
                                 required: false
-                                default: 'helper-only'
                                 choices:
                                     - 'full'
                                     - 'off'
@@ -90,7 +88,6 @@ options:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: 'off'
                         choices:
                             - 'on'
                             - 'off'
@@ -227,7 +224,6 @@ options:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: 'off'
                         choices:
                             - 'on'
                             - 'off'
@@ -240,7 +236,6 @@ options:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: 'off'
                         choices:
                             - 'on'
                             - 'off'
@@ -311,15 +306,15 @@ def main():
     # define the router spec - used for creation/modification
     router_spec = dict(
         bgp=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
+            enable=dict(type='str', required=False, choices=['on', 'off']),
             autonomous_system=dict(type='int', required=False),
             graceful_restart=dict(type='dict', required=False, options=dict(
-                mode=dict(type='str', required=False, default='helper-only', choices=['full', 'off', 'helper-only'])
+                mode=dict(type='str', required=False, choices=['full', 'off', 'helper-only'])
             )),
             router_id=dict(type='str', required=False)
         )),
         ospf=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
+            enable=dict(type='str', required=False, choices=['on', 'off']),
             timers=dict(type='dict', required=False, options=dict(
                 spf=dict(type='dict', required=False, options=dict(
                     delay=dict(type='int', required=False),
@@ -328,10 +323,10 @@ def main():
                 )))
             ))),
         vrr=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str', required=False, default='off', choices=['on', 'off'])
+            enable=dict(type='str', required=False, choices=['on', 'off'])
         )),
         pim=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
+            enable=dict(type='str', required=False, choices=['on', 'off']),
             timers=dict(type='dict', required=False, options=dict(
                 keep_alive=dict(type='int', required=False)
             ))

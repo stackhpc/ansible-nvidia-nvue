@@ -49,7 +49,6 @@ options:
                 description: Turn the feature 'on' or 'off'.
                 required: false
                 type: str
-                default: 'off'
                 choices:
                     - 'on'
                     - 'off'
@@ -62,7 +61,6 @@ options:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: 'off'
                         choices:
                             - 'on'
                             - 'off'
@@ -75,7 +73,6 @@ options:
                         description: Turn the feature 'on' or 'off'.
                         required: false
                         type: str
-                        default: 'off'
                         choices:
                             - 'on'
                             - 'off'
@@ -83,7 +80,6 @@ options:
                         description: The duration for which a switch holds the Ethernet segment-bond in a protodown state after a reboot or process restart.
                         required: false
                         type: int
-                        default: 180
             route_advertise:
                 description: Route advertising
                 required: false
@@ -94,7 +90,6 @@ options:
                                      routes ('self' = SVI IP/MAC). Relevant only in an MLAG configuration.
                         required: false
                         type: str
-                        default: system-ip-mac
                         choices:
                             - system-ip-mac
                             - shared-ip-mac
@@ -103,7 +98,6 @@ options:
                                      This configuration should not be enabled if SVI IPs are reused in the network.
                         required: false
                         type: str
-                        default: 'off'
                         choices:
                             - 'on'
                             - 'off'
@@ -113,7 +107,6 @@ options:
                                      The purpose is for remote L2-only VTEPs to do ARP suppression and for hosts to learn of the gateway's IP to MAC binding.
                         required: false
                         type: str
-                        default: 'off'
                         choices:
                             - 'on'
                             - 'off'
@@ -174,18 +167,18 @@ def main():
 
     # define the bridge spec - used for creation/modification
     evpn_spec = dict(
-        enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
+        enable=dict(type='str', required=False, choices=['on', 'off']),
         dad=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str', required=False, default='off', choices=['on', 'off'])
+            enable=dict(type='str', required=False, choices=['on', 'off'])
         )),
         multihoming=dict(type='dict', required=False, options=dict(
-            enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
-            startup_delay=dict(type='int', required=False, default=180)
+            enable=dict(type='str', required=False, choices=['on', 'off']),
+            startup_delay=dict(type='int', required=False)
         )),
         route_advertise=dict(type='dict', required=False, options=dict(
-            nexthop_setting=dict(type='str', required=False, default='system-ip-mac', choices=['system-ip-mac', 'shared-ip-mac']),
-            svi_ip=dict(type='str', required=False, default='off', choices=['on', 'off']),
-            default_gateway=dict(type='str', required=False, default='off', choices=['on', 'off'])
+            nexthop_setting=dict(type='str', required=False, choices=['system-ip-mac', 'shared-ip-mac']),
+            svi_ip=dict(type='str', required=False, choices=['on', 'off']),
+            default_gateway=dict(type='str', required=False, choices=['on', 'off'])
         ))
     )
 
