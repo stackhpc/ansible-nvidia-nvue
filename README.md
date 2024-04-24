@@ -15,6 +15,7 @@ The NVIDIA NVUE Collection includes Ansible modules to help you interact with NV
 | nvidia.nvue.evpn | EVPN configuration via REST API. | 
 | nvidia.nvue.interface | Interface configuration via REST API. | 
 | nvidia.nvue.mlag | MLAG configuration via REST API. | 
+| nvidia.nvue.qos | QoS configuration via REST API. |
 | nvidia.nvue.router | Router configuration via REST API. | 
 | nvidia.nvue.service | Service configuration via REST API. | 
 | nvidia.nvue.system | System configuration via REST API. | 

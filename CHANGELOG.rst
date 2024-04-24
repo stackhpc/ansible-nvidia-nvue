@@ -4,6 +4,29 @@ nvidia.nvue Release Notes
 
 .. contents:: Topics
 
+v1.2.0
+======
+
+Release Summary
+---------------
+
+Release with new modules and updated examples.
+
+Major Changes
+-------------
+
+- New Module: nvidia.nvue.qos
+
+Minor Changes
+-------------
+- Support for route filter functionality
+- Updates to the command module to implement the diff functionality
+
+Bugfixes
+--------
+- Updates removing config
+- null values getting populated if full sub dictionary items were not passed in the playbook.
+
 v1.1.0
 ======
 

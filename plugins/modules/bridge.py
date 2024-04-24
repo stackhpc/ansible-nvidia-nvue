@@ -54,17 +54,14 @@ options:
                 type: int
             encap:
                 description: Interfaces added to this domain will, by default, use this encapsulation.
-                default: 802.1Q
                 required: false
                 type: str
             mac_address:
                 description: Override global mac address.
-                default: auto
                 required: false
                 type: str
             type:
                 description: Type of bridge domain.
-                default: vlan-aware
                 required: false
                 type: str
             vlan:
@@ -96,7 +93,6 @@ options:
                                         description: Turn the feature 'on' or 'off' or 'auto'.
                                         required: false
                                         type: str
-                                        default: auto
                                         choices:
                                             - 'on'
                                             - 'off'
@@ -232,15 +228,15 @@ def main():
     bridge_spec = dict(
         id=dict(type='str', required=True),
         untagged=dict(type='int', required=False),
-        type=dict(type='str', required=False, default="vlan-aware"),
-        encap=dict(type='str', required=False, default="802.1Q"),
-        mac_address=dict(type='str', required=False, default="auto"),
+        type=dict(type='str', required=False),
+        encap=dict(type='str', required=False),
+        mac_address=dict(type='str', required=False),
         vlan=dict(type='list', required=False, elements='dict', options=dict(
             id=dict(type='str', required=False),
             vni=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False),
                 flooding=dict(type='dict', required=False, options=dict(
-                    enable=dict(type='str', required=False, choices=['on', 'off', 'auto'], default='auto'),
+                    enable=dict(type='str', required=False, choices=['on', 'off', 'auto']),
                     multicast_group=dict(type='str', required=False),
                     head_end_replication=dict(type='list', required=False, elements='dict', options=dict(
                         id=dict(type='str', required=False)

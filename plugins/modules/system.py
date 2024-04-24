@@ -46,12 +46,11 @@ options:
                 description: Static hostname for the switch.
                 required: false
                 type: str
-                default: cumulus
             timezone:
                 description: System Time Zone.
                 required: false
                 type: str
-            message:
+            login_message:
                 description: System pre-login and post-login messages.
                 required: false
                 type: dict
@@ -64,6 +63,19 @@ options:
                         description: Configure post-login message of the day.
                         required: false
                         type: str
+            reboot:
+                description: Platform reboot info.
+                required: false
+                type: dict
+                suboptions:
+                    mode:
+                        description: System reboot mode
+                        required: false
+                        type: str
+                        choices:
+                            - fast
+                            - warm
+                            - cold
             system_global:
                 description: Global system configuration.
                 required: false
@@ -138,11 +150,14 @@ def main():
 
     # define the system spec - used for creation/modification
     system_spec = dict(
-        hostname=dict(type='str', required=False, default='cumulus'),
+        hostname=dict(type='str', required=False),
         timezone=dict(type='str', required=False),
-        message=dict(type='dict', required=False, options=dict(
+        login_message=dict(type='dict', required=False, options=dict(
             pre_login=dict(type='str', required=False),
             post_login=dict(type='str', required=False)
+        )),
+        reboot=dict(type='dict', required=False, options=dict(
+            mode=dict(type='str', required=False, choices=["fast", "warm", "cold"])
         )),
         system_global=dict(type='dict', required=False, options=dict(
             system_mac=dict(type='str', required=False),
@@ -162,7 +177,7 @@ def main():
     )
 
     required_if = [
-        ["operation", "merged", ["data"]],
+        ["state", "merged", ["data"]],
     ]
     # the AnsibleModule object will be our abstraction working with Ansible
     # this includes instantiation, a couple of common attr would be the
@@ -184,6 +199,10 @@ def main():
     if "system_global" in data:
         data["global"] = data["system_global"]
         del data["system_global"]
+    # convert parameter name from login_message to message
+    if "login_message" in data:
+        data["message"] = data["login_message"]
+        del data["login_message"]
     force = module.params["force"]
     wait = module.params["wait"]
     revid = module.params["revid"]

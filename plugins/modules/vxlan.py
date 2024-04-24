@@ -46,7 +46,6 @@ options:
                 description: Turn the feature 'on' or 'off'.
                 required: false
                 type: str
-                default: 'off'
                 choices:
                     - 'on'
                     - 'off'
@@ -55,7 +54,6 @@ options:
                              but can be overridden by VNI-specific configuration.
                 required: false
                 type: str
-                default: 'off'
                 choices:
                     - 'on'
                     - 'off'
@@ -63,7 +61,6 @@ options:
                 description: Controls dynamic MAC learning over VXLAN tunnels based on received packets. This applies to all overlays (VNIs).
                 required: false
                 type: str
-                default: 'on'
                 choices:
                     - 'on'
                     - 'off'
@@ -76,7 +73,6 @@ options:
                                      This is the default.
                         required: false
                         type: str
-                        default: auto
             mlag:
                 description: VxLAN specific MLAG address.
                 type: dict
@@ -85,7 +81,6 @@ options:
                         description: Shared anycast address for MLAG peers.
                         required: false
                         type: str
-                        default: none
 
     revid:
         description: Revision ID to query/to apply config to.
@@ -141,16 +136,16 @@ def main():
         include=dict(type='list', required=False, elements='str')
     )
 
-    # define the bridge spec - used for creation/modification
+    # define the VxLAN spec - used for creation/modification
     vxlan_spec = dict(
-        enable=dict(type='str', required=False, default='off', choices=['on', 'off']),
-        mac_learning=dict(type='str', required=False, default='off', choices=['on', 'off']),
-        arp_nd_suppress=dict(type='str', required=False, default='on', choices=['on', 'off']),
+        enable=dict(type='str', required=False, choices=['on', 'off']),
+        mac_learning=dict(type='str', required=False, choices=['on', 'off']),
+        arp_nd_suppress=dict(type='str', required=False, choices=['on', 'off']),
         source=dict(type='dict', required=False, options=dict(
-            address=dict(type="str", required=False, default="auto")
+            address=dict(type="str", required=False)
         )),
         mlag=dict(type='dict', required=False, options=dict(
-            shared_address=dict(type="str", required=False, default="none")
+            shared_address=dict(type="str", required=False)
         ))
     )
 
