@@ -248,6 +248,34 @@ options:
                                 description: Timeout value for S,G stream, in seconds.
                                 required: false
                                 type: int
+            adaptive_routing:
+                description: Adaptive routing global configuration.
+                required: false
+                type: dict
+                suboptions:
+                    enable:
+                        description: Turn the feature 'on' or 'off'.
+                        required: false
+                        type: str
+                        choices:
+                            - 'on'
+                            - 'off'
+                    profile:
+                        description: Adaptive routing global profile configuration.
+                        required: false
+                        type: str
+                        choices:
+                            - 'profile-1'
+                            - 'profile-2'
+                            - 'profile-custom'
+                    link_utilization_threshold:
+                        description: Turn on or off Link utilization threshold on all interfaces.
+                                     This feature is off by default.
+                        required: false
+                        type: str
+                        choices:
+                            - 'on'
+                            - 'off'
     revid:
         description: Revision ID to query/to apply config to.
         required: false
@@ -330,6 +358,11 @@ def main():
             timers=dict(type='dict', required=False, options=dict(
                 keep_alive=dict(type='int', required=False)
             ))
+        )),
+        adaptive_routing=dict(type='dict', required=False, options=dict(
+            enable=dict(type='str', required=False, choices=['on', 'off']),
+            profile=dict(type='str', required=False, choices=['profile-1', 'profile-2', 'profile-custom']),
+            link_utilization_threshold=dict(type='str', required=False, choices=['on', 'off'])
         )),
         policy=dict(type='dict', required=False, options=dict(
             prefix_list=dict(type='list', required=False, elements='dict', options=dict(
