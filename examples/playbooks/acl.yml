@@ -33,12 +33,13 @@
                 match:
                   ip:
                     dest_ip: '10.115.28.0/32'
-                    dest_port:
-                      - id: 'ANY'
                     source_ip: '10.110.0.11/32'
-                    source_port:
-                      - id: 'smtp'
                     protocol: 'tcp'
+                    tcp:
+                      dest_port:
+                        - id: 'ANY'
+                      source_port:
+                        - id: 'smtp'
             type: 'ipv4'
       register: acl
 
