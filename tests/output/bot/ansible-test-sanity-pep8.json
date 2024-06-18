@@ -1,9 +1,9 @@
 {
-    "docs": "https://docs.ansible.com/ansible-core/2.13/dev_guide/testing/sanity/pep8.html", 
+    "docs": "https://docs.ansible.com/ansible-core/2.16/dev_guide/testing/sanity/pep8.html", 
     "results": [
         {
-            "message": "The test `ansible-test sanity --test pep8` [[explain](https://docs.ansible.com/ansible-core/2.13/dev_guide/testing/sanity/pep8.html)] failed with 1 error:", 
-            "output": "plugins/modules/api.py:43:110: W291: trailing whitespace"
+            "message": "The test `ansible-test sanity --test pep8` [[explain](https://docs.ansible.com/ansible-core/2.16/dev_guide/testing/sanity/pep8.html)] failed with 2 errors:", 
+            "output": "plugins/modules/interface.py:189:92: W291: trailing whitespace\nplugins/modules/interface.py:200:85: W291: trailing whitespace"
         }
     ], 
     "verified": false

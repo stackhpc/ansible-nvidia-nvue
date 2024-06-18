@@ -112,7 +112,60 @@ options:
                                                 description: An IPv4 address.
                                                 required: false
                                                 type: str
-
+            stp:
+                description: Attributes related to global stp.
+                required: false
+                type: dict
+                suboptions:
+                    mode:
+                        description: Attributes related to global stp.
+                        required: false
+                        type: str
+                        choices:
+                            - 'rstp'
+                            - 'pvrst'
+                    priority:
+                        description: STP priority. The priority value must be a number between 4096 and 32768
+                                     and a multiple of 4096.
+                        required: false
+                        type: int
+                    force_protocol_version:
+                        description: STP protocol version.
+                        required: false
+                        type: str
+                        choices:
+                            - 'rstp'
+                            - 'stp'
+                    vlan:
+                        description: Set of STP vlans in the bridge domain.
+                                     Only applicable when the domain type is "vlan-aware".
+                        required: false
+                        type: list
+                        elements: dict
+                        suboptions:
+                            id:
+                                description: A STP VLAN tag identifier
+                                required: false
+                                type: str
+                            bridge_priority:
+                                description: Configure vlan priority. The priority value must be a number
+                                             between 4096 and 32768 and a multiple of 4096.
+                                required: false
+                                type: int
+                            hello_time:
+                                description: Configure per vlan hello time (1-10) in seconds
+                                required: false
+                                type: int
+                            forward_delay:
+                                description: Configure per vlan forward delay (4-30) in seconds.
+                                             Must meet the condition 2 * (Bridge Forward Delay - 1 second) >= Bridge Max Age.
+                                required: false
+                                type: int
+                            max_age:
+                                description: Configure per vlan max age (6-40) in seconds.
+                                             Must meet the condition 2 * (Bridge Forward Delay - 1 second) >= Bridge Max Age
+                                required: false
+                                type: int
     domainid:
         description: Name of the domain to fetch/delete.
         type: str
@@ -242,6 +295,18 @@ def main():
                         id=dict(type='str', required=False)
                     ))
                 ))
+            ))
+        )),
+        stp=dict(type='dict', required=False, options=dict(
+            mode=dict(type='str', required=False, choices=['rstp', 'pvrst']),
+            priority=dict(type='int', required=False),
+            force_protocol_version=dict(type='str', required=False, choices=['rstp', 'stp']),
+            vlan=dict(type='list', required=False, elements='dict', options=dict(
+                id=dict(type='str', required=False),
+                bridge_priority=dict(type='int', required=False),
+                hello_time=dict(type='int', required=False),
+                forward_delay=dict(type='int', required=False),
+                max_age=dict(type='int', required=False),
             ))
         ))
     )

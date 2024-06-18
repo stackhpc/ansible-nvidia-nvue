@@ -107,26 +107,56 @@ options:
                                         description: ttl in ipv4 and hl in ipv6.
                                         required: false
                                         type: int
-                                    dest_port:
-                                        description: Destination port.
+                                    tcp:
+                                        description: TCP protocol packet match.
                                         required: false
-                                        type: list
-                                        elements: dict
+                                        type: dict
                                         suboptions:
-                                            id:
-                                                description: L4 port.
+                                            dest_port:
+                                                description: Destination port.
                                                 required: false
-                                                type: str
-                                    source_port:
-                                        description: Source port.
+                                                type: list
+                                                elements: dict
+                                                suboptions:
+                                                    id:
+                                                        description: L4 port.
+                                                        required: false
+                                                        type: str
+                                            source_port:
+                                                description: Source port.
+                                                required: false
+                                                type: list
+                                                elements: dict
+                                                suboptions:
+                                                    id:
+                                                        description: L4 port.
+                                                        required: false
+                                                        type: str
+                                    udp:
+                                        description: UDP protocol packet match.
                                         required: false
-                                        type: list
-                                        elements: dict
+                                        type: dict
                                         suboptions:
-                                            id:
-                                                description: L4 port.
+                                            dest_port:
+                                                description: Destination port.
                                                 required: false
-                                                type: str
+                                                type: list
+                                                elements: dict
+                                                suboptions:
+                                                    id:
+                                                        description: L4 port.
+                                                        required: false
+                                                        type: str
+                                            source_port:
+                                                description: Source port.
+                                                required: false
+                                                type: list
+                                                elements: dict
+                                                suboptions:
+                                                    id:
+                                                        description: L4 port.
+                                                        required: false
+                                                        type: str
                             mac:
                                 description: MAC match.
                                 required: false
@@ -303,11 +333,21 @@ def main():
                     icmp_type=dict(type='str', required=False),
                     icmpv6_type=dict(type='str', required=False),
                     ttl=dict(type='int', required=False),
-                    source_port=dict(type='list', required=False, elements='dict', options=dict(
-                        id=dict(type='str', required=False)
+                    tcp=dict(type='dict', required=False, options=dict(
+                        source_port=dict(type='list', required=False, elements='dict', options=dict(
+                            id=dict(type='str', required=False)
+                        )),
+                        dest_port=dict(type='list', required=False, elements='dict', options=dict(
+                            id=dict(type='str', required=False)
+                        ))
                     )),
-                    dest_port=dict(type='list', required=False, elements='dict', options=dict(
-                        id=dict(type='str', required=False)
+                    udp=dict(type='dict', required=False, options=dict(
+                        source_port=dict(type='list', required=False, elements='dict', options=dict(
+                            id=dict(type='str', required=False)
+                        )),
+                        dest_port=dict(type='list', required=False, elements='dict', options=dict(
+                            id=dict(type='str', required=False)
+                        ))
                     ))
                 )),
                 mac=dict(type='dict', required=False, options=dict(

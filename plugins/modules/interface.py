@@ -178,6 +178,33 @@ options:
                                         choices:
                                             - 'on'
                                             - 'off'
+                                    network:
+                                        description: Bridge assurance capability for a port.
+                                        required: false
+                                        type: str
+                                        choices:
+                                            - 'on'
+                                            - 'off'
+                                    vlan:
+                                        description: Set of stp vlans in the bridge domain.
+                                                     Only applicable when the domain type is "vlan-aware".
+                                        required: false
+                                        type: list
+                                        elements: dict
+                                        suboptions:
+                                            id:
+                                                description: STP VLAN tag identifier.
+                                                required: false
+                                                type: str
+                                            priority:
+                                                description: Port stp vlan priority.
+                                                             The priority value must be a number between 0 and 240 and a multiple of 16.
+                                                required: false
+                                                type: int
+                                            path_cost:
+                                                description: Configure stp vlan port path cost (1-200000000).
+                                                required: false
+                                                type: int
             router:
                 description: Interface router.
                 required: false
@@ -812,7 +839,13 @@ def main():
                 stp=dict(type='dict', required=False, options=dict(
                     admin_edge=dict(type='str', required=False, choices=['on', 'off']),
                     auto_edge=dict(type='str', required=False, choices=['on', 'off']),
-                    bpdu_guard=dict(type='str', required=False, choices=['on', 'off'])
+                    bpdu_guard=dict(type='str', required=False, choices=['on', 'off']),
+                    network=dict(type='str', required=False, choices=['on', 'off']),
+                    vlan=dict(type='list', required=False, elements='dict', options=dict(
+                        id=dict(type='str', required=False),
+                        priority=dict(type='int', required=False),
+                        path_cost=dict(type='int', required=False)
+                    ))
                 )),
                 vlan=dict(type='list', required=False, elements='dict', options=dict(
                     id=dict(type='str', required=False)

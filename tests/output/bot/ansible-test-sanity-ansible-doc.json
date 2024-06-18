@@ -1,9 +1,9 @@
 {
-    "docs": "https://docs.ansible.com/ansible-core/2.13/dev_guide/testing/sanity/ansible-doc.html", 
+    "docs": "https://docs.ansible.com/ansible-core/2.16/dev_guide/testing/sanity/ansible-doc.html", 
     "results": [
         {
-            "message": "The test `ansible-test sanity --test ansible-doc` [[explain](https://docs.ansible.com/ansible-core/2.13/dev_guide/testing/sanity/ansible-doc.html)] failed with the error:", 
-            "output": "Output on stderr from ansible-doc is considered an error.\n\nCommand \"ansible-doc -t module nvidia.nvue.__init__ nvidia.nvue.api nvidia.nvue.bridge nvidia.nvue.command nvidia.nvue.config nvidia.nvue.evpn nvidia.nvue.interface nvidia.nvue.mlag nvidia.nvue.router nvidia.nvue.service nvidia.nvue.system nvidia.nvue.vrf nvidia.nvue.vxlan\" returned exit status 0.\n>>> Standard Error\n[WARNING]: module nvidia.nvue.__init__ not found in: /dev/null:/tmp/ansible-\ntest-nt2ua0xa/ansible/modules"
+            "message": "The test `ansible-test sanity --test ansible-doc` [[explain](https://docs.ansible.com/ansible-core/2.16/dev_guide/testing/sanity/ansible-doc.html)] failed with the error:", 
+            "output": "Output on stderr from ansible-doc is considered an error.\n\nCommand \"ansible-doc -t module nvidia.nvue.acl nvidia.nvue.api nvidia.nvue.bridge nvidia.nvue.command nvidia.nvue.config nvidia.nvue.evpn nvidia.nvue.interface nvidia.nvue.mlag nvidia.nvue.qos nvidia.nvue.router nvidia.nvue.service nvidia.nvue.system nvidia.nvue.vrf nvidia.nvue.vxlan\" returned exit status 0.\n>>> Standard Error\n[WARNING]: While constructing a mapping from /mnt/c/Users/kvasudevan/OneDrive -\nNVIDIA Corporation/Desktop/KOffice/Automation/Ansible-\nPRA/ansible_collections/nvidia/nvue/plugins/modules/bridge.py, line 112, column\n21, found a duplicate dict key (mode). Using last defined value only."
         }
     ], 
     "verified": false
