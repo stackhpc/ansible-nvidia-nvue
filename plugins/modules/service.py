@@ -173,8 +173,7 @@ options:
             snmp_server:
                 description: SNMP configuration
                 required: false
-                type: list
-                elements: dict
+                type: dict
                 suboptions:
                     enable:
                         description: Turn the feature on or off. The feature is disabled by default.
@@ -326,7 +325,7 @@ def main():
                 protocol=dict(type='str', required=False, choices=['udp', 'tcp'])
             ))
         )),
-        snmp_server=dict(type='list', required=False, elements='dict', options=dict(
+        snmp_server=dict(type='dict', required=False, options=dict(
             enable=dict(type='str', required=False, choices=['on', 'off']),
             listening_address=dict(type='list', required=False, elements='dict', options=dict(
                 id=dict(type='str', required=False),
