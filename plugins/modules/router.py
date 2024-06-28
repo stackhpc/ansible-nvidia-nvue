@@ -159,6 +159,10 @@ options:
                                                 description: prefix length to be used for encapsulating smaller prefixes in rules
                                                 type: int
                                                 required: false
+                                            min_prefix_len:
+                                                description: prefix length to be used for encapsulating larger prefixes in rules
+                                                type: int
+                                                required: false
                                     action:
                                         description: action to take on the rule
                                         type: str
@@ -372,7 +376,8 @@ def main():
                     id=dict(type='int', required=False),
                     match=dict(type='list', required=False, elements='dict', options=dict(
                         id=dict(type='str', required=False),
-                        max_prefix_len=dict(type='int', required=False)
+                        max_prefix_len=dict(type='int', required=False),
+                        min_prefix_len=dict(type='int', required=False)
                     )),
                     action=dict(type='str', required=False, choices=['permit', 'deny'])
                 ))
