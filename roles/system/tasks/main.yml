@@ -6,6 +6,6 @@
     data:
       hostname: '{{ hostname }}'
       timezone: '{{ timezone }}'
-      message:
+      login_message:
         post_login: '{{ post_login_message }}'
         pre_login: '{{ pre_login_message }}'
