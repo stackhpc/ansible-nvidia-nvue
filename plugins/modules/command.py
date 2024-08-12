@@ -214,8 +214,12 @@ def run_module():
     # want to make any changes to the environment, just return the current
     # state with no modifications
     if module.check_mode:
-        module_args["apply"] = False
-        module.exit_json(**result)
+        # Both apply and atomic make the config be applied, we don't want
+        # that in check_mode
+        module.params["apply"] = False
+        module.params["atomic"] = False
+        # Detach to not leave unapplied config
+        module.params["detach"] = True
 
     changed, output, diff = run_nvue(module)
 
@@ -223,7 +227,12 @@ def run_module():
     # part where your module will do what it needs to do)
     # result['original_message'] = module.params['name']
     result["message"] = output
-    result["diff"] = diff
+    if diff:
+        result['changed'] = True
+    if module._diff and diff:
+        result["diff"] = dict(
+            prepared=diff
+        )
 
     # use whatever logic you need to determine whether or not this module
     # made any modifications to your target
