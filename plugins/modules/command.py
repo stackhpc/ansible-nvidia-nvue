@@ -142,6 +142,9 @@ def run_nvue(module):
         # Skip command which start with comment
         if stripped_line.startswith("#"):
             continue
+        # Skip empty lines
+        if stripped_line == '':
+            continue
         output_lines += [
             run_nvue_cmd(module, stripped_line, 'Failed on line "%s"' % line)
         ]
